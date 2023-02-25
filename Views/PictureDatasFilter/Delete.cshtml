@@ -1,0 +1,255 @@
+﻿@model THLWToolBox.Models.PictureData
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>PictureData</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.album_id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.album_id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.rare)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.rare)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.illustrator_name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.illustrator_name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.circle_name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.circle_name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.flavor_text1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.flavor_text1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.flavor_text2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.flavor_text2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.flavor_text3)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.flavor_text3)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.flavor_text4)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.flavor_text4)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.flavor_text5)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.flavor_text5)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.correction1_type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.correction1_type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.correction1_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.correction1_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.correction1_diff)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.correction1_diff)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.correction2_type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.correction2_type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.correction2_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.correction2_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.correction2_diff)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.correction2_diff)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic1_effect_type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic1_effect_type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic1_effect_subtype)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic1_effect_subtype)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic1_effect_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic1_effect_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic1_effect_value_max)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic1_effect_value_max)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic1_effect_turn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic1_effect_turn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic1_effect_range)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic1_effect_range)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic2_effect_type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic2_effect_type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic2_effect_subtype)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic2_effect_subtype)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic2_effect_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic2_effect_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic2_effect_value_max)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic2_effect_value_max)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic2_effect_turn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic2_effect_turn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic2_effect_range)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic2_effect_range)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic3_effect_type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic3_effect_type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic3_effect_subtype)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic3_effect_subtype)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic3_effect_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic3_effect_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic3_effect_value_max)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic3_effect_value_max)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic3_effect_turn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic3_effect_turn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic3_effect_range)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic3_effect_range)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic_text)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic_text)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.picture_characteristic_text_max)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.picture_characteristic_text_max)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.recycle_id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.recycle_id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.is_show)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.is_show)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,223 @@
+﻿@model THLWToolBox.Models.PictureData
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>PictureData</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="album_id" class="control-label"></label>
+                <input asp-for="album_id" class="form-control" />
+                <span asp-validation-for="album_id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <input asp-for="type" class="form-control" />
+                <span asp-validation-for="type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="rare" class="control-label"></label>
+                <input asp-for="rare" class="form-control" />
+                <span asp-validation-for="rare" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="illustrator_name" class="control-label"></label>
+                <input asp-for="illustrator_name" class="form-control" />
+                <span asp-validation-for="illustrator_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="circle_name" class="control-label"></label>
+                <input asp-for="circle_name" class="form-control" />
+                <span asp-validation-for="circle_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="flavor_text1" class="control-label"></label>
+                <input asp-for="flavor_text1" class="form-control" />
+                <span asp-validation-for="flavor_text1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="flavor_text2" class="control-label"></label>
+                <input asp-for="flavor_text2" class="form-control" />
+                <span asp-validation-for="flavor_text2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="flavor_text3" class="control-label"></label>
+                <input asp-for="flavor_text3" class="form-control" />
+                <span asp-validation-for="flavor_text3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="flavor_text4" class="control-label"></label>
+                <input asp-for="flavor_text4" class="form-control" />
+                <span asp-validation-for="flavor_text4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="flavor_text5" class="control-label"></label>
+                <input asp-for="flavor_text5" class="form-control" />
+                <span asp-validation-for="flavor_text5" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correction1_type" class="control-label"></label>
+                <input asp-for="correction1_type" class="form-control" />
+                <span asp-validation-for="correction1_type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correction1_value" class="control-label"></label>
+                <input asp-for="correction1_value" class="form-control" />
+                <span asp-validation-for="correction1_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correction1_diff" class="control-label"></label>
+                <input asp-for="correction1_diff" class="form-control" />
+                <span asp-validation-for="correction1_diff" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correction2_type" class="control-label"></label>
+                <input asp-for="correction2_type" class="form-control" />
+                <span asp-validation-for="correction2_type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correction2_value" class="control-label"></label>
+                <input asp-for="correction2_value" class="form-control" />
+                <span asp-validation-for="correction2_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correction2_diff" class="control-label"></label>
+                <input asp-for="correction2_diff" class="form-control" />
+                <span asp-validation-for="correction2_diff" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic1_effect_type" class="control-label"></label>
+                <input asp-for="picture_characteristic1_effect_type" class="form-control" />
+                <span asp-validation-for="picture_characteristic1_effect_type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic1_effect_subtype" class="control-label"></label>
+                <input asp-for="picture_characteristic1_effect_subtype" class="form-control" />
+                <span asp-validation-for="picture_characteristic1_effect_subtype" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic1_effect_value" class="control-label"></label>
+                <input asp-for="picture_characteristic1_effect_value" class="form-control" />
+                <span asp-validation-for="picture_characteristic1_effect_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic1_effect_value_max" class="control-label"></label>
+                <input asp-for="picture_characteristic1_effect_value_max" class="form-control" />
+                <span asp-validation-for="picture_characteristic1_effect_value_max" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic1_effect_turn" class="control-label"></label>
+                <input asp-for="picture_characteristic1_effect_turn" class="form-control" />
+                <span asp-validation-for="picture_characteristic1_effect_turn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic1_effect_range" class="control-label"></label>
+                <input asp-for="picture_characteristic1_effect_range" class="form-control" />
+                <span asp-validation-for="picture_characteristic1_effect_range" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic2_effect_type" class="control-label"></label>
+                <input asp-for="picture_characteristic2_effect_type" class="form-control" />
+                <span asp-validation-for="picture_characteristic2_effect_type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic2_effect_subtype" class="control-label"></label>
+                <input asp-for="picture_characteristic2_effect_subtype" class="form-control" />
+                <span asp-validation-for="picture_characteristic2_effect_subtype" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic2_effect_value" class="control-label"></label>
+                <input asp-for="picture_characteristic2_effect_value" class="form-control" />
+                <span asp-validation-for="picture_characteristic2_effect_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic2_effect_value_max" class="control-label"></label>
+                <input asp-for="picture_characteristic2_effect_value_max" class="form-control" />
+                <span asp-validation-for="picture_characteristic2_effect_value_max" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic2_effect_turn" class="control-label"></label>
+                <input asp-for="picture_characteristic2_effect_turn" class="form-control" />
+                <span asp-validation-for="picture_characteristic2_effect_turn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic2_effect_range" class="control-label"></label>
+                <input asp-for="picture_characteristic2_effect_range" class="form-control" />
+                <span asp-validation-for="picture_characteristic2_effect_range" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic3_effect_type" class="control-label"></label>
+                <input asp-for="picture_characteristic3_effect_type" class="form-control" />
+                <span asp-validation-for="picture_characteristic3_effect_type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic3_effect_subtype" class="control-label"></label>
+                <input asp-for="picture_characteristic3_effect_subtype" class="form-control" />
+                <span asp-validation-for="picture_characteristic3_effect_subtype" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic3_effect_value" class="control-label"></label>
+                <input asp-for="picture_characteristic3_effect_value" class="form-control" />
+                <span asp-validation-for="picture_characteristic3_effect_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic3_effect_value_max" class="control-label"></label>
+                <input asp-for="picture_characteristic3_effect_value_max" class="form-control" />
+                <span asp-validation-for="picture_characteristic3_effect_value_max" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic3_effect_turn" class="control-label"></label>
+                <input asp-for="picture_characteristic3_effect_turn" class="form-control" />
+                <span asp-validation-for="picture_characteristic3_effect_turn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic3_effect_range" class="control-label"></label>
+                <input asp-for="picture_characteristic3_effect_range" class="form-control" />
+                <span asp-validation-for="picture_characteristic3_effect_range" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic_text" class="control-label"></label>
+                <input asp-for="picture_characteristic_text" class="form-control" />
+                <span asp-validation-for="picture_characteristic_text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="picture_characteristic_text_max" class="control-label"></label>
+                <input asp-for="picture_characteristic_text_max" class="form-control" />
+                <span asp-validation-for="picture_characteristic_text_max" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="recycle_id" class="control-label"></label>
+                <input asp-for="recycle_id" class="form-control" />
+                <span asp-validation-for="recycle_id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="is_show" class="control-label"></label>
+                <input asp-for="is_show" class="form-control" />
+                <span asp-validation-for="is_show" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
