@@ -1,4 +1,6 @@
-﻿@model IEnumerable<THLWToolBox.Models.PictureData>
+﻿@*@model IEnumerable<THLWToolBox.Models.PictureData>*@
+@model THLWToolBox.Models.PictureDataViewModel
+@using System.Text.RegularExpressions;
 
 @{
     ViewData["Title"] = "Index";
@@ -6,256 +8,86 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<form asp-controller="PictureDatasFilter" asp-action="Index" method="get">
+    <p>
+        <p>
+            绘卷效果类型
+            <select asp-for="EffectId" asp-items="Model.EffectTypes">
+                <option value=null>{ 请选择 }</option>
+            </select>
+        </p>
+        <p>
+            子类型
+            <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes">
+                <option value=null>任意</option>
+            </select>
+        </p>
+        <p>
+            作用范围
+            <select asp-for="Range" asp-items="Model.RangeTypes">
+                <option value=null>任意</option>
+            </select>
+        </p>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.PictureDatas![0].id)
+            </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @*@Html.DisplayNameFor(model => model.PictureDatas![0].name)*@
+                名称
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.album_id)
+                @*@Html.DisplayNameFor(model => model.PictureDatas![0].rare)*@
+                星级
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.type)
+                @*@Html.DisplayNameFor(model => model.PictureDatas![0].picture_characteristic_text)*@
+                绘卷效果（未满破）
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.rare)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.illustrator_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.circle_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flavor_text1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flavor_text2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flavor_text3)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flavor_text4)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flavor_text5)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.correction1_type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.correction1_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.correction1_diff)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.correction2_type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.correction2_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.correction2_diff)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic1_effect_type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic1_effect_subtype)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic1_effect_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic1_effect_value_max)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic1_effect_turn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic1_effect_range)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic2_effect_type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic2_effect_subtype)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic2_effect_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic2_effect_value_max)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic2_effect_turn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic2_effect_range)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic3_effect_type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic3_effect_subtype)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic3_effect_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic3_effect_value_max)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic3_effect_turn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic3_effect_range)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic_text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.picture_characteristic_text_max)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.recycle_id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.is_show)
+                @*@Html.DisplayNameFor(model => model.PictureDatas![0].picture_characteristic_text)*@
+                绘卷效果(满破)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model.PictureDatas!)
+    {
         <tr>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.album_id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.rare)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.illustrator_name)
+                @*@Html.DisplayFor(modelItem => item.picture_characteristic_text)*@
+                    @{
+                        string effectText = item.picture_characteristic_text;
+                        effectText = Regex.Replace(effectText, "<color.*?>", "");
+                        effectText = Regex.Replace(effectText, "</color>", "");
+                        effectText = Html.Encode(effectText).Replace("\\n", "<br/>");
+                    }
+                @Html.Raw(effectText)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.circle_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.flavor_text1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.flavor_text2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.flavor_text3)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.flavor_text4)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.flavor_text5)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.correction1_type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.correction1_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.correction1_diff)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.correction2_type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.correction2_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.correction2_diff)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic1_effect_type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic1_effect_subtype)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic1_effect_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic1_effect_value_max)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic1_effect_turn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic1_effect_range)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic2_effect_type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic2_effect_subtype)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic2_effect_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic2_effect_value_max)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic2_effect_turn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic2_effect_range)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic3_effect_type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic3_effect_subtype)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic3_effect_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic3_effect_value_max)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic3_effect_turn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic3_effect_range)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic_text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.picture_characteristic_text_max)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.recycle_id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.is_show)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                @*@Html.DisplayFor(modelItem => item.picture_characteristic_text)*@
+                    @{
+                        string effectTextMax = item.picture_characteristic_text_max;
+                        effectTextMax = Regex.Replace(effectTextMax, "<color.*?>", "");
+                        effectTextMax = Regex.Replace(effectTextMax, "</color>", "");
+                        effectTextMax = Html.Encode(effectTextMax).Replace("\\n", "<br/>");
+                    }
+                    @Html.Raw(effectTextMax)
             </td>
         </tr>
 }

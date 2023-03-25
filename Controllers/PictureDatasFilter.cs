@@ -20,144 +20,121 @@ namespace THLWToolBox.Controllers
         }
 
         // GET: PictureDatasFilter
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range)
         {
-              return _context.PictureData != null ? 
-                          View(await _context.PictureData.ToListAsync()) :
-                          Problem("Entity set 'THLWToolBoxContext.PictureData'  is null.");
-        }
-
-        // GET: PictureDatasFilter/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.PictureData == null)
-            {
-                return NotFound();
-            }
-
-            var pictureData = await _context.PictureData
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (pictureData == null)
-            {
-                return NotFound();
-            }
-
-            return View(pictureData);
-        }
-
-        // GET: PictureDatasFilter/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: PictureDatasFilter/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,album_id,type,rare,illustrator_name,circle_name,flavor_text1,flavor_text2,flavor_text3,flavor_text4,flavor_text5,correction1_type,correction1_value,correction1_diff,correction2_type,correction2_value,correction2_diff,picture_characteristic1_effect_type,picture_characteristic1_effect_subtype,picture_characteristic1_effect_value,picture_characteristic1_effect_value_max,picture_characteristic1_effect_turn,picture_characteristic1_effect_range,picture_characteristic2_effect_type,picture_characteristic2_effect_subtype,picture_characteristic2_effect_value,picture_characteristic2_effect_value_max,picture_characteristic2_effect_turn,picture_characteristic2_effect_range,picture_characteristic3_effect_type,picture_characteristic3_effect_subtype,picture_characteristic3_effect_value,picture_characteristic3_effect_value_max,picture_characteristic3_effect_turn,picture_characteristic3_effect_range,picture_characteristic_text,picture_characteristic_text_max,recycle_id,is_show")] PictureData pictureData)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(pictureData);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pictureData);
-        }
-
-        // GET: PictureDatasFilter/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.PictureData == null)
-            {
-                return NotFound();
-            }
-
-            var pictureData = await _context.PictureData.FindAsync(id);
-            if (pictureData == null)
-            {
-                return NotFound();
-            }
-            return View(pictureData);
-        }
-
-        // POST: PictureDatasFilter/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,album_id,type,rare,illustrator_name,circle_name,flavor_text1,flavor_text2,flavor_text3,flavor_text4,flavor_text5,correction1_type,correction1_value,correction1_diff,correction2_type,correction2_value,correction2_diff,picture_characteristic1_effect_type,picture_characteristic1_effect_subtype,picture_characteristic1_effect_value,picture_characteristic1_effect_value_max,picture_characteristic1_effect_turn,picture_characteristic1_effect_range,picture_characteristic2_effect_type,picture_characteristic2_effect_subtype,picture_characteristic2_effect_value,picture_characteristic2_effect_value_max,picture_characteristic2_effect_turn,picture_characteristic2_effect_range,picture_characteristic3_effect_type,picture_characteristic3_effect_subtype,picture_characteristic3_effect_value,picture_characteristic3_effect_value_max,picture_characteristic3_effect_turn,picture_characteristic3_effect_range,picture_characteristic_text,picture_characteristic_text_max,recycle_id,is_show")] PictureData pictureData)
-        {
-            if (id != pictureData.id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(pictureData);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PictureDataExists(pictureData.id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pictureData);
-        }
-
-        // GET: PictureDatasFilter/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.PictureData == null)
-            {
-                return NotFound();
-            }
-
-            var pictureData = await _context.PictureData
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (pictureData == null)
-            {
-                return NotFound();
-            }
-
-            return View(pictureData);
-        }
-
-        // POST: PictureDatasFilter/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
+            //return _context.PictureData != null ?
+            //            View(await _context.PictureData.ToListAsync()) :
+            //            Problem("Entity set 'THLWToolBoxContext.PictureData'  is null.");
             if (_context.PictureData == null)
             {
-                return Problem("Entity set 'THLWToolBoxContext.PictureData'  is null.");
+                return Problem("Entity set 'THLWToolBoxContext.PictureData' is null.");
             }
-            var pictureData = await _context.PictureData.FindAsync(id);
-            if (pictureData != null)
+
+            var pictureDatas = from pd in _context.PictureData
+                               select pd;
+            var pictureDatasList = await pictureDatas.Distinct().ToListAsync();
+
+            List<PictureData> displayPictureDatas = null;
+
+            if (EffectId != null)
             {
-                _context.PictureData.Remove(pictureData);
+                int effectType = EffectId.GetValueOrDefault();
+                IQueryable<PictureData> pds = from pd in _context.PictureData
+                                              where (   (   pd.picture_characteristic1_effect_type == effectType
+                                                         && (SubeffectId == null ? true : pd.picture_characteristic1_effect_subtype == GeneralTypeMaster.GetSubeffectDecodedId(effectType, SubeffectId.GetValueOrDefault()))
+                                                         && (Range == null ? true : pd.picture_characteristic1_effect_range == Range.GetValueOrDefault()))
+                                                     || (pd.picture_characteristic2_effect_type == effectType
+                                                         && (SubeffectId == null ? true : pd.picture_characteristic2_effect_subtype == GeneralTypeMaster.GetSubeffectDecodedId(effectType, SubeffectId.GetValueOrDefault()))
+                                                         && (Range == null ? true : pd.picture_characteristic2_effect_range == Range.GetValueOrDefault()))
+                                                     || (pd.picture_characteristic3_effect_type == effectType
+                                                         && (SubeffectId == null ? true : pd.picture_characteristic3_effect_subtype == GeneralTypeMaster.GetSubeffectDecodedId(effectType, SubeffectId.GetValueOrDefault()))
+                                                         && (Range == null ? true : pd.picture_characteristic3_effect_range == Range.GetValueOrDefault())))
+                                              select pd;
+                displayPictureDatas = await pds.Distinct().ToListAsync();
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                displayPictureDatas = new List<PictureData>();
+            }
+
+            var pictureDataVM = new PictureDataViewModel
+            {
+                EffectTypes = new SelectList(GetEffectList(pictureDatasList), "id", "name", null),
+                SubeffectTypes = new SelectList(GetSubeffectList(pictureDatasList), "id", "name", null),
+                RangeTypes = new SelectList(GetRangeList(pictureDatasList), "id", "name", null),
+                PictureDatas = displayPictureDatas,
+                EffectId = EffectId,
+                SubeffectId = SubeffectId,
+                Range = Range
+            };
+            return View(pictureDataVM);
         }
 
-        private bool PictureDataExists(int id)
+        List<PictureDataSelectItemEffectModel> GetEffectList(List<PictureData> PictureDatasList)
         {
-          return (_context.PictureData?.Any(e => e.id == id)).GetValueOrDefault();
+            List<PictureDataSelectItemEffectModel> list = new List<PictureDataSelectItemEffectModel>();
+            HashSet<int> vis = new HashSet<int>();
+            foreach (PictureData pd in PictureDatasList)
+            {
+                for (int effectId = 1; effectId <= 3; effectId++)
+                {
+                    PictureDataSelectItemEffectModel pdim = new PictureDataSelectItemEffectModel(pd, effectId);
+                    if (pdim.id == 0)
+                        continue;
+                    if (!vis.Contains(pdim.id))
+                    {
+                        vis.Add(pdim.id);
+                        list.Add(pdim);
+                    }
+                }
+            }
+            list.Sort(delegate(PictureDataSelectItemEffectModel pdim1, PictureDataSelectItemEffectModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
+            return list;
+        }
+
+        List<PictureDataSelectItemSubeffectModel> GetSubeffectList(List<PictureData> PictureDatasList)
+        {
+            List<PictureDataSelectItemSubeffectModel> list = new List<PictureDataSelectItemSubeffectModel>();
+            HashSet<int> vis = new HashSet<int>();
+            foreach (PictureData pd in PictureDatasList)
+            {
+                for (int effectId = 1; effectId <= 3; effectId++)
+                {
+                    PictureDataSelectItemSubeffectModel pdim = new PictureDataSelectItemSubeffectModel(pd, effectId);
+                    if (pdim.id == 0)
+                        continue;
+                    if (!vis.Contains(pdim.id))
+                    {
+                        vis.Add(pdim.id);
+                        list.Add(pdim);
+                    }
+                }
+            }
+            list.Sort(delegate (PictureDataSelectItemSubeffectModel pdim1, PictureDataSelectItemSubeffectModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
+
+            return list;
+        }
+        List<PictureDataSelectItemRangeModel> GetRangeList(List<PictureData> PictureDatasList)
+        {
+            List<PictureDataSelectItemRangeModel> list = new List<PictureDataSelectItemRangeModel>();
+            HashSet<int> vis = new HashSet<int>();
+            foreach (PictureData pd in PictureDatasList)
+            {
+                for (int effectId = 1; effectId <= 3; effectId++)
+                {
+                    PictureDataSelectItemRangeModel pdim = new PictureDataSelectItemRangeModel(pd, effectId);
+                    if (pdim.id == 0)
+                        continue;
+                    if (!vis.Contains(pdim.id))
+                    {
+                        vis.Add(pdim.id);
+                        list.Add(pdim);
+                    }
+                }
+            }
+            list.Sort(delegate (PictureDataSelectItemRangeModel pdim1, PictureDataSelectItemRangeModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
+
+            return list;
         }
     }
 }
