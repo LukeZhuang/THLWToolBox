@@ -34,34 +34,13 @@ namespace THLWToolBox.Controllers
                                select pd;
             var pictureDatasList = await pictureDatas.Distinct().ToListAsync();
 
-            List<PictureData> displayPictureDatas = null;
-
-            if (EffectId != null)
-            {
-                int effectType = EffectId.GetValueOrDefault();
-                IQueryable<PictureData> pds = from pd in _context.PictureData
-                                              where (   (   pd.picture_characteristic1_effect_type == effectType
-                                                         && (SubeffectId == null ? true : pd.picture_characteristic1_effect_subtype == GeneralTypeMaster.GetSubeffectDecodedId(effectType, SubeffectId.GetValueOrDefault()))
-                                                         && (Range == null ? true : pd.picture_characteristic1_effect_range == Range.GetValueOrDefault()))
-                                                     || (pd.picture_characteristic2_effect_type == effectType
-                                                         && (SubeffectId == null ? true : pd.picture_characteristic2_effect_subtype == GeneralTypeMaster.GetSubeffectDecodedId(effectType, SubeffectId.GetValueOrDefault()))
-                                                         && (Range == null ? true : pd.picture_characteristic2_effect_range == Range.GetValueOrDefault()))
-                                                     || (pd.picture_characteristic3_effect_type == effectType
-                                                         && (SubeffectId == null ? true : pd.picture_characteristic3_effect_subtype == GeneralTypeMaster.GetSubeffectDecodedId(effectType, SubeffectId.GetValueOrDefault()))
-                                                         && (Range == null ? true : pd.picture_characteristic3_effect_range == Range.GetValueOrDefault())))
-                                              select pd;
-                displayPictureDatas = await pds.Distinct().ToListAsync();
-            }
-            else
-            {
-                displayPictureDatas = new List<PictureData>();
-            }
+            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range);
 
             var pictureDataVM = new PictureDataViewModel
             {
-                EffectTypes = new SelectList(GetEffectList(pictureDatasList), "id", "name", null),
-                SubeffectTypes = new SelectList(GetSubeffectList(pictureDatasList), "id", "name", null),
-                RangeTypes = new SelectList(GetRangeList(pictureDatasList), "id", "name", null),
+                EffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemEffectModel>(pictureDatasList), "id", "name", null),
+                SubeffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemSubeffectModel>(pictureDatasList), "id", "name", null),
+                RangeTypes = new SelectList(GetSelectListItems<PictureDataSelectItemRangeModel>(pictureDatasList), "id", "name", null),
                 PictureDatas = displayPictureDatas,
                 EffectId = EffectId,
                 SubeffectId = SubeffectId,
@@ -70,37 +49,52 @@ namespace THLWToolBox.Controllers
             return View(pictureDataVM);
         }
 
-        List<PictureDataSelectItemEffectModel> GetEffectList(List<PictureData> PictureDatasList)
+        /* It's too complex for LINQ, so just use naive list operation */
+        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range)
         {
-            List<PictureDataSelectItemEffectModel> list = new List<PictureDataSelectItemEffectModel>();
-            HashSet<int> vis = new HashSet<int>();
-            foreach (PictureData pd in PictureDatasList)
+            List <PictureData> queryResult = new List<PictureData>();
+            if (EffectId == null)
+                return queryResult;
+            int effectType = EffectId.GetValueOrDefault();
+            foreach (var pd in pds)
             {
-                for (int effectId = 1; effectId <= 3; effectId++)
+                //Console.WriteLine(pd.name);
+                List<int> effectTypes= new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
+                List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
+                List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
+
+                for (int i = 0; i < 3; i++)
                 {
-                    PictureDataSelectItemEffectModel pdim = new PictureDataSelectItemEffectModel(pd, effectId);
-                    if (pdim.id == 0)
-                        continue;
-                    if (!vis.Contains(pdim.id))
+                    bool isSelected = true;
+                    int curEffectType = effectTypes[i];
+                    int curSubEffectType = subEffectTypes[i];
+                    int curRangeType = rangeTypes[i];
+                    //Console.WriteLine("raw: " + curEffectType + " " + curSubEffectType + " " + curRangeType);
+                    //Console.WriteLine("mod: " + GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 + " " + GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 + " " + GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1);
+                    isSelected &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
+                    if (SubeffectId != null)
+                        isSelected &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
+                    if (Range != null)
+                        isSelected &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
+                    if (isSelected)
                     {
-                        vis.Add(pdim.id);
-                        list.Add(pdim);
+                        queryResult.Add(pd);
+                        break;
                     }
                 }
             }
-            list.Sort(delegate(PictureDataSelectItemEffectModel pdim1, PictureDataSelectItemEffectModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
-            return list;
+            return queryResult;
         }
 
-        List<PictureDataSelectItemSubeffectModel> GetSubeffectList(List<PictureData> PictureDatasList)
+        List<PictureDataSelectItemModel> GetSelectListItems<T>(List<PictureData> PictureDatasList)
         {
-            List<PictureDataSelectItemSubeffectModel> list = new List<PictureDataSelectItemSubeffectModel>();
+            List<PictureDataSelectItemModel> list = new List<PictureDataSelectItemModel>();
             HashSet<int> vis = new HashSet<int>();
             foreach (PictureData pd in PictureDatasList)
             {
                 for (int effectId = 1; effectId <= 3; effectId++)
                 {
-                    PictureDataSelectItemSubeffectModel pdim = new PictureDataSelectItemSubeffectModel(pd, effectId);
+                    PictureDataSelectItemModel pdim = (PictureDataSelectItemModel)Activator.CreateInstance(typeof(T), new object[] { pd, effectId });
                     if (pdim.id == 0)
                         continue;
                     if (!vis.Contains(pdim.id))
@@ -110,30 +104,7 @@ namespace THLWToolBox.Controllers
                     }
                 }
             }
-            list.Sort(delegate (PictureDataSelectItemSubeffectModel pdim1, PictureDataSelectItemSubeffectModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
-
-            return list;
-        }
-        List<PictureDataSelectItemRangeModel> GetRangeList(List<PictureData> PictureDatasList)
-        {
-            List<PictureDataSelectItemRangeModel> list = new List<PictureDataSelectItemRangeModel>();
-            HashSet<int> vis = new HashSet<int>();
-            foreach (PictureData pd in PictureDatasList)
-            {
-                for (int effectId = 1; effectId <= 3; effectId++)
-                {
-                    PictureDataSelectItemRangeModel pdim = new PictureDataSelectItemRangeModel(pd, effectId);
-                    if (pdim.id == 0)
-                        continue;
-                    if (!vis.Contains(pdim.id))
-                    {
-                        vis.Add(pdim.id);
-                        list.Add(pdim);
-                    }
-                }
-            }
-            list.Sort(delegate (PictureDataSelectItemRangeModel pdim1, PictureDataSelectItemRangeModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
-
+            list.Sort(delegate (PictureDataSelectItemModel pdim1, PictureDataSelectItemModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
             return list;
         }
     }

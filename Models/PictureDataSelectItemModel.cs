@@ -1,9 +1,12 @@
 ﻿namespace THLWToolBox.Models
 {
-    public class PictureDataSelectItemEffectModel
+    public class PictureDataSelectItemModel
     {
         public int id { get; set; }
         public string name { get; set; }
+    }
+    public class PictureDataSelectItemEffectModel : PictureDataSelectItemModel
+    {
         public PictureDataSelectItemEffectModel(PictureData pd, int effectId)
         {
             int effectType = 0;
@@ -23,14 +26,11 @@
             {
                 throw new NotImplementedException();
             }
-            this.id = effectType;
-            this.name = GeneralTypeMaster.GetEffectTypeName(effectType);
+            (this.id, this.name) = GeneralTypeMaster.GetEffectRemappedInfo(effectType);
         }
     }
-    public class PictureDataSelectItemSubeffectModel
+    public class PictureDataSelectItemSubeffectModel : PictureDataSelectItemModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
         public PictureDataSelectItemSubeffectModel(PictureData pd, int effectId)
         {
             int effectType = 0;
@@ -54,28 +54,11 @@
             {
                 throw new NotImplementedException();
             }
-            if (effectType == 0 || subeffectType == 0)
-            {
-                this.id = 0;
-                this.name = "undefined";
-            }
-            else if (effectType == 14)
-            {
-                /* "受来自X种族攻击时伤害下降" not implemented */
-                this.id = 0;
-                this.name = "undefined";
-            }
-            else
-            {
-                this.id = GeneralTypeMaster.EncodeSubeffectLowerBound(effectType) + subeffectType;
-                this.name = GeneralTypeMaster.GetSubeffectTypeName(effectType, subeffectType);
-            }
+            (this.id, this.name) = GeneralTypeMaster.GetSubEffectRemappedInfo(effectType, subeffectType);
         }
     }
-    public class PictureDataSelectItemRangeModel
+    public class PictureDataSelectItemRangeModel : PictureDataSelectItemModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
         public PictureDataSelectItemRangeModel(PictureData pd, int effectId)
         {
             int rangeType = 0;
@@ -95,8 +78,7 @@
             {
                 throw new NotImplementedException();
             }
-            this.id = rangeType;
-            this.name = GeneralTypeMaster.GetRangeTypeString(rangeType);
+            (this.id, this.name) = GeneralTypeMaster.GetRangeRemappedInfo(rangeType);
         }
     }
 }
