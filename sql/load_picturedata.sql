@@ -82,5 +82,5 @@ SELECT [id]
       ,[picture_characteristic_text_max]
       ,[recycle_id]
       ,[is_show]
-  FROM [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PictureTable];
+  FROM [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PictureTableRaw];
   SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PictureData] OFF;

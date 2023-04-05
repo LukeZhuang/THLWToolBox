@@ -42,6 +42,7 @@ namespace THLWToolBox.Controllers
                 SubeffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemSubeffectModel>(pictureDatasList), "id", "name", null),
                 RangeTypes = new SelectList(GetSelectListItems<PictureDataSelectItemRangeModel>(pictureDatasList), "id", "name", null),
                 PictureDatas = displayPictureDatas,
+                //PictureDatas = pictureDatasList,
                 EffectId = EffectId,
                 SubeffectId = SubeffectId,
                 Range = Range

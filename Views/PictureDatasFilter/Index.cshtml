@@ -1,12 +1,13 @@
 ﻿@*@model IEnumerable<THLWToolBox.Models.PictureData>*@
 @model THLWToolBox.Models.PictureDataViewModel
 @using System.Text.RegularExpressions;
+@using THLWToolBox.Helpers;
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>绘卷筛选器</h1>
 
 <form asp-controller="PictureDatasFilter" asp-action="Index" method="get">
     <p>
@@ -53,6 +54,9 @@
                 @*@Html.DisplayNameFor(model => model.PictureDatas![0].picture_characteristic_text)*@
                 绘卷效果(满破)
             </th>
+            <th>
+                图片
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -71,23 +75,14 @@
             </td>
             <td>
                 @*@Html.DisplayFor(modelItem => item.picture_characteristic_text)*@
-                    @{
-                        string effectText = item.picture_characteristic_text;
-                        effectText = Regex.Replace(effectText, "<color.*?>", "");
-                        effectText = Regex.Replace(effectText, "</color>", "");
-                        effectText = Html.Encode(effectText).Replace("\\n", "<br/>");
-                    }
-                @Html.Raw(effectText)
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.picture_characteristic_text))
             </td>
             <td>
                 @*@Html.DisplayFor(modelItem => item.picture_characteristic_text)*@
-                    @{
-                        string effectTextMax = item.picture_characteristic_text_max;
-                        effectTextMax = Regex.Replace(effectTextMax, "<color.*?>", "");
-                        effectTextMax = Regex.Replace(effectTextMax, "</color>", "");
-                        effectTextMax = Html.Encode(effectTextMax).Replace("\\n", "<br/>");
-                    }
-                    @Html.Raw(effectTextMax)
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.picture_characteristic_text_max))
+            </td>
+            <td>
+                    <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="70" height="70" />
             </td>
         </tr>
 }
