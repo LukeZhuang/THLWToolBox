@@ -7,30 +7,53 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>绘卷筛选器</h1>
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE)</font></b></p>
+
+<h2>绘卷筛选器</h2>
+<p>
+    <p>说明:</p>
+    <p>1. 实装指<font color="red">截至上述数据更新日期</font>时玩家是否有方法获取</p>
+    <p>2. 面板数值均为满级时的样子</p>
+    <p>3. 面板类型若被勾选，则仅显示满足已勾选组合的绘卷。例如勾选体力和阳攻，则仅显示体力+阳攻的绘卷</p>
+</p>
 
 <form asp-controller="PictureDatasFilter" asp-action="Index" method="get">
+    <p>实装:</p>
+    <p>@Html.CheckBox("ActiveOnly", true) 仅显示已实装</p>
+    <p>星级:</p>
+    <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
+    <p>绘卷效果:</p>
     <p>
-        <p>
-            绘卷效果类型
-            <select asp-for="EffectId" asp-items="Model.EffectTypes">
-                <option value=null>{请选择}(必选)</option>
-            </select>
-        </p>
-        <p>
-            子类型
-            <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes">
-                <option value=null>任意</option>
-            </select>
-        </p>
-        <p>
-            作用范围
-            <select asp-for="Range" asp-items="Model.RangeTypes">
-                <option value=null>任意</option>
-            </select>
-        </p>
-        <input type="submit" value="Filter" />
+        绘卷效果类型
+        <select asp-for="EffectId" asp-items="Model.EffectTypes">
+            <option value=null>任意</option>
+        </select>
     </p>
+    <p>
+        子类型
+        <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes">
+            <option value=null>任意</option>
+        </select>
+    </p>
+    <p>
+        作用范围
+        <select asp-for="Range" asp-items="Model.RangeTypes">
+            <option value=null>任意</option>
+        </select>
+    </p>
+    <p>
+        式专用效果
+        <select asp-for="UnitTypeId" asp-items="Model.UnitTypes">
+            <option value=null>任意</option>
+        </select>
+    </p>
+    <p>面板:</p>
+    <p>
+        <p>@Html.CheckBox("CorrType1", false) 体力 @Html.CheckBox("CorrType6", false) 速度</p>
+        <p>@Html.CheckBox("CorrType2", false) 阳攻 @Html.CheckBox("CorrType3", false) 阳防</p>
+        <p>@Html.CheckBox("CorrType4", false) 阴攻 @Html.CheckBox("CorrType5", false) 阴防</p>
+    </p>
+    <input type="submit" value="筛选" />
 </form>
 <table class="table">
     <thead>
@@ -39,23 +62,28 @@
                 @Html.DisplayNameFor(model => model.PictureDatas![0].id)
             </th>*@
             <th>
-                @*@Html.DisplayNameFor(model => model.PictureDatas![0].name)*@
                 名称
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.PictureDatas![0].rare)*@
                 星级
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.PictureDatas![0].picture_characteristic_text)*@
+                面板1
+            </th>
+            <th>
+                面板2
+            </th>
+            <th>
                 绘卷效果（未满破）
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.PictureDatas![0].picture_characteristic_text)*@
                 绘卷效果(满破)
             </th>
             <th>
                 图片
+            </th>
+            <th>
+                实装
             </th>
             <th></th>
         </tr>
@@ -74,15 +102,22 @@
                 @Html.DisplayFor(modelItem => item.rare)
             </td>
             <td>
-                @*@Html.DisplayFor(modelItem => item.picture_characteristic_text)*@
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction1_type, item.correction1_value)))
+            </td>
+            <td>
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction2_type, item.correction2_value)))
+            </td>
+            <td>
                 @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.picture_characteristic_text))
             </td>
             <td>
-                @*@Html.DisplayFor(modelItem => item.picture_characteristic_text)*@
                 @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.picture_characteristic_text_max))
             </td>
             <td>
-                    <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="70" height="70" />
+                <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="70" height="70" />
+            </td>
+            <td>
+                @Html.Raw(GeneralTypeMaster.IsShowStr(item.is_show))
             </td>
         </tr>
 }

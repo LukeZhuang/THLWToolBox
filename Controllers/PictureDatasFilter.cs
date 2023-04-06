@@ -20,7 +20,10 @@ namespace THLWToolBox.Controllers
         }
 
         // GET: PictureDatasFilter
-        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range)
+        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range,
+                                               bool? ActiveOnly,
+                                               bool? RareType3, bool? RareType4, bool? RareType5,
+                                               bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6)
         {
             //return _context.PictureData != null ?
             //            View(await _context.PictureData.ToListAsync()) :
@@ -34,7 +37,9 @@ namespace THLWToolBox.Controllers
                                select pd;
             var pictureDatasList = await pictureDatas.Distinct().ToListAsync();
 
-            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range);
+            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, ActiveOnly,
+                                                              RareType3, RareType4, RareType5,
+                                                              CorrType1, CorrType2, CorrType3, CorrType4, CorrType5, CorrType6);
 
             var pictureDataVM = new PictureDataViewModel
             {
@@ -45,45 +50,112 @@ namespace THLWToolBox.Controllers
                 //PictureDatas = pictureDatasList,
                 EffectId = EffectId,
                 SubeffectId = SubeffectId,
-                Range = Range
+                Range = Range,
+                ActiveOnly = ActiveOnly,
+                RareType3 = RareType3,
+                RareType4 = RareType4,
+                RareType5 = RareType5,
+                CorrType1 = CorrType1,
+                CorrType2 = CorrType2,
+                CorrType3 = CorrType3,
+                CorrType4 = CorrType4,
+                CorrType5 = CorrType5,
+                CorrType6 = CorrType6
             };
             return View(pictureDataVM);
         }
 
         /* It's too complex for LINQ, so just use naive list operation */
-        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range)
+        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range,
+                                                  bool? ActiveOnly,
+                                                  bool? RareType3, bool? RareType4, bool? RareType5,
+                                                  bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6)
         {
             List <PictureData> queryResult = new List<PictureData>();
-            if (EffectId == null)
-                return queryResult;
-            int effectType = EffectId.GetValueOrDefault();
             foreach (var pd in pds)
             {
-                //Console.WriteLine(pd.name);
-                List<int> effectTypes= new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
-                List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
-                List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
-
-                for (int i = 0; i < 3; i++)
+                bool isSelected = true;
+                /* --- check rare --- */
+                if (   (pd.rare == 3 && RareType3 != null && RareType3.GetValueOrDefault() == false)
+                    || (pd.rare == 4 && RareType4 != null && RareType4.GetValueOrDefault() == false)
+                    || (pd.rare == 5 && RareType5 != null && RareType5.GetValueOrDefault() == false))
                 {
-                    bool isSelected = true;
-                    int curEffectType = effectTypes[i];
-                    int curSubEffectType = subEffectTypes[i];
-                    int curRangeType = rangeTypes[i];
-                    //Console.WriteLine("raw: " + curEffectType + " " + curSubEffectType + " " + curRangeType);
-                    //Console.WriteLine("mod: " + GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 + " " + GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 + " " + GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1);
-                    isSelected &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
-                    if (SubeffectId != null)
-                        isSelected &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
-                    if (Range != null)
-                        isSelected &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
-                    if (isSelected)
+                    isSelected = false;
+                    continue;
+                }
+
+                /* --- check is_show --- */
+                if (pd.is_show == 0 && (ActiveOnly == null || ActiveOnly.GetValueOrDefault() == true))
+                {
+                    isSelected = false;
+                    continue;
+                }
+
+                /* --- check correction_type --- */
+                List<int> currentCorrTypes = new List<int> { pd.correction1_type, pd.correction2_type };
+                List<int> selectedCorrTypes = new List<int>();
+                if (CorrType1 != null && CorrType1.GetValueOrDefault() == true)
+                    selectedCorrTypes.Add(1);
+                if (CorrType2 != null && CorrType2.GetValueOrDefault() == true)
+                    selectedCorrTypes.Add(2);
+                if (CorrType3 != null && CorrType3.GetValueOrDefault() == true)
+                    selectedCorrTypes.Add(3);
+                if (CorrType4 != null && CorrType4.GetValueOrDefault() == true)
+                    selectedCorrTypes.Add(4);
+                if (CorrType5 != null && CorrType5.GetValueOrDefault() == true)
+                    selectedCorrTypes.Add(5);
+                if (CorrType6 != null && CorrType6.GetValueOrDefault() == true)
+                    selectedCorrTypes.Add(6);
+                if (selectedCorrTypes.Except(currentCorrTypes).Any())
+                {
+                    isSelected = false;
+                    continue;
+                }
+
+                /* --- check effect --- */
+                if (EffectId != null)
+                {
+                    bool AnyEffectMatch = false;
+                    int effectType = EffectId.GetValueOrDefault();
+                    List<int> effectTypes = new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
+                    List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
+                    List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
+
+                    for (int i = 0; i < 3; i++)
                     {
-                        queryResult.Add(pd);
-                        break;
+                        bool currentMatch = true;
+                        int curEffectType = effectTypes[i];
+                        int curSubEffectType = subEffectTypes[i];
+                        int curRangeType = rangeTypes[i];
+                        //Console.WriteLine("raw: " + curEffectType + " " + curSubEffectType + " " + curRangeType);
+                        //Console.WriteLine("mod: " + GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 + " " + GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 + " " + GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1);
+                        currentMatch &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
+                        if (SubeffectId != null)
+                            currentMatch &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
+                        if (Range != null)
+                            currentMatch &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
+                        if (currentMatch)
+                        {
+                            AnyEffectMatch = true;
+                            break;
+                        }
                     }
+                    if (!AnyEffectMatch)
+                        isSelected = false;
+                }
+
+                if (isSelected)
+                {
+                    queryResult.Add(pd);
                 }
             }
+            queryResult.Sort(delegate (PictureData pd1, PictureData pd2)
+            {
+                if (pd1.rare != pd2.rare)
+                    return -pd1.rare.CompareTo(pd2.rare);
+                else
+                    return -pd1.id.CompareTo(pd2.id);
+            });
             return queryResult;
         }
 

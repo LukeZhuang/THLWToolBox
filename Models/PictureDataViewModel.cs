@@ -8,8 +8,20 @@ namespace THLWToolBox.Models
         public SelectList? EffectTypes { get; set; }
         public SelectList? SubeffectTypes { get; set; }
         public SelectList? RangeTypes { get; set; }
+        public SelectList? UnitTypes { get; set; }
         public int? EffectId { get; set; }
         public int? SubeffectId { get; set; }
         public int? Range { get; set; }
+        public int? UnitTypeId { get; set; }
+        public bool? ActiveOnly { get; set; }
+        public bool? RareType3 { get; set; }
+        public bool? RareType4 { get; set; }
+        public bool? RareType5 { get; set; }
+        public bool? CorrType1 { get; set; }
+        public bool? CorrType2 { get; set; }
+        public bool? CorrType3 { get; set; }
+        public bool? CorrType4 { get; set; }
+        public bool? CorrType5 { get; set; }
+        public bool? CorrType6 { get; set; }
     }
 }

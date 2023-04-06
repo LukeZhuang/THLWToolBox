@@ -312,5 +312,39 @@ namespace THLWToolBox.Models
                     return new Tuple<int, string>(rangeType, GetRangeTypeString(rangeType));
             }
         }
+
+        public static string IsShowStr(int isShow)
+        {
+            return isShow == 1 ? "是" : "否";
+        }
+
+        public static string CorrectionStr(int correctionType, int correctionValue)
+        {
+            string correctionTypeStr = "";
+            switch (correctionType)
+            {
+                case 1:
+                    correctionTypeStr = "体力";
+                    break;
+                case 2:
+                    correctionTypeStr = "阳攻";
+                    break;
+                case 3:
+                    correctionTypeStr = "阳防";
+                    break;
+                case 4:
+                    correctionTypeStr = "阴攻";
+                    break;
+                case 5:
+                    correctionTypeStr = "阴防";
+                    break;
+                case 6:
+                    correctionTypeStr = "速度";
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+            return correctionTypeStr + "+" + "<color=#FF6600>" + correctionValue + "</color>";
+        }
     }
 }
