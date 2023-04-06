@@ -6,6 +6,7 @@ namespace THLWToolBox.Helpers
 {
     public class GeneralHelper
     {
+        public static string DATA_UPDATE_DATE = "2023/03/28";
         public static string StringFromDatabaseForDisplay(string originalText)
         {
             string text = originalText;
