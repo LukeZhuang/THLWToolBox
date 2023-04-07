@@ -20,8 +20,7 @@ namespace THLWToolBox.Controllers
         }
 
         // GET: PictureDatasFilter
-        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range,
-                                               bool? ActiveOnly,
+        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId,
                                                bool? RareType3, bool? RareType4, bool? RareType5,
                                                bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6)
         {
@@ -37,7 +36,7 @@ namespace THLWToolBox.Controllers
                                select pd;
             var pictureDatasList = await pictureDatas.Distinct().ToListAsync();
 
-            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, ActiveOnly,
+            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, UnitRoleTypeId,
                                                               RareType3, RareType4, RareType5,
                                                               CorrType1, CorrType2, CorrType3, CorrType4, CorrType5, CorrType6);
 
@@ -46,12 +45,13 @@ namespace THLWToolBox.Controllers
                 EffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemEffectModel>(pictureDatasList), "id", "name", null),
                 SubeffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemSubeffectModel>(pictureDatasList), "id", "name", null),
                 RangeTypes = new SelectList(GetSelectListItems<PictureDataSelectItemRangeModel>(pictureDatasList), "id", "name", null),
+                UnitRoleTypes = new SelectList(GetSelectListItems<PictureDataSelectItemUnitRoleTypeModel>(pictureDatasList), "id", "name", null),
                 PictureDatas = displayPictureDatas,
                 //PictureDatas = pictureDatasList,
                 EffectId = EffectId,
                 SubeffectId = SubeffectId,
                 Range = Range,
-                ActiveOnly = ActiveOnly,
+                UnitRoleTypeId = UnitRoleTypeId,
                 RareType3 = RareType3,
                 RareType4 = RareType4,
                 RareType5 = RareType5,
@@ -66,8 +66,7 @@ namespace THLWToolBox.Controllers
         }
 
         /* It's too complex for LINQ, so just use naive list operation */
-        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range,
-                                                  bool? ActiveOnly,
+        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId,
                                                   bool? RareType3, bool? RareType4, bool? RareType5,
                                                   bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6)
         {
@@ -79,13 +78,6 @@ namespace THLWToolBox.Controllers
                 if (   (pd.rare == 3 && RareType3 != null && RareType3.GetValueOrDefault() == false)
                     || (pd.rare == 4 && RareType4 != null && RareType4.GetValueOrDefault() == false)
                     || (pd.rare == 5 && RareType5 != null && RareType5.GetValueOrDefault() == false))
-                {
-                    isSelected = false;
-                    continue;
-                }
-
-                /* --- check is_show --- */
-                if (pd.is_show == 0 && (ActiveOnly == null || ActiveOnly.GetValueOrDefault() == true))
                 {
                     isSelected = false;
                     continue;
@@ -134,6 +126,8 @@ namespace THLWToolBox.Controllers
                             currentMatch &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
                         if (Range != null)
                             currentMatch &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
+                        if (UnitRoleTypeId != null)
+                            currentMatch &= (GeneralTypeMaster.GetEffectByRoleRemappedInfo(curEffectType).Item1 == UnitRoleTypeId.GetValueOrDefault());
                         if (currentMatch)
                         {
                             AnyEffectMatch = true;

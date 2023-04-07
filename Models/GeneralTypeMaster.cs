@@ -129,6 +129,31 @@ namespace THLWToolBox.Models
             }
         }
 
+        public static string GetUnitRoleString(int unitRole)
+        {
+            switch (unitRole)
+            {
+                case 1:
+                    return "防御式";
+                case 2:
+                    return "支援式";
+                case 3:
+                    return "回复式";
+                case 4:
+                    return "干扰式";
+                case 5:
+                    return "攻击式";
+                case 6:
+                    return "技巧式";
+                case 7:
+                    return "速攻式";
+                case 8:
+                    return "破坏式";
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         public static string GetEffectTypeName(int effectType)
         {
             switch (effectType)
@@ -313,9 +338,36 @@ namespace THLWToolBox.Models
             }
         }
 
-        public static string IsShowStr(int isShow)
+        public static Tuple<int, string> GetEffectByRoleRemappedInfo(int effectType)
         {
-            return isShow == 1 ? "是" : "否";
+            switch (effectType)
+            {
+                case 21:  /* "防御式使用时施加Buff" */
+                case 22:  /* "支援式使用时施加Buff" */
+                case 23:  /* "回复式使用时施加Buff" */
+                case 24:  /* "干扰式使用时施加Buff" */
+                case 25:  /* "攻击式使用时施加Buff" */
+                case 26:  /* "技巧式使用时施加Buff" */
+                case 27:  /* "速攻式使用时施加Buff" */
+                case 28:  /* "破坏式使用时施加Buff" */
+                    return new Tuple<int, string>(effectType - 20, GetUnitRoleString(effectType - 20));
+                case 31:  /* "防御式使用时施加Debuff" */
+                case 32:  /* "支援式使用时施加Debuff" */
+                case 33:  /* "回复式使用时施加Debuff" */
+                case 34:  /* "干扰式使用时施加Debuff" */
+                case 35:  /* "攻击式使用时施加Debuff" */
+                case 36:  /* "技巧式使用时施加Debuff" */
+                case 37:  /* "速攻式使用时施加Debuff" */
+                case 38:  /* "破坏式使用时施加Debuff" */
+                    return new Tuple<int, string>(effectType - 30, GetUnitRoleString(effectType - 30));
+                default:
+                    return new Tuple<int, string>(0, "空");
+            }
+        }
+
+        public static string IsActiveStr(bool isActive)
+        {
+            return isActive ? "是" : "否";
         }
 
         public static string CorrectionStr(int correctionType, int correctionValue)

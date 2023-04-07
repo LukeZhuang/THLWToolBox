@@ -81,4 +81,29 @@
             (this.id, this.name) = GeneralTypeMaster.GetRangeRemappedInfo(rangeType);
         }
     }
+
+    public class PictureDataSelectItemUnitRoleTypeModel : PictureDataSelectItemModel
+    {
+        public PictureDataSelectItemUnitRoleTypeModel(PictureData pd, int effectId)
+        {
+            int effectType = 0;
+            if (effectId == 1)
+            {
+                effectType = pd.picture_characteristic1_effect_type;
+            }
+            else if (effectId == 2)
+            {
+                effectType = pd.picture_characteristic2_effect_type;
+            }
+            else if (effectId == 3)
+            {
+                effectType = pd.picture_characteristic3_effect_type;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            (this.id, this.name) = GeneralTypeMaster.GetEffectByRoleRemappedInfo(effectType);
+        }
+    }
 }

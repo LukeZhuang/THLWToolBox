@@ -12,14 +12,11 @@
 <h2>绘卷筛选器</h2>
 <p>
     <p>说明:</p>
-    <p>1. 实装指<font color="red">截至上述数据更新日期</font>时玩家是否有方法获取</p>
-    <p>2. 面板数值均为满级时的样子</p>
-    <p>3. 面板类型若被勾选，则仅显示满足已勾选组合的绘卷。例如勾选体力和阳攻，则仅显示体力+阳攻的绘卷</p>
+    <p>1. 面板数值均为满级时的样子</p>
+    <p>2. 面板类型若被勾选，则仅显示满足已勾选组合的绘卷。例如勾选体力和阳攻，则仅显示同时有体力+阳攻的绘卷</p>
 </p>
 
 <form asp-controller="PictureDatasFilter" asp-action="Index" method="get">
-    <p>实装:</p>
-    <p>@Html.CheckBox("ActiveOnly", true) 仅显示已实装</p>
     <p>星级:</p>
     <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
     <p>绘卷效果:</p>
@@ -42,8 +39,8 @@
         </select>
     </p>
     <p>
-        式专用效果
-        <select asp-for="UnitTypeId" asp-items="Model.UnitTypes">
+        角色式专用效果
+        <select asp-for="UnitRoleTypeId" asp-items="Model.UnitRoleTypes">
             <option value=null>任意</option>
         </select>
     </p>
@@ -82,9 +79,6 @@
             <th>
                 图片
             </th>
-            <th>
-                实装
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -115,9 +109,6 @@
             </td>
             <td>
                 <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="70" height="70" />
-            </td>
-            <td>
-                @Html.Raw(GeneralTypeMaster.IsShowStr(item.is_show))
             </td>
         </tr>
 }
