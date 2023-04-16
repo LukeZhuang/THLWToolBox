@@ -17,9 +17,9 @@
 </p>
 
 <form asp-controller="PictureDatasFilter" asp-action="Index" method="get">
-    <p>星级:</p>
+    <p><b>星级:</b></p>
     <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
-    <p>绘卷效果:</p>
+    <p><b>绘卷效果:</b></p>
     <p>
         绘卷效果类型
         <select asp-for="EffectId" asp-items="Model.EffectTypes">
@@ -44,7 +44,7 @@
             <option value=null>任意</option>
         </select>
     </p>
-    <p>面板:</p>
+    <p><b>面板:</b></p>
     <p>
         <p>@Html.CheckBox("CorrType1", false) 体力 @Html.CheckBox("CorrType6", false) 速度</p>
         <p>@Html.CheckBox("CorrType2", false) 阳攻 @Html.CheckBox("CorrType3", false) 阳防</p>
