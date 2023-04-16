@@ -3,8 +3,9 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'">PictureDatasFilter</button>
-    <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'">PlayerUnitSwitchLinkHelper</button>
+    @*<h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+    <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'">绘卷筛选器</button>
+    <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'">换位连携查询器</button>
+    <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'">弹幕隐藏数据查询器</button>
 </div>
