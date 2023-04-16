@@ -15,5 +15,7 @@ namespace THLWToolBox.Data
         }
 
         public DbSet<THLWToolBox.Models.PictureData> PictureData { get; set; } = default!;
+
+        public DbSet<THLWToolBox.Models.PlayerUnitData> PlayerUnitData { get; set; } = default!;
     }
 }

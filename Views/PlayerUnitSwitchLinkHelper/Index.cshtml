@@ -1,0 +1,240 @@
+﻿@model IEnumerable<THLWToolBox.Models.PlayerUnitData>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.name_kana)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.alias_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.short_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.person_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.album_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.exp_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.symbol_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.symbol_title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.symbol_description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.life_point)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.yang_attack)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.yang_defense)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.yin_attack)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.yin_defense)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.speed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.shot1_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.shot2_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.spellcard1_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.spellcard2_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.spellcard3_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.spellcard4_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.spellcard5_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.skill1_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.skill2_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.skill3_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.resist_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.characteristic_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ability_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.recycle_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.default_costume_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.drop_text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.limitbreak_item_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.spellcard_bgm_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_show)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name_kana)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.alias_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.short_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.person_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.album_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.role)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.exp_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.symbol_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.symbol_title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.symbol_description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.life_point)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.yang_attack)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.yang_defense)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.yin_attack)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.yin_defense)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.speed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.shot1_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.shot2_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spellcard1_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spellcard2_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spellcard3_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spellcard4_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spellcard5_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.skill1_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.skill2_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.skill3_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.resist_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.characteristic_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ability_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.recycle_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.default_costume_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.drop_text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.limitbreak_item_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spellcard_bgm_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.is_show)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
