@@ -38,7 +38,7 @@ namespace THLWToolBox.Controllers
             var symbolList = await symbols.Distinct().ToListAsync();
 
             List<PlayerUnitSwitchLinkDisplayModel> displayPictureDatas = new List<PlayerUnitSwitchLinkDisplayModel>();
-            if (UnitName != null)
+            if (UnitName != null && UnitName.Length > 0)
             {
                 foreach (var pud in playerUnitDatasList)
                 {

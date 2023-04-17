@@ -1,0 +1,135 @@
+﻿@*@model IEnumerable<THLWToolBox.Models.PlayerUnitData>*@
+@model THLWToolBox.Models.PlayerUnitRaceFilterViewModel
+@using THLWToolBox.Helpers;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+        <script type="text/javascript">
+            $('#nameinput1').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/PlayerUnitRaceFilter/SearchUser',
+                        dataType: 'json',
+                        data: { term: $('#nameinput1').val() },
+                        success: function (data) {
+                            var result = $.map(data, function (item) {
+                                return {
+                                    label: item
+                                };
+                            });
+                            return response(result);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#nameinput1').val(ui.item.label);
+                },
+                create: function () {
+                    $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+                        return $('<li>')
+                            .append('<div id="ui-id-6" tabindex="-1" class="ui-menu-item-wrapper">'
+                                    + item.label + '<br></div>')
+                            .appendTo(ul);
+                    };
+                }
+            });
+            $('#nameinput2').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/PlayerUnitRaceFilter/SearchRace',
+                        dataType: 'json',
+                        data: { term: $('#nameinput2').val() },
+                        success: function (data) {
+                            var result = $.map(data, function (item) {
+                                return {
+                                    label: item
+                                };
+                            });
+                            return response(result);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#nameinput2').val(ui.item.label);
+                },
+                create: function () {
+                    $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+                        return $('<li>')
+                            .append('<div id="ui-id-6" tabindex="-1" class="ui-menu-item-wrapper">'
+                                    + item.label + '<br></div>')
+                            .appendTo(ul);
+                    };
+                }
+            });
+    </script>
+}
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE)</font></b></p>
+
+<h2>角色种族查询器</h2>
+<p>
+    <p>说明:</p>
+    <p>1. 角色名与种族名任选其一输入，<b><font color="red">如果两个都输入则仅显示角色名结果</font></b></p>
+    <p>2. 目前已实装种族列表：@Html.Raw(Model.RaceList)</p>
+</p>
+
+<p>
+    <form asp-controller="PlayerUnitRaceFilter" asp-action="Index" method="get">
+        <p><b>角色名（带补全建议）:</b></p>
+        <p><input type="text" id="nameinput1" asp-for="UnitName"></p>
+        <p><b>泛异记号:</b></p>
+        <select asp-for="SymbolId" asp-items="Model.Symbols">
+            <option value=null>任意</option>
+        </select>
+        <p>或者</p>
+        <p><b>种族名（带补全建议）:</b></p>
+        <p><input type="text" id="nameinput2" asp-for="RaceName"></p>
+        <input type="submit" value="筛选" />
+    </form>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                头像
+            </th>
+            <th>
+                角色/种族
+            </th>
+            <th>
+                泛异记号
+            </th>
+            <th>
+                查询结果
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.QueryResults!)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" width="70" height="70" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.playerUnitData.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
+                </td>
+                <td>
+                    @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(String.Join(", ", item.queryRaces)))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

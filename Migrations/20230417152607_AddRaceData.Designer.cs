@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using THLWToolBox.Data;
 
@@ -10,9 +11,11 @@ using THLWToolBox.Data;
 namespace THLWToolBox.Migrations
 {
     [DbContext(typeof(THLWToolBoxContext))]
-    partial class THLWToolBoxContextModelSnapshot : ModelSnapshot
+    [Migration("20230417152607_AddRaceData")]
+    partial class AddRaceData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
