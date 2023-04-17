@@ -2,10 +2,52 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .button {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: 25%;
+    }
+
+    .button1 {
+        background-color: #4CAFff;
+    }
+
+    .button2 {
+        background-color: darkcyan;
+    }
+
+    .button3 {
+        background-color: darkgoldenrod;
+    }
+
+    .button4 {
+        background-color: darksalmon;
+    }
+
+    .button5 {
+        background-color: darkviolet;
+    }
+
+    .button6 {
+        background-color: #4CAF50;
+    }
+</style>
+
 <div class="text-center">
     @*<h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
-    <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'">绘卷筛选器</button>
-    <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'">换位连携查询器</button>
-    <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'">弹幕隐藏数据查询器</button>
+    <p><button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="button button1">绘卷筛选器</button></p>
+    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button button2">亲密关系查询器</button></p>
+    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button button3">角色种族查询器(按角色)</button></p>
+    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button button4">角色种族查询器(按种族)</button></p>
+    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button button5">弹幕隐藏数据查询器</button></p>
+    @*<button><img src="~/res/pictures_img/1.png" /></button>*@
 </div>
