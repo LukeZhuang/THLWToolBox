@@ -87,9 +87,11 @@
         <p><b>角色名（带补全建议）:</b></p>
         <p><input type="text" id="nameinput1" asp-for="UnitName"></p>
         <p><b>泛异记号:</b></p>
-        <select asp-for="SymbolId" asp-items="Model.Symbols">
+        <p>
+            <select asp-for="SymbolId" asp-items="Model.Symbols">
             <option value=null>任意</option>
-        </select>
+            </select>
+        </p>
         <p>或者</p>
         <p><b>种族名（带补全建议）:</b></p>
         <p><input type="text" id="nameinput2" asp-for="RaceName"></p>
