@@ -19,7 +19,7 @@ namespace THLWToolBox.Controllers
             _context = context;
         }
 
-        // GET: PlayerUnitShotDataFilter
+        // POST: PlayerUnitShotDataFilter
         public async Task<IActionResult> Index(string? UnitName, string? SymbolId, int? ShotId)
         {
             if (_context.PictureData == null)

@@ -16,7 +16,7 @@
     <p>2. 面板类型若被勾选，则仅显示满足已勾选组合的绘卷。例如勾选体力和阳攻，则仅显示同时有体力+阳攻的绘卷</p>
 </p>
 
-<form asp-controller="PictureDatasFilter" asp-action="Index" method="get">
+<form asp-controller="PictureDatasFilter" asp-action="Index" method="post">
     <p><b>星级:</b></p>
     <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
     <p><b>绘卷效果:</b></p>

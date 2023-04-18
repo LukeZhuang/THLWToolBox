@@ -19,7 +19,7 @@ namespace THLWToolBox.Controllers
             _context = context;
         }
 
-        // GET: PictureDatasFilter
+        // POST: PictureDatasFilter
         public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId,
                                                bool? RareType3, bool? RareType4, bool? RareType5,
                                                bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6)
