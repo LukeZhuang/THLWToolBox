@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace THLWToolBox.Controllers
         // POST: PictureDatasFilter
         public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId,
                                                bool? RareType3, bool? RareType4, bool? RareType5,
-                                               bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6)
+                                               bool? CorrType1, bool? CorrType2, bool? CorrType3, bool? CorrType4, bool? CorrType5, bool? CorrType6,
+                                               bool? SimplifiedEffect)
         {
             //return _context.PictureData != null ?
             //            View(await _context.PictureData.ToListAsync()) :
@@ -35,6 +37,13 @@ namespace THLWToolBox.Controllers
             var pictureDatas = from pd in _context.PictureData
                                select pd;
             var pictureDatasList = await pictureDatas.Distinct().ToListAsync();
+
+            var raceDatas = from rd in _context.RaceData
+                            select rd;
+            var raceDataList = await raceDatas.Distinct().ToListAsync();
+            IDictionary<int, string> raceDict = new Dictionary<int, string>();
+            foreach (var raceData in raceDataList)
+                raceDict[raceData.id] = raceData.name;
 
             var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, UnitRoleTypeId,
                                                               RareType3, RareType4, RareType5,
@@ -60,7 +69,9 @@ namespace THLWToolBox.Controllers
                 CorrType3 = CorrType3,
                 CorrType4 = CorrType4,
                 CorrType5 = CorrType5,
-                CorrType6 = CorrType6
+                CorrType6 = CorrType6,
+                SimplifiedEffect = SimplifiedEffect,
+                RaceDict= raceDict
             };
             return View(pictureDataVM);
         }

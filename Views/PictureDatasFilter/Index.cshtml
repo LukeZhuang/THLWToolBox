@@ -17,6 +17,8 @@
 </p>
 
 <form asp-controller="PictureDatasFilter" asp-action="Index" method="post">
+    <p><b>总览:</b></p>
+    <p>@Html.CheckBox("SimplifiedEffect", true) 显示简略版效果(测试特性)</p>
     <p><b>星级:</b></p>
     <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
     <p><b>绘卷效果:</b></p>
@@ -71,10 +73,10 @@
                 面板2
             </th>
             <th>
-                绘卷效果（未满破）
+                未满破效果
             </th>
             <th>
-                绘卷效果(满破)
+                满破效果
             </th>
             <th>
                 图片
@@ -102,10 +104,16 @@
                 @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction2_type, item.correction2_value)))
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.picture_characteristic_text))
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(Model.SimplifiedEffect.GetValueOrDefault(true) ? SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic1_effect_type, item.picture_characteristic1_effect_subtype, item.picture_characteristic1_effect_value, item.picture_characteristic1_effect_turn, item.picture_characteristic1_effect_range, Model.RaceDict) + "<ret>" +
+                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic2_effect_type, item.picture_characteristic2_effect_subtype, item.picture_characteristic2_effect_value, item.picture_characteristic2_effect_turn, item.picture_characteristic2_effect_range, Model.RaceDict) + "<ret>" +
+                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic3_effect_type, item.picture_characteristic3_effect_subtype, item.picture_characteristic3_effect_value, item.picture_characteristic3_effect_turn, item.picture_characteristic3_effect_range, Model.RaceDict)
+                                                                                                                    : item.picture_characteristic_text))
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.picture_characteristic_text_max))
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(Model.SimplifiedEffect.GetValueOrDefault(true) ? SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic1_effect_type, item.picture_characteristic1_effect_subtype, item.picture_characteristic1_effect_value_max, item.picture_characteristic1_effect_turn, item.picture_characteristic1_effect_range, Model.RaceDict) + "<ret>" +
+                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic2_effect_type, item.picture_characteristic2_effect_subtype, item.picture_characteristic2_effect_value_max, item.picture_characteristic2_effect_turn, item.picture_characteristic2_effect_range, Model.RaceDict) + "<ret>" +
+                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic3_effect_type, item.picture_characteristic3_effect_subtype, item.picture_characteristic3_effect_value_max, item.picture_characteristic3_effect_turn, item.picture_characteristic3_effect_range, Model.RaceDict)
+                                                                                                                    : item.picture_characteristic_text_max))
             </td>
             <td>
                 <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="70" height="70" />

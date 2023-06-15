@@ -22,5 +22,7 @@ namespace THLWToolBox.Models
         public bool? CorrType4 { get; set; }
         public bool? CorrType5 { get; set; }
         public bool? CorrType6 { get; set; }
+        public bool? SimplifiedEffect { get; set; }
+        public IDictionary<int, string>? RaceDict { get; set; }
     }
 }
