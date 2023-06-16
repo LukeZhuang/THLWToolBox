@@ -37,37 +37,88 @@
     </p>
     <p><b>星级:</b></p>
     <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
-    <p><b>绘卷效果:</b></p>
-    <p>
-        绘卷效果类型
-        <select asp-for="EffectId" asp-items="Model.EffectTypes">
-            <option value=null>任意</option>
-        </select>
-    </p>
-    <p>
-        子类型
-        <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes">
-            <option value=null>任意</option>
-        </select>
-    </p>
-    <p>
-        作用范围
-        <select asp-for="Range" asp-items="Model.RangeTypes">
-            <option value=null>任意</option>
-        </select>
-    </p>
-    <p>
-        角色式专用效果
-        <select asp-for="UnitRoleTypeId" asp-items="Model.UnitRoleTypes">
-            <option value=null>任意</option>
-        </select>
-    </p>
-    <p>
-        回合数
-        <select asp-for="TurnTypeId" asp-items="Model.TurnTypes">
-            <option value=null>任意</option>
-        </select>
-    </p>
+
+    
+    <p><b>绘卷效果组合查询:</b></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>绘卷效果1:</th>
+                <th>绘卷效果2:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    <p>
+                        绘卷效果类型
+                        <select asp-for="EffectId" asp-items="Model.EffectTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        子类型
+                        <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        作用范围
+                        <select asp-for="Range" asp-items="Model.RangeTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        角色式专用效果
+                        <select asp-for="UnitRoleTypeId" asp-items="Model.UnitRoleTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        回合数
+                        <select asp-for="TurnTypeId" asp-items="Model.TurnTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                </th>
+                <th>
+                    <p>
+                        绘卷效果类型
+                        <select asp-for="Effect2Id" asp-items="Model.EffectTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        子类型
+                        <select asp-for="Subeffect2Id" asp-items="Model.SubeffectTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        作用范围
+                        <select asp-for="Range2" asp-items="Model.RangeTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        角色式专用效果
+                        <select asp-for="UnitRoleType2Id" asp-items="Model.UnitRoleTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                    <p>
+                        回合数
+                        <select asp-for="TurnType2Id" asp-items="Model.TurnTypes">
+                            <option value=null>任意</option>
+                        </select>
+                    </p>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    
+
+
     <p><b>面板(若选择，则筛选，并先按主属性排序再按副排序):</b></p>
     <p>
         <p>

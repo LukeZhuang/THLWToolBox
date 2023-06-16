@@ -15,6 +15,11 @@ namespace THLWToolBox.Models
         public int? Range { get; set; }
         public int? UnitRoleTypeId { get; set; }
         public int? TurnTypeId { get; set; }
+        public int? Effect2Id { get; set; }
+        public int? Subeffect2Id { get; set; }
+        public int? Range2 { get; set; }
+        public int? UnitRoleType2Id { get; set; }
+        public int? TurnType2Id { get; set; }
         public bool? RareType3 { get; set; }
         public bool? RareType4 { get; set; }
         public bool? RareType5 { get; set; }
