@@ -62,6 +62,12 @@
             <option value=null>任意</option>
         </select>
     </p>
+    <p>
+        回合数
+        <select asp-for="TurnTypeId" asp-items="Model.TurnTypes">
+            <option value=null>任意</option>
+        </select>
+    </p>
     <p><b>面板(若选择，则筛选，并先按主属性排序再按副排序):</b></p>
     <p>
         <p>
