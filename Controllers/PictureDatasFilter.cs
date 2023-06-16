@@ -21,7 +21,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PictureDatasFilter
-        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId,
+        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId,
                                                bool? RareType3, bool? RareType4, bool? RareType5,
                                                bool? SimplifiedEffect, int? DisplayPictureLevel,
                                                int? CorrTypeMain, int? CorrTypeSub)
@@ -45,7 +45,7 @@ namespace THLWToolBox.Controllers
             foreach (var raceData in raceDataList)
                 raceDict[raceData.id] = raceData.name;
 
-            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, UnitRoleTypeId,
+            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, UnitRoleTypeId, TurnTypeId,
                                                               RareType3, RareType4, RareType5,
                                                               CorrTypeMain, CorrTypeSub, DisplayPictureLevel);
 
@@ -55,12 +55,14 @@ namespace THLWToolBox.Controllers
                 SubeffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemSubeffectModel>(pictureDatasList), "id", "name", null),
                 RangeTypes = new SelectList(GetSelectListItems<PictureDataSelectItemRangeModel>(pictureDatasList), "id", "name", null),
                 UnitRoleTypes = new SelectList(GetSelectListItems<PictureDataSelectItemUnitRoleTypeModel>(pictureDatasList), "id", "name", null),
+                TurnTypes = new SelectList(GetSelectListItems<PictureDataSelectItemTurnTypeModel>(pictureDatasList), "id", "name", null),
                 PictureDatas = displayPictureDatas,
                 //PictureDatas = pictureDatasList,
                 EffectId = EffectId,
                 SubeffectId = SubeffectId,
                 Range = Range,
                 UnitRoleTypeId = UnitRoleTypeId,
+                TurnTypeId = TurnTypeId,
                 RareType3 = RareType3,
                 RareType4 = RareType4,
                 RareType5 = RareType5,
@@ -74,7 +76,7 @@ namespace THLWToolBox.Controllers
         }
 
         /* It's too complex for LINQ, so just use naive list operation */
-        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId,
+        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId,
                                                   bool? RareType3, bool? RareType4, bool? RareType5,
                                                   int? CorrTypeMain, int? CorrTypeSub, int? DisplayPictureLevel)
         {
@@ -112,6 +114,7 @@ namespace THLWToolBox.Controllers
                     List<int> effectTypes = new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
                     List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
                     List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
+                    List<int> turnTypes = new List<int> { pd.picture_characteristic1_effect_turn, pd.picture_characteristic2_effect_turn, pd.picture_characteristic3_effect_turn };
 
                     for (int i = 0; i < 3; i++)
                     {
@@ -119,6 +122,7 @@ namespace THLWToolBox.Controllers
                         int curEffectType = effectTypes[i];
                         int curSubEffectType = subEffectTypes[i];
                         int curRangeType = rangeTypes[i];
+                        int curTurnType = turnTypes[i];
                         //Console.WriteLine("raw: " + curEffectType + " " + curSubEffectType + " " + curRangeType);
                         //Console.WriteLine("mod: " + GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 + " " + GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 + " " + GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1);
                         currentMatch &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
@@ -128,6 +132,8 @@ namespace THLWToolBox.Controllers
                             currentMatch &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
                         if (UnitRoleTypeId != null)
                             currentMatch &= (GeneralTypeMaster.GetEffectByRoleRemappedInfo(curEffectType).Item1 == UnitRoleTypeId.GetValueOrDefault());
+                        if (TurnTypeId != null)
+                            currentMatch &= (curTurnType == TurnTypeId.GetValueOrDefault());
                         if (currentMatch)
                         {
                             AnyEffectMatch = true;
