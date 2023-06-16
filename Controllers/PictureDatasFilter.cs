@@ -22,6 +22,7 @@ namespace THLWToolBox.Controllers
 
         // POST: PictureDatasFilter
         public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId,
+                                               int? Effect2Id, int? Subeffect2Id, int? Range2, int? UnitRoleType2Id, int? TurnType2Id,
                                                bool? RareType3, bool? RareType4, bool? RareType5,
                                                bool? SimplifiedEffect, int? DisplayPictureLevel,
                                                int? CorrTypeMain, int? CorrTypeSub)
@@ -46,6 +47,7 @@ namespace THLWToolBox.Controllers
                 raceDict[raceData.id] = raceData.name;
 
             var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, UnitRoleTypeId, TurnTypeId,
+                                                              Effect2Id, Subeffect2Id, Range2, UnitRoleType2Id, TurnType2Id,
                                                               RareType3, RareType4, RareType5,
                                                               CorrTypeMain, CorrTypeSub, DisplayPictureLevel);
 
@@ -63,6 +65,11 @@ namespace THLWToolBox.Controllers
                 Range = Range,
                 UnitRoleTypeId = UnitRoleTypeId,
                 TurnTypeId = TurnTypeId,
+                Effect2Id = Effect2Id,
+                Subeffect2Id = Subeffect2Id,
+                Range2 = Range2,
+                UnitRoleType2Id = UnitRoleType2Id,
+                TurnType2Id = TurnType2Id,
                 RareType3 = RareType3,
                 RareType4 = RareType4,
                 RareType5 = RareType5,
@@ -77,6 +84,7 @@ namespace THLWToolBox.Controllers
 
         /* It's too complex for LINQ, so just use naive list operation */
         List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId,
+                                                  int? Effect2Id, int? Subeffect2Id, int? Range2, int? UnitRoleType2Id, int? TurnType2Id,
                                                   bool? RareType3, bool? RareType4, bool? RareType5,
                                                   int? CorrTypeMain, int? CorrTypeSub, int? DisplayPictureLevel)
         {
@@ -107,42 +115,8 @@ namespace THLWToolBox.Controllers
                 }
 
                 /* --- check effect --- */
-                if (EffectId != null)
-                {
-                    bool AnyEffectMatch = false;
-                    int effectType = EffectId.GetValueOrDefault();
-                    List<int> effectTypes = new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
-                    List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
-                    List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
-                    List<int> turnTypes = new List<int> { pd.picture_characteristic1_effect_turn, pd.picture_characteristic2_effect_turn, pd.picture_characteristic3_effect_turn };
-
-                    for (int i = 0; i < 3; i++)
-                    {
-                        bool currentMatch = true;
-                        int curEffectType = effectTypes[i];
-                        int curSubEffectType = subEffectTypes[i];
-                        int curRangeType = rangeTypes[i];
-                        int curTurnType = turnTypes[i];
-                        //Console.WriteLine("raw: " + curEffectType + " " + curSubEffectType + " " + curRangeType);
-                        //Console.WriteLine("mod: " + GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 + " " + GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 + " " + GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1);
-                        currentMatch &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
-                        if (SubeffectId != null)
-                            currentMatch &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
-                        if (Range != null)
-                            currentMatch &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
-                        if (UnitRoleTypeId != null)
-                            currentMatch &= (GeneralTypeMaster.GetEffectByRoleRemappedInfo(curEffectType).Item1 == UnitRoleTypeId.GetValueOrDefault());
-                        if (TurnTypeId != null)
-                            currentMatch &= (curTurnType == TurnTypeId.GetValueOrDefault());
-                        if (currentMatch)
-                        {
-                            AnyEffectMatch = true;
-                            break;
-                        }
-                    }
-                    if (!AnyEffectMatch)
-                        isSelected = false;
-                }
+                isSelected &= FilterByEffect(pd, EffectId,  SubeffectId,  Range,  UnitRoleTypeId,  TurnTypeId);
+                isSelected &= FilterByEffect(pd, Effect2Id, Subeffect2Id, Range2, UnitRoleType2Id, TurnType2Id);
 
                 if (isSelected)
                 {
@@ -161,6 +135,38 @@ namespace THLWToolBox.Controllers
                     return -pd1.id.CompareTo(pd2.id);
             });
             return queryResult;
+        }
+
+        bool FilterByEffect(PictureData pd, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId)
+        {
+            if (EffectId == null)
+                return true;
+            int effectType = EffectId.GetValueOrDefault();
+            List<int> effectTypes = new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
+            List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
+            List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
+            List<int> turnTypes = new List<int> { pd.picture_characteristic1_effect_turn, pd.picture_characteristic2_effect_turn, pd.picture_characteristic3_effect_turn };
+
+            for (int i = 0; i < 3; i++)
+            {
+                bool currentMatch = true;
+                int curEffectType = effectTypes[i];
+                int curSubEffectType = subEffectTypes[i];
+                int curRangeType = rangeTypes[i];
+                int curTurnType = turnTypes[i];
+                currentMatch &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
+                if (SubeffectId != null)
+                    currentMatch &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
+                if (Range != null)
+                    currentMatch &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
+                if (UnitRoleTypeId != null)
+                    currentMatch &= (GeneralTypeMaster.GetEffectByRoleRemappedInfo(curEffectType).Item1 == UnitRoleTypeId.GetValueOrDefault());
+                if (TurnTypeId != null)
+                    currentMatch &= (curTurnType == TurnTypeId.GetValueOrDefault());
+                if (currentMatch)
+                    return true;
+            }
+            return false;
         }
 
         int GetCorrTypeValue(int CorrType, PictureData pd, int DisplayPictureLevel)
