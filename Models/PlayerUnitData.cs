@@ -38,6 +38,9 @@
         public string drop_text { get; set; }
         public int limitbreak_item_id { get; set; }
         public int spellcard_bgm_id { get; set; }
+        public string name_sub { get; set; }
+        public string name_kana_sub { get; set; }
+        public string short_name_sub { get; set; }
         public int is_show { get; set; }
     }
 }

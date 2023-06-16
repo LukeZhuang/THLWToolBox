@@ -16,11 +16,10 @@ namespace THLWToolBox.Models
         public bool? RareType3 { get; set; }
         public bool? RareType4 { get; set; }
         public bool? RareType5 { get; set; }
-        public bool? CorrType1 { get; set; }
-        public bool? CorrType2 { get; set; }
-        public bool? CorrType3 { get; set; }
-        public bool? CorrType4 { get; set; }
-        public bool? CorrType5 { get; set; }
-        public bool? CorrType6 { get; set; }
+        public bool? SimplifiedEffect { get; set; }
+        public IDictionary<int, string>? RaceDict { get; set; }
+        public int? DisplayPictureLevel { get; set; }
+        public int? CorrTypeMain { get; set; }
+        public int? CorrTypeSub { get; set; }
     }
 }

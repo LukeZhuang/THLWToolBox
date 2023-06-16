@@ -55,10 +55,12 @@ delete from [dbo].[PlayerUnitCharacteristicData];
 delete from [dbo].[PlayerUnitData];
 delete from [dbo].[PlayerUnitShotData];
 delete from [dbo].[PlayerUnitSpellcardData];
+delete from [dbo].[RaceData];
+delete from [dbo].[PlayerUnitRaceData];
 
 SET IDENTITY_INSERT [dbo].[PlayerUnitData] ON;
 insert into [dbo].[PlayerUnitData] (
-[id],[name],[name_kana],[alias_name],[short_name],[person_id],[album_id],[role],[exp_id],[symbol_name],[symbol_title],[symbol_description],[life_point],[yang_attack],[yang_defense],[yin_attack],[yin_defense],[speed],[shot1_id],[shot2_id],[spellcard1_id],[spellcard2_id],[spellcard3_id],[spellcard4_id],[spellcard5_id],[skill1_id],[skill2_id],[skill3_id],[resist_id],[characteristic_id],[ability_id],[recycle_id],[default_costume_id],[drop_text],[limitbreak_item_id],[spellcard_bgm_id],[is_show]
+[id],[name],[name_kana],[alias_name],[short_name],[person_id],[album_id],[role],[exp_id],[symbol_name],[symbol_title],[symbol_description],[life_point],[yang_attack],[yang_defense],[yin_attack],[yin_defense],[speed],[shot1_id],[shot2_id],[spellcard1_id],[spellcard2_id],[spellcard3_id],[spellcard4_id],[spellcard5_id],[skill1_id],[skill2_id],[skill3_id],[resist_id],[characteristic_id],[ability_id],[recycle_id],[default_costume_id],[drop_text],[limitbreak_item_id],[spellcard_bgm_id],[name_sub],[name_kana_sub],[short_name_sub],[is_show]
 )
 select * from [dbo].[RAW_UnitTable]
 where symbol_name != '(empty)' and (shot1_id != 10011 or id = 1001) and alias_name != '_TEST';

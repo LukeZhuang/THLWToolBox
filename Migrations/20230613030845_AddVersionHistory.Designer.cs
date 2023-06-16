@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using THLWToolBox.Data;
 
@@ -11,9 +12,11 @@ using THLWToolBox.Data;
 namespace THLWToolBox.Migrations
 {
     [DbContext(typeof(THLWToolBoxContext))]
-    partial class THLWToolBoxContextModelSnapshot : ModelSnapshot
+    [Migration("20230613030845_AddVersionHistory")]
+    partial class AddVersionHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,14 +350,6 @@ namespace THLWToolBox.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name_kana_sub")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name_sub")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("person_id")
                         .HasColumnType("int");
 
@@ -368,10 +363,6 @@ namespace THLWToolBox.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("short_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("short_name_sub")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
