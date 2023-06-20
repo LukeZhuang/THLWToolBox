@@ -5,57 +5,95 @@
 }
 
 <style>
+    .title {
+        font-size: 25px;
+    }
     .button {
         border: none;
-        color: white;
-        padding: 15px 32px;
+        background: white;
+        color: black;
+        padding: 15px 20px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
         margin: 4px 2px;
         cursor: pointer;
-        width: 25%;
+        width: 24%;
+        height: 60px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
     }
 
-    .button1 {
-        background-color: #4CAFff;
+    .home-box2 {
+        width: 70%;
+        padding: 0px 0px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 15%;
+        margin-right: 15%;
     }
-
-    .button2 {
-        background-color: darkcyan;
-    }
-
-    .button3 {
-        background-color: darkgoldenrod;
-    }
-
-    .button4 {
-        background-color: darksalmon;
-    }
-
-    .button5 {
-        background-color: deeppink;
-    }
-
-    .button6 {
-        background-color: darkviolet;
-    }
-
-    .button7 {
-        background-color: #4CAF50;
+    .box-btl-1 {
+        position: relative;
+        width: 100%;
+        padding: 7px 10px;
+        background: orange;
+        text-align: center;
+        color: #fff;
+        font-size: 18px;
+        height: 40px;
+        line-height: 22px;
+        font-weight: bold
     }
 </style>
 
-<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE)</font></b></p>
-<p><b><font color="red">*当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
-<div class="text-center">
+@*<div class="text-center">*@
+<div>
     @*<h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="button button1">绘卷筛选器</button></p>
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button button5">亲密关系查询器</button></p>
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="button button3">角色种族查询器</button></p>
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="button button2">弹幕隐藏数据查询器</button></p>
+    <div class="text-center">
+        <div class="title"><img src="@Url.Content("~/res/website/index_toolbox.png")" alt="暂无图片" width="50" height="50"></img>东方归言录工具箱</div>
+    </div>
+    <div class="home-box2">
+        <div class="box-btl-1">绘卷相关</div>
+        <p>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="button">
+                <img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" width="30" height="30"></img> 绘卷筛选器
+            </button>
+        </p>
+    </div>
+    <div class="home-box2">
+        <div class="box-btl-1">角色相关</div>
+        <p>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button">
+                <img src="@Url.Content("~/res/website/index_btn_heart.png")" width="30" height="30"></img> 查亲密关系
+            </button>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="button">
+                <img src="@Url.Content("~/res/website/index_btn_race.png")" width="30" height="30"></img> 查种族
+            </button>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="button">
+                <img src="@Url.Content("~/res/website/index_btn_bullet.png")" width="30" height="30"></img> 查弹幕数据
+            </button>
+            <button type="button" class="button">
+                <img src="@Url.Content("~/res/website/index_btn_typeattack.png")" width="30" height="30"></img> 查特攻
+            </button>
+            <button type="button"class="button">
+                <img src="@Url.Content("~/res/website/index_btn_power.png")" width="30" height="30"></img> 查回灵效率
+            </button>
+            <button type="button"class="button">
+                <img src="@Url.Content("~/res/website/index_btn_skill.png")" width="30" height="30"></img> 查技能
+            </button>
+            <button type="button" class="button">
+                <img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="30" height="30"></img> 查异常破盾
+            </button>
+        </p>
+    </div>
+    <div class="home-box2">
+        <div class="box-btl-1">其他实用工具</div>
+        <p>
+            <button type="button" class="button">暂无</button>
+        </p>
+    </div>
     @*<button><img src="~/res/pictures_img/1.png" /></button>*@
 </div>
