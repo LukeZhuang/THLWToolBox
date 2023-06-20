@@ -19,18 +19,18 @@
         font-size: 16px;
         margin: 4px 2px;
         cursor: pointer;
-        width: 24%;
-        height: 60px;
+        /*width: 24%;*/
+        /*height: 60px;*/
         border: 2px solid rgba(0, 0, 0, 0.1);
     }
 
     .home-box2 {
-        width: 70%;
+        width: 88%;
         padding: 0px 0px;
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: 15%;
-        margin-right: 15%;
+        margin-left: 6%;
+        margin-right: 6%;
     }
     .box-btl-1 {
         position: relative;
@@ -43,6 +43,13 @@
         height: 40px;
         line-height: 22px;
         font-weight: bold
+    }
+
+    .my-buttons {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        width: 100%;
+        grid-gap: 5px;
     }
 </style>
 
@@ -57,43 +64,45 @@
     </div>
     <div class="home-box2">
         <div class="box-btl-1">绘卷相关</div>
-        <p>
+        <div class="my-buttons">
             <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="button">
-                <img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" width="30" height="30"></img> 绘卷筛选器
+                <div><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" width="40" height="40"></img></div>绘卷筛选器
             </button>
-        </p>
+        </div>
     </div>
     <div class="home-box2">
         <div class="box-btl-1">角色相关</div>
-        <p>
+        <div class="my-buttons">
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button">
-                <img src="@Url.Content("~/res/website/index_btn_heart.png")" width="30" height="30"></img> 查亲密关系
+                <div><img src="@Url.Content("~/res/website/index_btn_heart.png")" width="40" height="40"></img></div>查亲密关系
             </button>
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="button">
-                <img src="@Url.Content("~/res/website/index_btn_race.png")" width="30" height="30"></img> 查种族
+                <div><img src="@Url.Content("~/res/website/index_btn_race.png")" width="40" height="40"></img></div>查种族
             </button>
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="button">
-                <img src="@Url.Content("~/res/website/index_btn_bullet.png")" width="30" height="30"></img> 查弹幕数据
+                <div><img src="@Url.Content("~/res/website/index_btn_bullet.png")" width="40" height="40"></img></div>查弹幕数据
             </button>
             <button type="button" class="button">
-                <img src="@Url.Content("~/res/website/index_btn_typeattack.png")" width="30" height="30"></img> 查特攻
+                <div><img src="@Url.Content("~/res/website/index_btn_typeattack.png")" width="40" height="40"></img></div>查特攻（开发中）
             </button>
             <button type="button"class="button">
-                <img src="@Url.Content("~/res/website/index_btn_power.png")" width="30" height="30"></img> 查回灵效率
+                <div><img src="@Url.Content("~/res/website/index_btn_power.png")" width="40" height="40"></img></div>查回灵效率（开发中）
             </button>
             <button type="button"class="button">
-                <img src="@Url.Content("~/res/website/index_btn_skill.png")" width="30" height="30"></img> 查技能
+                <div><img src="@Url.Content("~/res/website/index_btn_skill.png")" width="40" height="40"></img></div>查技能（开发中）
             </button>
             <button type="button" class="button">
-                <img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="30" height="30"></img> 查异常破盾
+                <div><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="40" height="40"></img></div>查异常破盾（开发中）
             </button>
-        </p>
+        </div>
     </div>
     <div class="home-box2">
         <div class="box-btl-1">其他实用工具</div>
-        <p>
-            <button type="button" class="button">暂无</button>
-        </p>
+        <div class="my-buttons">
+            <button type="button" class="button">
+                <div><img src="@Url.Content("~/res/website/index_btn_empty.png")" width="40" height="40"></img></div>暂无
+            </button>
+        </div>
     </div>
     @*<button><img src="~/res/pictures_img/1.png" /></button>*@
 </div>
