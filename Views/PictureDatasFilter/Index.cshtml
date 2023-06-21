@@ -151,9 +151,6 @@
 <table class="table">
     <thead>
         <tr>
-            @*<th>
-                @Html.DisplayNameFor(model => model.PictureDatas![0].id)
-            </th>*@
             <th>
                 名称
             </th>
@@ -182,9 +179,6 @@
     @foreach (var item in Model.PictureDatas!)
     {
         <tr>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.id)
-            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.name)
             </td>
