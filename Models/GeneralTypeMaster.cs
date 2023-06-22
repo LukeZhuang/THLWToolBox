@@ -398,9 +398,9 @@ namespace THLWToolBox.Models
             }
             string correctionValueWrapper = Convert.ToString(correctionValue);
             if (corrTypeMain != null && corrTypeMain.GetValueOrDefault() == correctionType)
-                correctionValueWrapper = "<color=#FF6600>" + correctionValueWrapper + "</color>";
+                correctionValueWrapper = "<b><color=#FF6600>" + correctionValueWrapper + "</color></b>";
             else if (corrTypeSub != null && corrTypeSub.GetValueOrDefault() == correctionType)
-                correctionValueWrapper = "<color=#4CAFFF>" + correctionValueWrapper + "</color>";
+                correctionValueWrapper = "<b><color=#4CAFFF>" + correctionValueWrapper + "</color></b>";
 
             return correctionTypeStr + "+" + correctionValueWrapper;
         }
