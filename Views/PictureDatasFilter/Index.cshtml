@@ -393,7 +393,7 @@
                                                                                                                     : item.picture_characteristic_text_max))
             </td>
             <td>
-                <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="65" height="65" />
+                <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" width="65" height="65" />
             </td>
         </tr>
 }
