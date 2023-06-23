@@ -13,12 +13,12 @@
         font-weight: bold
     }
     .home-box {
-        width: 88%;
+        width: 94%;
         padding: 0px 0px;
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: 6%;
-        margin-right: 6%;
+        margin-left: 3%;
+        margin-right: 3%;
         border: 2px solid rgba(0, 0, 0, 0.1);
     }
     .filter-box {
@@ -122,6 +122,26 @@
     }
 </style>
 
+<!-- Modal -->
+<div class="modal fade" id="pictureDatasFilterHelperModal" tabindex="-1" aria-labelledby="pictureDatasFilterHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pictureDatasFilterHelper">帮助：绘卷筛选器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 默认显示简略版绘卷效果描述，以及0级面板</p>
+                <p>2. 效果查询支持两种组合查询，若想进行筛选则必选“主类型”，否则无效</p>
+                <p>3. 面板属性若选择，则会进行筛选。然后按照当前指定的等级，把筛选结果先按“主属性”从大到小排序，再按“副属性”从大到小排序</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
 <div class="text-center">
@@ -149,7 +169,7 @@
     
     <div class="filter-box">
         <div class="title-box-1">绘卷效果查询</div>
-        @*<table class="table">
+        <table class="table">
             <thead>
                 <tr>
                     <th>绘卷效果1:</th>
@@ -224,11 +244,11 @@
                     </th>
                 </tr>
             </tbody>
-        </table>*@
+        </table>
     </div>
     
 
-    
+
     <div class="filter-box">
         <div class="title-box-1">面板筛选与排序</div>
         <div class="selects-grid">
@@ -276,7 +296,7 @@
     </div>
     <div class="submit-title-box-1"></div>
     <input type="submit" value="确定" class="btn-submit" />
-    <button type="button" class="btn-submit btn-helper">帮助</button>
+    <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#pictureDatasFilterHelperModal">帮助</button>
 </form>
 </div>
 
