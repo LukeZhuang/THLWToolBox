@@ -153,11 +153,11 @@
 
         private static string MarkValue(int value)
         {
-            return "<color=#FF6600>" + Convert.ToString(value) + "</color>";
+            return "<b><color=#FC0377>" + Convert.ToString(value) + "</color></b>";
         }
         private static string MarkValue(double value)
         {
-            return "<color=#FF6600>" + string.Format("{0:N2}", value) + "</color>";
+            return "<b><color=#FC0377>" + string.Format("{0:N2}", value) + "</color></b>";
         }
 
         public static string CreateSimplifiedEffectStr(int type, int subtype, int value, int turn, int range, IDictionary<int, string>? raceDict = null)

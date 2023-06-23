@@ -7,153 +7,340 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+    .title-box {
+        font-size: 30px;
+        font-weight: bold
+    }
+    .home-box {
+        width: 94%;
+        padding: 0px 0px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 3%;
+        margin-right: 3%;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+    .filter-box {
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .title-box-1 {
+        position: relative;
+        width: 100%;
+        padding: 7px 10px;
+        background: orange;
+        text-align: center;
+        color: #fff;
+        font-size: 18px;
+        height: 40px;
+        line-height: 22px;
+        font-weight: bold
+    }
+    .buttons-grid {
+        display: inline-grid;
+        /*grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;*/
+        grid-template-columns: auto auto auto auto auto auto;
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+        grid-gap: 5px;
+    }
+
+    .btn-checkbox {
+        border: none;
+        background: white;
+        color: black;
+        padding: 5px 0px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        border: 2px solid rgba(0, 0, 0, 0.3);
+    }
+
+    .selects-grid {
+        display: inline-grid;
+        grid-template-columns: auto 9fr;
+        grid-template-rows: auto auto auto auto auto;
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+        grid-gap: 5px;
+    }
+
+    .selects-box {
+        border: none;
+        background: white;
+        color: black;
+        padding: 7px 7px;
+        text-align: left;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        /*margin: 4px 2px;*/
+        /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+    }
+
+    .selector {
+        width: 150px
+    }
+
+    .submit-title-box-1 {
+        position: relative;
+        width: 100%;
+        padding: 7px 10px;
+        background: darkgray;
+        text-align: center;
+        height: 10px;
+    }
+
+    .btn-submit {
+        position: relative;
+        width: 41%;
+        margin-left: 6%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        height: 50px;
+        line-height: 1;
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border: 3px solid #fc7703;
+        background: #fff;
+        color: #fc7703;
+        border-radius: 40px;
+    }
+
+    .btn-helper {
+        border: 3px solid #8C82FC;
+        color: #8C82FC;
+    }
+
+    .accordion .card-header:after {
+        font-family: 'FontAwesome';
+        content: "\f068";
+        float: left;
+    }
+
+    .accordion .card-header.collapsed:after {
+        /* symbol for "collapsed" panels */
+        content: "\f067";
+    }
+
+    .effect-box {
+        width: max(60%, 300px);
+        margin-left: 1%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .effect-expand-label {
+        width: 250px;
+        margin-left: 10px;
+        margin-bottom: 10px
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="pictureDatasFilterHelperModal" tabindex="-1" aria-labelledby="pictureDatasFilterHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pictureDatasFilterHelper">帮助：绘卷筛选器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 默认显示简略版绘卷效果描述，以及0级面板</p>
+                <p>2. 效果查询支持两种组合查询，若想进行筛选则必选“主类型”，否则无效</p>
+                <p>3. 面板属性若选择，则会进行筛选。然后按照当前指定的等级，把筛选结果先按“主属性”从大到小排序，再按“副属性”从大到小排序</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
-<h2>绘卷筛选器</h2>
-<p>
-    <p>说明:</p>
-    <p>1. 面板数值均为满级时的样子</p>
-    <p>2. 面板类型若被勾选，则仅显示满足已勾选组合的绘卷。例如勾选体力和阳攻，则仅显示同时有体力+阳攻的绘卷</p>
-</p>
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" width="60" height="60"/> 绘卷筛选器</div>
+</div>
 
+<div class="home-box">
 <form asp-controller="PictureDatasFilter" asp-action="Index" method="post">
-    <p><b>总览:</b></p>
-    <p>@Html.CheckBox("SimplifiedEffect", true) 显示简略版效果(测试特性)</p>
-    <p>
-        绘卷等级:
-        <select asp-for="DisplayPictureLevel">
-            <option value=0>0级</option>
-            <option value=1>1级</option>
-            <option value=2>2级</option>
-            <option value=3>3级</option>
-            <option value=4>4级</option>
-            <option value=5>5级</option>
-            <option value=6>6级</option>
-            <option value=7>7级</option>
-            <option value=8>8级</option>
-            <option value=9>9级</option>
-            <option value=10>10级</option>
-        </select>
-    </p>
-    <p><b>星级:</b></p>
-    <p>@Html.CheckBox("RareType3", true) 三星 @Html.CheckBox("RareType4", true) 四星 @Html.CheckBox("RareType5", true) 五星</p>
+    <div class="filter-box">
+        <div class="title-box-1">通用</div>
+        <div class="buttons-grid">
+            <div class="btn-checkbox" style="width:250px">@Html.CheckBox("SimplifiedEffect", true) 显示简略版效果描述</div>
+        </div>
+    </div>
+
+    <div class="filter-box">
+        <div class="title-box-1">星级筛选</div>
+        <div class="buttons-grid">
+            <div class="btn-checkbox">@Html.CheckBox("RareType3", true) 三星</div>
+            <div class="btn-checkbox">@Html.CheckBox("RareType4", true) 四星</div>
+            <div class="btn-checkbox">@Html.CheckBox("RareType5", true) 五星</div>
+        </div>
+    </div>
 
     
-    <p><b>绘卷效果组合查询:</b></p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>绘卷效果1:</th>
-                <th>绘卷效果2:</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>
-                    <p>
-                        绘卷效果类型
-                        <select asp-for="EffectId" asp-items="Model.EffectTypes">
+    <div class="filter-box">
+        <div class="title-box-1">绘卷效果查询</div>
+        <div class="effect-box">
+            <div style="margin: 10px 10px"><h5><b>绘卷效果1:</b></h5></div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">主类型:</div>
+                <div class="selects-box">
+                    <select asp-for="EffectId" asp-items="Model.EffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">子类型:</div>
+                <div class="selects-box">
+                    <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+            <div id="accordion" class="accordion effect-expand-label">
+                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureeffectbox1">
+                    <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                </div>
+            </div>
+            <div class="card-body collapse" id="pictureeffectbox1" data-parent="#accordion">
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range" asp-items="Model.RangeTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
-                    </p>
-                    <p>
-                        子类型
-                        <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes">
+                    </div>
+                    <div class="selects-box" style="text-align: right">式专用:</div>
+                    <div class="selects-box">
+                        <select asp-for="UnitRoleTypeId" asp-items="Model.UnitRoleTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
-                    </p>
-                    <p>
-                        作用范围
-                        <select asp-for="Range" asp-items="Model.RangeTypes">
+                    </div>
+                    <div class="selects-box" style="text-align: right">回合数:</div>
+                    <div class="selects-box">
+                        <select asp-for="TurnTypeId" asp-items="Model.TurnTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
-                    </p>
-                    <p>
-                        角色式专用效果
-                        <select asp-for="UnitRoleTypeId" asp-items="Model.UnitRoleTypes">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="effect-box">
+            <div style="margin: 10px 10px"><h5><b>绘卷效果2:</b></h5></div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">主类型:</div>
+                <div class="selects-box">
+                    <select asp-for="Effect2Id" asp-items="Model.EffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">子类型:</div>
+                <div class="selects-box">
+                    <select asp-for="Subeffect2Id" asp-items="Model.SubeffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+            <div id="accordion" class="accordion effect-expand-label">
+                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureeffectbox2">
+                    <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                </div>
+            </div>
+            <div class="card-body collapse" id="pictureeffectbox2" data-parent="#accordion">
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range2" asp-items="Model.RangeTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
-                    </p>
-                    <p>
-                        回合数
-                        <select asp-for="TurnTypeId" asp-items="Model.TurnTypes">
+                    </div>
+                    <div class="selects-box" style="text-align: right">式专用:</div>
+                    <div class="selects-box">
+                        <select asp-for="UnitRoleType2Id" asp-items="Model.UnitRoleTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
-                    </p>
-                </th>
-                <th>
-                    <p>
-                        绘卷效果类型
-                        <select asp-for="Effect2Id" asp-items="Model.EffectTypes">
+                    </div>
+                    <div class="selects-box" style="text-align: right">回合数:</div>
+                    <div class="selects-box">
+                        <select asp-for="TurnType2Id" asp-items="Model.TurnTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
-                    </p>
-                    <p>
-                        子类型
-                        <select asp-for="Subeffect2Id" asp-items="Model.SubeffectTypes">
-                            <option value=null>任意</option>
-                        </select>
-                    </p>
-                    <p>
-                        作用范围
-                        <select asp-for="Range2" asp-items="Model.RangeTypes">
-                            <option value=null>任意</option>
-                        </select>
-                    </p>
-                    <p>
-                        角色式专用效果
-                        <select asp-for="UnitRoleType2Id" asp-items="Model.UnitRoleTypes">
-                            <option value=null>任意</option>
-                        </select>
-                    </p>
-                    <p>
-                        回合数
-                        <select asp-for="TurnType2Id" asp-items="Model.TurnTypes">
-                            <option value=null>任意</option>
-                        </select>
-                    </p>
-                </th>
-            </tr>
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-
-
-    <p><b>面板(若选择，则筛选，并先按主属性排序再按副排序):</b></p>
-    <p>
-        <p>
-            <font color="FF6600">主属性</font>
-            <select asp-for="CorrTypeMain">
-                <option value=null>{未选择}</option>
-                <option value=1>体力</option>
-                <option value=2>阳攻</option>
-                <option value=3>阳防</option>
-                <option value=4>阴攻</option>
-                <option value=5>阴防</option>
-                <option value=6>速度</option>
-            </select>
-        </p>
-        <p>
-        <font color="4CAFFF">副属性</font>
-            <select asp-for="CorrTypeSub">
-                <option value=null>{未选择}</option>
-                <option value=1>体力</option>
-                <option value=2>阳攻</option>
-                <option value=3>阳防</option>
-                <option value=4>阴攻</option>
-                <option value=5>阴防</option>
-                <option value=6>速度</option>
-            </select>
-        </p>
-    </p>
-    <input type="submit" value="筛选" />
+    <div class="filter-box">
+        <div class="title-box-1">面板筛选与排序</div>
+        <div class="selects-grid">
+            <div class="selects-box" style="text-align: right">面板等级:</div>
+            <div class="selects-box">
+                <select asp-for="DisplayPictureLevel" class="selector">
+                    <option value=0>0级</option>
+                    <option value=1>1级</option>
+                    <option value=2>2级</option>
+                    <option value=3>3级</option>
+                    <option value=4>4级</option>
+                    <option value=5>5级</option>
+                    <option value=6>6级</option>
+                    <option value=7>7级</option>
+                    <option value=8>8级</option>
+                    <option value=9>9级</option>
+                    <option value=10>10级</option>
+                </select>
+            </div>
+            <div class="selects-box" style="text-align: right">主属性（<b><font color="FF6600">红色标出</font></b>）：</div>
+            <div class="selects-box">
+                <select asp-for="CorrTypeMain" class="selector">
+                    <option value=null>{未选择}</option>
+                    <option value=1>体力</option>
+                    <option value=2>阳攻</option>
+                    <option value=3>阳防</option>
+                    <option value=4>阴攻</option>
+                    <option value=5>阴防</option>
+                    <option value=6>速度</option>
+                </select>
+            </div>
+            <div class="selects-box" style="text-align: right">副属性（<b><font color="4CAFFF">蓝色标出</font></b>）：</div>
+            <div class="selects-box">
+                <select asp-for="CorrTypeSub" class="selector">
+                    <option value=null>{未选择}</option>
+                    <option value=1>体力</option>
+                    <option value=2>阳攻</option>
+                    <option value=3>阳防</option>
+                    <option value=4>阴攻</option>
+                    <option value=5>阴防</option>
+                    <option value=6>速度</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="submit-title-box-1"></div>
+    <input type="submit" value="确定" class="btn-submit" />
+    <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#pictureDatasFilterHelperModal">帮助</button>
 </form>
-<table class="table">
+</div>
+
+
+<div class="home-box">
+<table class="table table-light table-bordered">
     <thead>
         <tr>
-            @*<th>
-                @Html.DisplayNameFor(model => model.PictureDatas![0].id)
-            </th>*@
             <th>
                 名称
             </th>
@@ -175,18 +362,14 @@
             <th>
                 图片
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
     @foreach (var item in Model.PictureDatas!)
     {
         <tr>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.id)
-            </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                <a href=@Html.Raw("https://wiki.biligame.com/touhoulostword/" + item.name)>@Html.DisplayFor(modelItem => item.name)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.rare)
@@ -210,9 +393,10 @@
                                                                                                                     : item.picture_characteristic_text_max))
             </td>
             <td>
-                <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="70" height="70" />
+                <img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" width="65" height="65" />
             </td>
         </tr>
 }
     </tbody>
-</table>
+    </table>
+</div>

@@ -20,12 +20,16 @@ namespace THLWToolBox.Helpers
             Regex reg1 = new Regex("<color=(#[A-F0-9]+)>");
             text = reg1.Replace(text, "xxx$1yyy");
             text = Regex.Replace(text, "</color>", "zzz");
+            text = text.Replace("<b>", "bb1bb");
+            text = text.Replace("</b>", "bb2bb");
             text = HttpUtility.HtmlEncode(text);
             Regex reg2 = new Regex("xxx(#[A-F0-9]+)yyy");
             text = reg2.Replace(text, "<font color=\"$1\">");
             text = text.Replace("zzz", "</font>");
             text = text.Replace("\\n", "<br/>");
             text = text.Replace("rrr", "<br/>");
+            text = text.Replace("bb1bb", "<b>");
+            text = text.Replace("bb2bb", "</b>");
             return text;
         }
 
