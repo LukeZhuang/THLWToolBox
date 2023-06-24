@@ -1,0 +1,142 @@
+﻿.title-box {
+    font-size: 30px;
+    font-weight: bold
+}
+
+.home-box {
+    position: relative;
+    width: 94%;
+    padding: 0px 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 3%;
+    margin-right: 3%;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.filter-box {
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.title-box-1 {
+    position: relative;
+    width: 100%;
+    padding: 7px 10px;
+    background: orange;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    height: 40px;
+    line-height: 22px;
+    font-weight: bold
+}
+
+.buttons-grid {
+    display: inline-grid;
+    /*grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;*/
+    grid-template-columns: auto auto auto auto auto auto;
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;
+    grid-gap: 5px;
+}
+
+.btn-checkbox {
+    border: none;
+    background: white;
+    color: black;
+    padding: 5px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.selects-grid {
+    display: inline-grid;
+    grid-template-columns: auto 9fr;
+    grid-template-rows: auto auto auto auto auto;
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;
+    grid-gap: 5px;
+}
+
+.selects-box {
+    border: none;
+    background: white;
+    color: black;
+    padding: 7px 7px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    /*margin: 4px 2px;*/
+    /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+}
+
+.selector {
+    width: 150px
+}
+
+.submit-title-box-1 {
+    position: relative;
+    width: 100%;
+    padding: 7px 10px;
+    background: darkgray;
+    text-align: center;
+    height: 10px;
+}
+
+.btn-submit {
+    position: relative;
+    width: 41%;
+    margin-left: 6%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+    line-height: 1;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border: 3px solid #fc7703;
+    background: #fff;
+    color: #fc7703;
+    border-radius: 40px;
+}
+
+.btn-helper {
+    border: 3px solid #8C82FC;
+    color: #8C82FC;
+}
+
+.accordion .card-header:after {
+    font-family: 'FontAwesome';
+    content: "\f068";
+    float: left;
+}
+
+.accordion .card-header.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\f067";
+}
+
+.effect-box {
+    width: max(60%, 300px);
+    margin-left: 1%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.effect-expand-label {
+    width: 250px;
+    margin-left: 10px;
+    margin-bottom: 10px
+}
