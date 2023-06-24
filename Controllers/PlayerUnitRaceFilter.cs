@@ -114,7 +114,7 @@ namespace THLWToolBox.Controllers
                                 string nameStr = rd.name;
                                 if (rd.name.Equals(RaceName))
                                 {
-                                    nameStr = "<color=#FF6600>" + nameStr + "</color>";
+                                    nameStr = "<b><color=#FF6600>" + nameStr + "</color></b>";
                                 }
                                 queryRaces.Add(nameStr);
                             }

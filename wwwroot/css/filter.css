@@ -140,3 +140,10 @@
     margin-left: 10px;
     margin-bottom: 10px
 }
+
+.picture-unit-img-wrapper img {
+    width: auto;
+    height: 60px;
+    position: relative;
+    margin: 0;
+}
