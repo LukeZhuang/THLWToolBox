@@ -78,6 +78,12 @@
     .btn-feature-inprogess {
         color: darkgray;
     }
+    .image-box img {
+        width: auto;
+        height: 30px;
+        position: relative;
+        margin: 0;
+    }
 </style>
 
 <p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
@@ -93,7 +99,7 @@
         <div class="title-box-1">绘卷相关</div>
         <div class="buttons-grid">
             <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" /></div>
                 绘卷筛选器
             </button>
         </div>
@@ -103,38 +109,38 @@
         <div class="title-box-2">查看角色信息</div>
         <div class="buttons-grid">
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_heart.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_heart.png")" /></div>
                 查亲密关系
             </button>
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_race.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_race.png")" /></div>
                 查种族
             </button>
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_bullet.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_bullet.png")" /></div>
                 查弹幕补正
             </button>
             <button type="button" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_power.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_power.png")" /></div>
                 <div class="btn-feature-inprogess">查回灵效率</div>
             </button>
         </div>
         <div class="title-box-2">找想要的角色</div>
         <div class="buttons-grid">
             <button type="button" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_typeattack.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_typeattack.png")" /></div>
                 <div class="btn-feature-inprogess">按特攻找</div>
             </button>
             <button type="button" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_skill.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_skill.png")" /></div>
                 <div class="btn-feature-inprogess">按技能找</div>
             </button>
             <button type="button" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" /></div>
                 <div class="btn-feature-inprogess">按异常破盾找</div>
             </button>
             <button type="button" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_element.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_element.png")" /></div>
                 <div class="btn-feature-inprogess">按属性找</div>
             </button>
         </div>
@@ -143,7 +149,7 @@
         <div class="title-box-1">其他实用工具</div>
         <div class="buttons-grid">
             <button type="button" class="btn-index">
-                <div><img src="@Url.Content("~/res/website/index_btn_empty.png")" width="40" height="40"></img></div>
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_empty.png")" /></div>
                 <div class="btn-feature-inprogess">开发中</div>
             </button>
         </div>
