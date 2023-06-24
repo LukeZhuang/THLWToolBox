@@ -7,6 +7,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<!-- Modal -->
+<div class="modal fade" id="unitSwitchLinkFilterHelperModal" tabindex="-1" aria-labelledby="unitSwitchLinkFilterHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="unitSwitchLinkFilterHelper">帮助：亲密关系查询器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>有关亲密关系详情见我的文章：<a href="https://www.bilibili.com/read/cv22187818">换位连携机制详解</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
@@ -47,58 +69,69 @@
 
 <p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
-<h2>亲密关系查询器</h2>
-<p>
-    <p>说明:</p>
-    <p>有关亲密关系详情见我的文章：<a href="https://www.bilibili.com/read/cv22187818">换位连携机制详解</a></p>
-</p>
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_heart.png")" width="60" height="60" /> 亲密关系查询器</div>
+</div>
 
-<p>
+<div class="home-box">
     <form asp-controller="PlayerUnitSwitchLinkHelper" asp-action="Index" method="post">
-        <p><b>角色名（带补全建议）:</b></p>
-        <p><input type="text" id="nameinput1" asp-for="UnitName"></p>
-        <p><b>泛异记号:</b></p>
-        <select asp-for="SymbolId" asp-items="Model.Symbols">
-            <option value=null>任意</option>
-        </select>
-        <input type="submit" value="筛选" />
+        <div class="filter-box">
+            <div class="title-box-1">按角色名查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">角色名（带补全建议）:</div>
+                <div class="selects-box">
+                    <input type="text" id="nameinput1" asp-for="UnitName" class="selector">
+                </div>
+                <div class="selects-box" style="text-align: right">泛异记号：</div>
+                <div class="selects-box">
+                    <select asp-for="SymbolId" asp-items="Model.Symbols" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitSwitchLinkFilterHelperModal">帮助</button>
     </form>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                头像
-            </th>
-            <th>
-                角色名
-            </th>
-            <th>
-                泛异记号
-            </th>
-            <th>
-                亲密关系角色
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.PlayerUnitDatas!)
-    {
-        <tr>
-            <td>
-                <img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" width="70" height="70" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.playerUnitData.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
-            </td>
-            <td>
-                @*@Html.DisplayFor(modelItem => item.RelatedUnitsToList())*@
-                @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</div>
+
+<div class="home-box">
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    泛异记号
+                </th>
+                <th>
+                    亲密关系角色列表
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.PlayerUnitDatas!)
+        {
+            <tr>
+                <td>
+                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.playerUnitData.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
+                </td>
+                <td>
+                    @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
