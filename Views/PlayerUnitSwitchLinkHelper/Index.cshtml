@@ -11,6 +11,34 @@
     <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
 </head>
 
+<style>
+    .swith-link-units {
+        border: none;
+        background: white;
+        padding: 7px 7px;
+        text-align: left;
+        text-decoration: none;
+        display: inline-block;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .units-img-name-box {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        font-size: 12px;
+        padding: 2px 2px;
+        margin-top: 1px;
+    }
+
+    .units-img-name-box img {
+        width: 100%;
+        height: auto;
+        position: relative;
+        margin: 0;
+    }
+</style>
+
 <!-- Modal -->
 <div class="modal fade" id="unitSwitchLinkFilterHelperModal" tabindex="-1" aria-labelledby="unitSwitchLinkFilterHelper" aria-hidden="true">
     <div class="modal-dialog">
@@ -128,10 +156,12 @@
                     @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
                 </td>
                 <td>
-                    @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
+                    <div class="swith-link-units">
+                        @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
+                    </div>
                 </td>
             </tr>
-    }
+        }
         </tbody>
     </table>
 </div>
