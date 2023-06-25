@@ -370,7 +370,7 @@ namespace THLWToolBox.Models
             return isActive ? "是" : "否";
         }
 
-        public static string CorrectionStr(int correctionType, int correctionValue)
+        public static string CorrectionStr(int correctionType, int correctionValue, int? corrTypeMain, int? corrTypeSub)
         {
             string correctionTypeStr = "";
             switch (correctionType)
@@ -396,7 +396,18 @@ namespace THLWToolBox.Models
                 default:
                     throw new NotImplementedException();
             }
-            return correctionTypeStr + "+" + "<color=#FF6600>" + correctionValue + "</color>";
+            string correctionValueWrapper = Convert.ToString(correctionValue);
+            if (corrTypeMain != null && corrTypeMain.GetValueOrDefault() == correctionType)
+                correctionValueWrapper = "<b><color=#FF6600>" + correctionValueWrapper + "</color></b>";
+            else if (corrTypeSub != null && corrTypeSub.GetValueOrDefault() == correctionType)
+                correctionValueWrapper = "<b><color=#4CAFFF>" + correctionValueWrapper + "</color></b>";
+
+            return correctionTypeStr + "+" + correctionValueWrapper;
+        }
+
+        public static int CorrectionValueByLevel(int maxValue, int diff, int level)
+        {
+            return maxValue - diff * (10 - level);
         }
     }
 }

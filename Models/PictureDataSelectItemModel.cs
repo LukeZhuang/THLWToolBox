@@ -106,4 +106,29 @@
             (this.id, this.name) = GeneralTypeMaster.GetEffectByRoleRemappedInfo(effectType);
         }
     }
+
+    public class PictureDataSelectItemTurnTypeModel : PictureDataSelectItemModel
+    {
+        public PictureDataSelectItemTurnTypeModel(PictureData pd, int effectId)
+        {
+            int turnType = 0;
+            if (effectId == 1)
+            {
+                turnType = pd.picture_characteristic1_effect_turn;
+            }
+            else if (effectId == 2)
+            {
+                turnType = pd.picture_characteristic2_effect_turn;
+            }
+            else if (effectId == 3)
+            {
+                turnType = pd.picture_characteristic3_effect_turn;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            (this.id, this.name) = new Tuple<int, string>(turnType, Convert.ToString(turnType));
+        }
+    }
 }

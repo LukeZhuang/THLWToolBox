@@ -7,6 +7,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -73,65 +77,99 @@
     </script>
 }
 
-<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE)</font></b></p>
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
-<h2>角色种族查询器</h2>
-<p>
-    <p>说明:</p>
-    <p>1. 角色名与种族名任选其一输入，<b><font color="red">如果两个都输入则仅显示角色名结果</font></b></p>
-    <p>2. 目前已实装种族列表：@Html.Raw(Model.RaceList)</p>
-</p>
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_race.png")" width="60" height="60" />角色种族查询器</div>
+</div>
 
-<p>
+<!-- Modal -->
+<div class="modal fade" id="unitRaceFilterHelperModal" tabindex="-1" aria-labelledby="unitRaceFilterHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="unitRaceFilterHelper">帮助：角色种族查询器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 角色名与种族名任选其一输入，<b><font color="red">如果两个都输入则仅显示角色名结果</font></b></p>
+                <p>2. 目前已实装种族列表：@Html.Raw(Model.RaceList)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="home-box">
     <form asp-controller="PlayerUnitRaceFilter" asp-action="Index" method="post">
-        <p><b>角色名（带补全建议）:</b></p>
-        <p><input type="text" id="nameinput1" asp-for="UnitName"></p>
-        <p><b>泛异记号:</b></p>
-        <p>
-            <select asp-for="SymbolId" asp-items="Model.Symbols">
-            <option value=null>任意</option>
-            </select>
-        </p>
-        <p>或者</p>
-        <p><b>种族名（带补全建议）:</b></p>
-        <p><input type="text" id="nameinput2" asp-for="RaceName"></p>
-        <input type="submit" value="筛选" />
+        <div class="filter-box">
+            <div class="title-box-1">按角色名查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">角色名（带补全建议）:</div>
+                <div class="selects-box">
+                    <input type="text" id="nameinput1" asp-for="UnitName" class="selector">
+                </div>
+                <div class="selects-box" style="text-align: right">泛异记号：</div>
+                <div class="selects-box">
+                    <select asp-for="SymbolId" asp-items="Model.Symbols" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="title-box-1">按种族名查询（见帮助）</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">种族名（带补全建议）:</div>
+                <div class="selects-box">
+                    <input type="text" id="nameinput2" asp-for="RaceName" class="selector">
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitRaceFilterHelperModal">帮助</button>
     </form>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                头像
-            </th>
-            <th>
-                角色/种族
-            </th>
-            <th>
-                泛异记号
-            </th>
-            <th>
-                查询结果
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.QueryResults!)
-        {
+</div>
+
+<div class="home-box">
+    <table class="table table-light table-bordered">
+        <thead>
             <tr>
-                <td>
-                    <img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" width="70" height="70" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerUnitData.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
-                </td>
-                <td>
-                    @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(String.Join(", ", item.queryRaces)))
-                </td>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    泛异记号
+                </th>
+                <th>
+                    种族列表
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.QueryResults!)
+            {
+                <tr>
+                    <td>
+                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.playerUnitData.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
+                    </td>
+                    <td>
+                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(String.Join(", ", item.queryRaces)))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

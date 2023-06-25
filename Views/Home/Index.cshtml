@@ -5,57 +5,153 @@
 }
 
 <style>
-    .button {
+    .title {
+        font-size: 25px;
+        font-weight: bold
+    }
+
+    .home-box {
+        width: 88%;
+        padding: 0px 0px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 6%;
+        margin-right: 6%;
+    }
+    .title-box-1 {
+        position: relative;
+        width: 100%;
+        padding: 7px 10px;
+        background: orange;
+        text-align: center;
+        color: #fff;
+        font-size: 18px;
+        height: 40px;
+        line-height: 22px;
+        font-weight: bold
+    }
+
+    .title-box-2 {
+        position: relative;
+        width: 94%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-left: 3%;
+        margin-right: 3%;
+        padding: 7px 10px;
+        background: #B19CD9;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        height: 30px;
+        /*line-height: 22px;*/
+        font-weight: bold
+    }
+
+    .buttons-grid {
+        position: relative;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+        grid-gap: 5px;
+    }
+
+    .btn-index {
         border: none;
-        color: white;
-        padding: 15px 32px;
+        background: white;
+        color: black;
+        padding: 15px 0px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
         margin: 4px 2px;
         cursor: pointer;
-        width: 25%;
+        font-weight: bold;
+        /*width: 24%;*/
+        /*height: 60px;*/
+        border: 2px solid rgba(0, 0, 0, 0.1);
     }
 
-    .button1 {
-        background-color: #4CAFff;
+    .btn-feature-inprogess {
+        color: darkgray;
     }
-
-    .button2 {
-        background-color: darkcyan;
-    }
-
-    .button3 {
-        background-color: darkgoldenrod;
-    }
-
-    .button4 {
-        background-color: darksalmon;
-    }
-
-    .button5 {
-        background-color: deeppink;
-    }
-
-    .button6 {
-        background-color: darkviolet;
-    }
-
-    .button7 {
-        background-color: #4CAF50;
+    .image-box img {
+        width: auto;
+        height: 30px;
+        position: relative;
+        margin: 0;
     }
 </style>
 
-<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE)</font></b></p>
-<p><b><font color="red">*当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
-<div class="text-center">
+@*<div class="text-center">*@
+<div>
     @*<h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="button button1">绘卷筛选器</button></p>
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="button button5">亲密关系查询器</button></p>
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="button button3">角色种族查询器</button></p>
-    <p><button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="button button2">弹幕隐藏数据查询器</button></p>
-    @*<button><img src="~/res/pictures_img/1.png" /></button>*@
+    <div class="text-center">
+        <div class="title"><img src="@Url.Content("~/res/website/index_toolbox.png")" alt="暂无图片" width="50" height="50" />东方归言录工具箱</div>
+    </div>
+    <div class="home-box">
+        <div class="title-box-1">绘卷相关</div>
+        <div class="buttons-grid">
+            <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" /></div>
+                绘卷筛选器
+            </button>
+        </div>
+    </div>
+    <div class="home-box">
+        <div class="title-box-1">角色相关</div>
+        <div class="title-box-2">查看角色信息</div>
+        <div class="buttons-grid">
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_heart.png")" /></div>
+                查亲密关系
+            </button>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_race.png")" /></div>
+                查种族
+            </button>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_bullet.png")" /></div>
+                查弹幕数据
+            </button>
+            <button type="button" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_power.png")" /></div>
+                <div class="btn-feature-inprogess">查回灵效率</div>
+            </button>
+        </div>
+        <div class="title-box-2">找想要的角色</div>
+        <div class="buttons-grid">
+            <button type="button" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_typeattack.png")" /></div>
+                <div class="btn-feature-inprogess">按特攻找</div>
+            </button>
+            <button type="button" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_skill.png")" /></div>
+                <div class="btn-feature-inprogess">按技能找</div>
+            </button>
+            <button type="button" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" /></div>
+                <div class="btn-feature-inprogess">按异常破盾找</div>
+            </button>
+            <button type="button" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_element.png")" /></div>
+                <div class="btn-feature-inprogess">按属性找</div>
+            </button>
+        </div>
+    </div>
+    <div class="home-box">
+        <div class="title-box-1">其他实用工具</div>
+        <div class="buttons-grid">
+            <button type="button" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_empty.png")" /></div>
+                <div class="btn-feature-inprogess">开发中</div>
+            </button>
+        </div>
+    </div>
 </div>
