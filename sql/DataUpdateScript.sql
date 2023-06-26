@@ -1,5 +1,17 @@
 /****** Script for SelectTopNRows command from SSMS  ******/
 
+/* update version info */
+USE [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7]
+GO
+
+INSERT INTO [dbo].[VersionHistoryData]
+           ([ReleaseDate]
+           ,[description])
+     VALUES
+           ('2023-06-24', N'v1.1更新，界面大优化，绘卷筛选器优化。发布公告：https://www.bilibili.com/read/cv24562484')
+GO
+
+
 /* step 0: import data manually */
 /********************************/
 /********************************/
