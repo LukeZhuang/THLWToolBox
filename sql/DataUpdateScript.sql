@@ -36,6 +36,7 @@ delete from [TouhouLostWordRawData].[dbo].[ShotTable];
 delete from [TouhouLostWordRawData].[dbo].[SpellcardTable];
 delete from [TouhouLostWordRawData].[dbo].[UnitRaceTable];
 delete from [TouhouLostWordRawData].[dbo].[UnitTable];
+delete from [TouhouLostWordRawData].[dbo].[BulletTable];
 
 
 /* step 3: copy new data */
@@ -47,6 +48,7 @@ insert into [TouhouLostWordRawData].[dbo].[ShotTable] select * from [TouhouLostW
 insert into [TouhouLostWordRawData].[dbo].[SpellcardTable] select * from [TouhouLostWordRawData].[dbo].[SpellcardTableNew];
 insert into [TouhouLostWordRawData].[dbo].[UnitRaceTable] select * from [TouhouLostWordRawData].[dbo].[UnitRaceTableNew];
 insert into [TouhouLostWordRawData].[dbo].[UnitTable] select * from [TouhouLostWordRawData].[dbo].[UnitTableNew];
+insert into [TouhouLostWordRawData].[dbo].[BulletTable] select * from [TouhouLostWordRawData].[dbo].[BulletTableNew];
 
 
 /* step 4: drop new data table */
@@ -58,6 +60,7 @@ drop table [TouhouLostWordRawData].[dbo].[ShotTableNew];
 drop table [TouhouLostWordRawData].[dbo].[SpellcardTableNew];
 drop table [TouhouLostWordRawData].[dbo].[UnitRaceTableNew];
 drop table [TouhouLostWordRawData].[dbo].[UnitTableNew];
+drop table [TouhouLostWordRawData].[dbo].[BulletTableNew];
 
 
 /* step 5: prepare data for website */
@@ -69,6 +72,7 @@ delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[Pla
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitSpellcardData];
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[RaceData];
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitRaceData];
+delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletData];
 
 SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] ON;
 insert into [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] (
@@ -119,3 +123,14 @@ INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[Pla
 )
 select * from [TouhouLostWordRawData].[dbo].[UnitRaceTable]
 SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitRaceData] OFF;
+
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletData] ON;
+INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletData] (
+[id],[name],[description],[element],[type],[category],[power],[hit],[critical],[bullet1_addon_id],[bullet1_addon_value],[bullet2_addon_id],[bullet2_addon_value],[bullet3_addon_id],[bullet3_addon_value],[bullet1_extraeffect_id],[bullet1_extraeffect_success_rate],[bullet2_extraeffect_id],[bullet2_extraeffect_success_rate],[bullet3_extraeffect_id],[bullet3_extraeffect_success_rate]
+)
+select B.* from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitSpellcardData] as A inner join [TouhouLostWordRawData].[dbo].[BulletTable] as B on (A.magazine0_bullet_id = B.id or A.magazine1_bullet_id = B.id or A.magazine2_bullet_id = B.id or A.magazine3_bullet_id = B.id or A.magazine4_bullet_id = B.id or A.magazine5_bullet_id = B.id)
+INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletData] (
+[id],[name],[description],[element],[type],[category],[power],[hit],[critical],[bullet1_addon_id],[bullet1_addon_value],[bullet2_addon_id],[bullet2_addon_value],[bullet3_addon_id],[bullet3_addon_value],[bullet1_extraeffect_id],[bullet1_extraeffect_success_rate],[bullet2_extraeffect_id],[bullet2_extraeffect_success_rate],[bullet3_extraeffect_id],[bullet3_extraeffect_success_rate]
+)
+select B.* from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitShotData] as A inner join [TouhouLostWordRawData].[dbo].[BulletTable] as B on (A.magazine0_bullet_id = B.id or A.magazine1_bullet_id = B.id or A.magazine2_bullet_id = B.id or A.magazine3_bullet_id = B.id or A.magazine4_bullet_id = B.id or A.magazine5_bullet_id = B.id)
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletData] OFF;

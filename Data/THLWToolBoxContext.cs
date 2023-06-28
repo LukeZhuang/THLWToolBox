@@ -23,5 +23,6 @@ namespace THLWToolBox.Data
         public DbSet<THLWToolBox.Models.PlayerUnitSpellcardData> PlayerUnitSpellcardData { get; set; } = default!;
         public DbSet<THLWToolBox.Models.RaceData> RaceData { get; set; } = default!;
         public DbSet<THLWToolBox.Models.VersionHistoryData> VersionHistoryData { get; set; } = default!;
+        public DbSet<THLWToolBox.Models.PlayerUnitBulletData> PlayerUnitBulletData { get; set; } = default!;
     }
 }
