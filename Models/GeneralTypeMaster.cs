@@ -4,6 +4,21 @@ namespace THLWToolBox.Models
 {
     public class GeneralTypeMaster
     {
+        public class SingleBulletInfo
+        {
+            public int bullet_id { get; set; }
+            public int bullet_range { get; set; }
+            public int bullet_value { get; set; }
+            public int bullet_power_rate { get; set; }
+            public SingleBulletInfo(int bullet_id, int bullet_range, int bullet_value, int bullet_power_rate)
+            {
+                this.bullet_id = bullet_id;
+                this.bullet_range = bullet_range;
+                this.bullet_value = bullet_value;
+                this.bullet_power_rate = bullet_power_rate;
+            }
+        }
+
         public static string GetRangeTypeString(int range)
         {
             switch (range)
@@ -76,30 +91,35 @@ namespace THLWToolBox.Models
             switch (bulletType)
             {
                 case 1:
-                    return "弹种-通常弹";
+                    return "通常";
                 case 2:
-                    return "弹种-镭射弹";
+                    return "镭射";
                 case 3:
-                    return "弹种-体术弹";
+                    return "体术";
                 case 4:
-                    return "弹种-斩击弹";
+                    return "斩击";
                 case 5:
-                    return "弹种-动能弹";
+                    return "动能";
                 case 6:
-                    return "弹种-流体弹";
+                    return "流体";
                 case 7:
-                    return "弹种-能量弹";
+                    return "能量";
                 case 8:
-                    return "弹种-御符弹";
+                    return "御符";
                 case 9:
-                    return "弹种-光弹";
+                    return "光";
                 case 10:
-                    return "弹种-尖头弹";
+                    return "尖头";
                 case 11:
-                    return "弹种-追踪弹";
+                    return "追踪";
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        public static string GetBulletTypeStringForSelect(int elementType)
+        {
+            return "弹种-" + GetBulletTypeString(elementType) + "弹";
         }
 
         public static string GetElementTypeString(int elementType)
@@ -107,26 +127,31 @@ namespace THLWToolBox.Models
             switch (elementType)
             {
                 case 1:
-                    return "属性-日";
+                    return "日";
                 case 2:
-                    return "属性-月";
+                    return "月";
                 case 3:
-                    return "属性-火";
+                    return "火";
                 case 4:
-                    return "属性-水";
+                    return "水";
                 case 5:
-                    return "属性-木";
+                    return "木";
                 case 6:
-                    return "属性-金";
+                    return "金";
                 case 7:
-                    return "属性-土";
+                    return "土";
                 case 8:
-                    return "属性-星";
+                    return "星";
                 case 9:
-                    return "属性-无";
+                    return "无";
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        public static string GetElementTypeStringForSelect(int elementType)
+        {
+            return "属性-" + GetElementTypeString(elementType);
         }
 
         public static string GetUnitRoleString(int unitRole)
@@ -316,11 +341,11 @@ namespace THLWToolBox.Models
 
                 case 12:  /* "受X弹种攻击时伤害下降" */
                 case 15:  /* "X弹种威力上升" */
-                    return new Tuple<int, string>(3000 + subEffectType, GetBulletTypeString(subEffectType));
+                    return new Tuple<int, string>(3000 + subEffectType, GetBulletTypeStringForSelect(subEffectType));
 
                 case 13:  /* "受X属性攻击时伤害下降" */
                 case 16:  /* "X属性威力上升" */
-                    return new Tuple<int, string>(4000 + subEffectType, GetElementTypeString(subEffectType));
+                    return new Tuple<int, string>(4000 + subEffectType, GetElementTypeStringForSelect(subEffectType));
 
                 default:
                     throw new NotImplementedException();

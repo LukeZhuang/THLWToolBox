@@ -85,7 +85,6 @@ namespace THLWToolBox.Controllers
                         raceId = rd.id;
                     }
                 }
-                Console.WriteLine(raceId + " " + RaceName);
                 HashSet<int> unitIds = new HashSet<int>();
                 foreach (var purd in playerUnitRaceDataList)
                 {
