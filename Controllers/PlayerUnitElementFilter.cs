@@ -109,13 +109,11 @@ namespace THLWToolBox.Controllers
 
             if (calcSmallSC)
             {
-                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard1_id], "一符", 2.0));
-                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard2_id], "二符", 2.0));
-                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard3_id], "三符", 2.0));
-                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard4_id], "四符", 2.0));
+                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard1_id], "一符", 3.0));
+                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard2_id], "二符", 3.0));
             }
             if (calcLastSC)
-                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard5_id], "终符", 6.0));
+                scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard5_id], "终符", 5.0));
 
             foreach (var sc in scs)
                 TotalScore += CalcSpellcardElementScore(FilterId, sc.Item1, sc.Item2, sc.Item3, bulletDataDict, pud.yang_attack, pud.yin_attack, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
@@ -125,6 +123,7 @@ namespace THLWToolBox.Controllers
 
         public double CalcShotElementScore(int FilterId, PlayerUnitShotData pusd, string name, double weight, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
         {
+            int level5PowerRate = pusd.shot_level5_power_rate;
             List<SingleBulletInfo> bulletList = new List<SingleBulletInfo> {
                 new SingleBulletInfo(pusd.magazine0_bullet_id, pusd.magazine0_bullet_range, pusd.magazine0_bullet_value, pusd.magazine0_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine1_bullet_id, pusd.magazine1_bullet_range, pusd.magazine1_bullet_value, pusd.magazine1_bullet_power_rate),
@@ -132,11 +131,12 @@ namespace THLWToolBox.Controllers
                 new SingleBulletInfo(pusd.magazine3_bullet_id, pusd.magazine3_bullet_range, pusd.magazine3_bullet_value, pusd.magazine3_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine4_bullet_id, pusd.magazine4_bullet_range, pusd.magazine4_bullet_value, pusd.magazine4_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine5_bullet_id, pusd.magazine5_bullet_range, pusd.magazine5_bullet_value, pusd.magazine5_bullet_power_rate) };
-            return CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
+            return CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, level5PowerRate, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
         }
 
         public double CalcSpellcardElementScore(int FilterId, PlayerUnitSpellcardData puscd, string name, double weight, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
         {
+            int level5PowerRate = puscd.shot_level5_power_rate;
             List<SingleBulletInfo> bulletList = new List<SingleBulletInfo> {
                 new SingleBulletInfo(puscd.magazine0_bullet_id, puscd.magazine0_bullet_range, puscd.magazine0_bullet_value, puscd.magazine0_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine1_bullet_id, puscd.magazine1_bullet_range, puscd.magazine1_bullet_value, puscd.magazine1_bullet_power_rate),
@@ -144,10 +144,10 @@ namespace THLWToolBox.Controllers
                 new SingleBulletInfo(puscd.magazine3_bullet_id, puscd.magazine3_bullet_range, puscd.magazine3_bullet_value, puscd.magazine3_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine4_bullet_id, puscd.magazine4_bullet_range, puscd.magazine4_bullet_value, puscd.magazine4_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine5_bullet_id, puscd.magazine5_bullet_range, puscd.magazine5_bullet_value, puscd.magazine5_bullet_power_rate) };
-            return CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
+            return CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, level5PowerRate, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
         }
 
-        public double CalcBulletListScore(int FilterId, string name, double weight, List<SingleBulletInfo> bulletList, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
+        public double CalcBulletListScore(int FilterId, string name, double weight, List<SingleBulletInfo> bulletList, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int level5PowerRate, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
         {
             double BulletListScore = 0.0;
 
@@ -206,7 +206,7 @@ namespace THLWToolBox.Controllers
                     else
                         throw new NotImplementedException("unknown bullet type");
 
-                    BulletListScore += (atk / 1000.0) * (bullet.bullet_power_rate / 100.0) * bullet.bullet_value * (bulletRecord.hit / 100.0) * (1 + bulletRecord.critical / 100.0) * (bullet.bullet_range == 2 ? 1.5 : 1.0) * weight;
+                    BulletListScore += (atk / 1000.0) * (bullet.bullet_power_rate / 100.0) * bullet.bullet_value * (bulletRecord.hit / 100.0) * (1 + bulletRecord.critical / 100.0) * (level5PowerRate / 100.0) * (bullet.bullet_range == 2 ? 1.5 : 1.0) * weight;
                     bulletStatus |= (1 << FilterId);
 
                     Found = true;
