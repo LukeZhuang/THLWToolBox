@@ -161,15 +161,9 @@
         <div class="filter-box">
             <div class="title-box-1">按角色名查询</div>
             <div class="selects-grid">
-                <div class="selects-box" style="text-align: right">角色名（带补全建议）:</div>
+                <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput1" asp-for="UnitName" class="selector">
-                </div>
-                <div class="selects-box" style="text-align: right">泛异记号（必选）：</div>
-                <div class="selects-box">
-                    <select asp-for="SymbolId" asp-items="Model.Symbols" class="selector">
-                        <option value=null>任意</option>
-                    </select>
+                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
                 </div>
             </div>
         </div>

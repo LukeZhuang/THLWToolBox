@@ -20,7 +20,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PlayerUnitCriticalHitFilter
-        public async Task<IActionResult> Index(int? ShotType, string? UnitName, string? SymbolId, string? RaceName)
+        public async Task<IActionResult> Index(int? ShotType, string? UnitSymbolName, string? RaceName)
         {
             if (_context.PlayerUnitData == null)
             {
@@ -84,11 +84,11 @@ namespace THLWToolBox.Controllers
 
             HashSet<int> targetRaceIds = new();
 
-            if (UnitName != null && UnitName.Length > 0 && SymbolId != null)
+            if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
                 foreach (var pud in playerUnitDatasList)
                 {
-                    if (pud.name.Equals(UnitName) && SymbolId.Equals(pud.symbol_name))
+                    if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
                         List<string> queryRaces = new List<string>();
                         foreach (var purd in playerUnitRaceDataList)
@@ -139,9 +139,7 @@ namespace THLWToolBox.Controllers
             {
                 RaceList = String.Join(", ", GetRaces()),
                 QueryResults = displayUnitCriticalDatas,
-                Symbols = new SelectList(symbolList),
-                SymbolId = SymbolId,
-                UnitName = UnitName,
+                UnitSymbolName = UnitSymbolName,
                 RaceName = RaceName
             };
             return View(playerUnitCriticalFilterVM);
@@ -267,7 +265,7 @@ namespace THLWToolBox.Controllers
         {
             var playerUnitDatas = from pud in _context.PlayerUnitData
                                   select pud;
-            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => pud.name).Distinct().ToList();
+            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => (pud.name + pud.symbol_name)).Distinct().ToList();
 
             return Json(result);
         }

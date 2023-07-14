@@ -32,9 +32,7 @@ namespace THLWToolBox.Models
     public class PlayerUnitShotDataFilterViewModel
     {
         public List<PlayerUnitShotDataDisplayModel>? PlayerUnitDatas { get; set; }
-        public SelectList? Symbols { get; set; }
-        public string? UnitName { get; set; }
-        public string? SymbolId { get; set; }
+        public string? UnitSymbolName { get; set; }
         public int? ShotId { get; set; }
     }
 }

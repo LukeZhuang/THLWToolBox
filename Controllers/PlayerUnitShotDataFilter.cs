@@ -20,7 +20,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PlayerUnitShotDataFilter
-        public async Task<IActionResult> Index(string? UnitName, string? SymbolId, int? ShotId)
+        public async Task<IActionResult> Index(string? UnitSymbolName, int? ShotId)
         {
             if (_context.PictureData == null)
             {
@@ -40,35 +40,32 @@ namespace THLWToolBox.Controllers
 
             List<PlayerUnitShotDataDisplayModel> displayPlayerUnitDatas = new List<PlayerUnitShotDataDisplayModel>();
 
-            if (UnitName != null && UnitName.Length > 0 && ShotId != null)
+            if (UnitSymbolName != null && UnitSymbolName.Length > 0 && ShotId != null)
             {
                 int shotIdVal = ShotId.GetValueOrDefault();
                 foreach (var pud in playerUnitDatasList)
                 {
-                    if (pud.name.Equals(UnitName))
+                    if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
-                        if (SymbolId == null || SymbolId.Equals("null") || SymbolId.Equals(pud.symbol_name))
+                        if (shotIdVal <= 2)
                         {
-                            if (shotIdVal <= 2)
+                            int shotIdInTable = (shotIdVal == 1 ? pud.shot1_id : pud.shot2_id);
+                            foreach (var pusd in playerUnitShotDataList)
                             {
-                                int shotIdInTable = (shotIdVal == 1 ? pud.shot1_id : pud.shot2_id);
-                                foreach (var pusd in playerUnitShotDataList)
+                                if (pusd.id == shotIdInTable)
                                 {
-                                    if (pusd.id == shotIdInTable)
-                                    {
-                                        displayPlayerUnitDatas.Add(new PlayerUnitShotDataDisplayModel(pud, pusd.name, pusd.phantasm_power_up_rate, pusd.shot_level0_power_rate, pusd.shot_level1_power_rate, pusd.shot_level2_power_rate, pusd.shot_level3_power_rate, pusd.shot_level4_power_rate, pusd.shot_level5_power_rate));
-                                    }
+                                    displayPlayerUnitDatas.Add(new PlayerUnitShotDataDisplayModel(pud, pusd.name, pusd.phantasm_power_up_rate, pusd.shot_level0_power_rate, pusd.shot_level1_power_rate, pusd.shot_level2_power_rate, pusd.shot_level3_power_rate, pusd.shot_level4_power_rate, pusd.shot_level5_power_rate));
                                 }
                             }
-                            else
+                        }
+                        else
+                        {
+                            int spellcardIdInTable = (shotIdVal == 3 ? pud.spellcard1_id : (shotIdVal == 4 ? pud.spellcard2_id : pud.spellcard5_id));
+                            foreach (var puscd in playerUnitSpellcardDataList)
                             {
-                                int spellcardIdInTable = (shotIdVal == 3 ? pud.spellcard1_id : (shotIdVal == 4 ? pud.spellcard2_id : pud.spellcard5_id));
-                                foreach (var puscd in playerUnitSpellcardDataList)
+                                if (puscd.id == spellcardIdInTable)
                                 {
-                                    if (puscd.id == spellcardIdInTable)
-                                    {
-                                        displayPlayerUnitDatas.Add(new PlayerUnitShotDataDisplayModel(pud, puscd.name, puscd.phantasm_power_up_rate, puscd.shot_level0_power_rate, puscd.shot_level1_power_rate, puscd.shot_level2_power_rate, puscd.shot_level3_power_rate, puscd.shot_level4_power_rate, puscd.shot_level5_power_rate));
-                                    }
+                                    displayPlayerUnitDatas.Add(new PlayerUnitShotDataDisplayModel(pud, puscd.name, puscd.phantasm_power_up_rate, puscd.shot_level0_power_rate, puscd.shot_level1_power_rate, puscd.shot_level2_power_rate, puscd.shot_level3_power_rate, puscd.shot_level4_power_rate, puscd.shot_level5_power_rate));
                                 }
                             }
                         }
@@ -79,9 +76,7 @@ namespace THLWToolBox.Controllers
             var playerUnitDataVM = new PlayerUnitShotDataFilterViewModel
             {
                 PlayerUnitDatas = displayPlayerUnitDatas,
-                Symbols = new SelectList(symbolList),
-                SymbolId = SymbolId,
-                UnitName = UnitName
+                UnitSymbolName = UnitSymbolName
             };
             return View(playerUnitDataVM);
         }
@@ -91,7 +86,7 @@ namespace THLWToolBox.Controllers
         {
             var playerUnitDatas = from pud in _context.PlayerUnitData
                                   select pud;
-            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => pud.name).Distinct().ToList();
+            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => (pud.name + pud.symbol_name)).Distinct().ToList();
 
             return Json(result);
         }

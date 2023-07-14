@@ -21,7 +21,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PlayerUnitRaceFilter
-        public async Task<IActionResult> Index(string? UnitName, string? SymbolId, string? RaceName)
+        public async Task<IActionResult> Index(string? UnitSymbolName, string? RaceName)
         {
             if (_context.PictureData == null)
             {
@@ -44,32 +44,29 @@ namespace THLWToolBox.Controllers
 
             List<PlayerUnitRaceDisplayModel> displayUnitRaceDatas = new List<PlayerUnitRaceDisplayModel>();
 
-            if (UnitName != null && UnitName.Length > 0)
+            if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
                 foreach (var pud in playerUnitDatasList)
                 {
-                    if (pud.name.Equals(UnitName))
+                    if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
-                        if (SymbolId == null || SymbolId.Equals("null") || SymbolId.Equals(pud.symbol_name))
+                        List<string> queryRaces = new List<string>();
+                        HashSet<int> raceIds = new HashSet<int>();
+                        foreach (var purd in playerUnitRaceDataList)
                         {
-                            List<string> queryRaces = new List<string>();
-                            HashSet<int> raceIds = new HashSet<int>();
-                            foreach (var purd in playerUnitRaceDataList)
+                            if (purd.unit_id == pud.id)
                             {
-                                if (purd.unit_id == pud.id)
-                                {
-                                    raceIds.Add(purd.race_id);
-                                }
+                                raceIds.Add(purd.race_id);
                             }
-                            foreach (var rd in raceDataList)
-                            {
-                                if (raceIds.Contains(rd.id))
-                                {
-                                    queryRaces.Add(rd.name);
-                                }
-                            }
-                            displayUnitRaceDatas.Add(new PlayerUnitRaceDisplayModel(pud, queryRaces));
                         }
+                        foreach (var rd in raceDataList)
+                        {
+                            if (raceIds.Contains(rd.id))
+                            {
+                                queryRaces.Add(rd.name);
+                            }
+                        }
+                        displayUnitRaceDatas.Add(new PlayerUnitRaceDisplayModel(pud, queryRaces));
                     }
                 }
             }
@@ -126,10 +123,8 @@ namespace THLWToolBox.Controllers
             var playerUnitDataVM = new PlayerUnitRaceFilterViewModel
             {
                 RaceList = String.Join(", ", GetRaces()),
-                Symbols = new SelectList(symbolList),
-                SymbolId = SymbolId,
                 QueryResults = displayUnitRaceDatas,
-                UnitName = UnitName,
+                UnitSymbolName = UnitSymbolName,
                 RaceName = RaceName
             };
             return View(playerUnitDataVM);
@@ -140,7 +135,7 @@ namespace THLWToolBox.Controllers
         {
             var playerUnitDatas = from pud in _context.PlayerUnitData
                                   select pud;
-            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => pud.name).Distinct().ToList();
+            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => (pud.name + pud.symbol_name)).Distinct().ToList();
 
             return Json(result);
         }

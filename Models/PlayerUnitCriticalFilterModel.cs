@@ -20,9 +20,7 @@ namespace THLWToolBox.Models
         public List<PlayerUnitCriticalDisplayModel> QueryResults { get; set; }
         public string? RaceList { get; set; }
         public string? RaceName { get; set; }
-        public SelectList? Symbols { get; set; }
-        public string? UnitName { get; set; }
-        public string? SymbolId { get; set; }
+        public string? UnitSymbolName { get; set; }
         public int? ShotType { get; set; }
     }
 }

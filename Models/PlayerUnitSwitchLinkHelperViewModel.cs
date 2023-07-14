@@ -16,8 +16,6 @@ namespace THLWToolBox.Models
     public class PlayerUnitSwitchLinkHelperViewModel
     {
         public List<PlayerUnitSwitchLinkDisplayModel>? PlayerUnitDatas { get; set; }
-        public SelectList? Symbols { get; set; }
-        public string? UnitName { get; set; }
-        public string? SymbolId { get; set; }
+        public string? UnitSymbolName { get; set; }
     }
 }
