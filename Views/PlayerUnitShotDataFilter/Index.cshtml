@@ -20,10 +20,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>1. 射击/符卡种类必选，否则不输出任何信息</p>
-                <p>2. "灵力回收效率"为每一发<b><font color="red">命中的</font></b>子弹回收的灵力量</p>
-                <p>3. 有关灵力回收机制详情见我的文章：<a href="https://www.bilibili.com/read/cv20750984">灵力回收机制详解</a></p>
-                <p>4. "弹幕补正"为乘在伤害计算最后的一个隐藏数据。后面的等级为弹幕等级，若是符卡则为觉醒等级，若是射击则为当前持有的灵力（向下取整）</p>
+                <p>1. "灵力回收效率"为每一发<b><font color="red">命中的</font></b>子弹回收的灵力量</p>
+                <p>2. 有关灵力回收机制详情见我的文章：<a href="https://www.bilibili.com/read/cv20750984">灵力回收机制详解</a></p>
+                <p>3. "弹幕补正"为乘在伤害计算最后的一个隐藏数据。后面的等级为弹幕等级，若是符卡则为觉醒等级，若是射击则为当前持有的灵力（向下取整）</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
@@ -84,17 +83,6 @@
                 <div class="selects-box">
                     <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
                 </div>
-                <div class="selects-box" style="text-align: right">射击/符卡种类：</div>
-                <div class="selects-box">
-                    <select asp-for="ShotId" class="selector">
-                        <option value=null>{必选}</option>
-                        <option value=1>扩散射击</option>
-                        <option value=2>集中射击</option>
-                        <option value=3>符卡一</option>
-                        <option value=4>符卡二</option>
-                        <option value=5>终符</option>
-                    </select>
-                </div>
             </div>
         </div>
         <div class="submit-title-box-1"></div>
@@ -104,6 +92,7 @@
 </div>
 
 <div class="home-box">
+    <div class="title-result-box-1">要查询的角色</div>
     <table class="table table-light table-bordered">
         <thead>
             <tr>
@@ -115,6 +104,34 @@
                 </th>
                 <th>
                     泛异记号
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.QueryUnit!) {
+            <tr>
+                <td>
+                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.symbol_name)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">该角色射击数据列表</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    射击种类
                 </th>
                 <th>
                     射击名
@@ -143,16 +160,10 @@
             </tr>
         </thead>
         <tbody>
-    @foreach (var item in Model.PlayerUnitDatas!) {
+        @foreach (var item in Model.ShotDatas!) {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerUnitData.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
+                    @Html.DisplayFor(modelItem => item.type_name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.shot_name)
@@ -179,7 +190,7 @@
                     @Html.Raw((0.01 * item.shot_level5_power_rate).ToString())
                 </td>
             </tr>
-    }
+        }
         </tbody>
     </table>
 </div>

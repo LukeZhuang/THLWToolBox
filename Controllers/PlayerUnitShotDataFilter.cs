@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PlayerUnitShotDataFilter
-        public async Task<IActionResult> Index(string? UnitSymbolName, int? ShotId)
+        public async Task<IActionResult> Index(string? UnitSymbolName)
         {
             if (_context.PictureData == null)
             {
@@ -38,47 +39,50 @@ namespace THLWToolBox.Controllers
             var playerUnitSpellcardDatas = from puscd in _context.PlayerUnitSpellcardData select puscd;
             var playerUnitSpellcardDataList = await playerUnitSpellcardDatas.Distinct().ToListAsync();
 
-            List<PlayerUnitShotDataDisplayModel> displayPlayerUnitDatas = new List<PlayerUnitShotDataDisplayModel>();
+            Dictionary<int, PlayerUnitShotData> shotDataDict = new();
+            Dictionary<int, PlayerUnitSpellcardData> spellcardDataDict = new();
 
-            if (UnitSymbolName != null && UnitSymbolName.Length > 0 && ShotId != null)
+            foreach (var pusd in playerUnitShotDataList)
+                shotDataDict[pusd.id] = pusd;
+            foreach (var puscd in playerUnitSpellcardDataList)
+                spellcardDataDict[puscd.id] = puscd;
+
+            List<PlayerUnitData> QueryUnit = new();
+            List<PlayerUnitShotDataDisplayModel> displayPlayerUnitDatas = new();
+
+            if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
-                int shotIdVal = ShotId.GetValueOrDefault();
                 foreach (var pud in playerUnitDatasList)
                 {
                     if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
-                        if (shotIdVal <= 2)
-                        {
-                            int shotIdInTable = (shotIdVal == 1 ? pud.shot1_id : pud.shot2_id);
-                            foreach (var pusd in playerUnitShotDataList)
-                            {
-                                if (pusd.id == shotIdInTable)
-                                {
-                                    displayPlayerUnitDatas.Add(new PlayerUnitShotDataDisplayModel(pud, pusd.name, pusd.phantasm_power_up_rate, pusd.shot_level0_power_rate, pusd.shot_level1_power_rate, pusd.shot_level2_power_rate, pusd.shot_level3_power_rate, pusd.shot_level4_power_rate, pusd.shot_level5_power_rate));
-                                }
-                            }
-                        }
-                        else
-                        {
-                            int spellcardIdInTable = (shotIdVal == 3 ? pud.spellcard1_id : (shotIdVal == 4 ? pud.spellcard2_id : pud.spellcard5_id));
-                            foreach (var puscd in playerUnitSpellcardDataList)
-                            {
-                                if (puscd.id == spellcardIdInTable)
-                                {
-                                    displayPlayerUnitDatas.Add(new PlayerUnitShotDataDisplayModel(pud, puscd.name, puscd.phantasm_power_up_rate, puscd.shot_level0_power_rate, puscd.shot_level1_power_rate, puscd.shot_level2_power_rate, puscd.shot_level3_power_rate, puscd.shot_level4_power_rate, puscd.shot_level5_power_rate));
-                                }
-                            }
-                        }
+                        QueryUnit.Add(pud);
+                        displayPlayerUnitDatas.Add(CreateShotDataDisplayModel("扩散射击", shotDataDict[pud.shot1_id]));
+                        displayPlayerUnitDatas.Add(CreateShotDataDisplayModel("集中射击", shotDataDict[pud.shot2_id]));
+                        displayPlayerUnitDatas.Add(CreateShotDataDisplayModel("符卡一", spellcardDataDict[pud.spellcard1_id]));
+                        displayPlayerUnitDatas.Add(CreateShotDataDisplayModel("符卡二", spellcardDataDict[pud.spellcard2_id]));
+                        displayPlayerUnitDatas.Add(CreateShotDataDisplayModel("终符", spellcardDataDict[pud.spellcard5_id]));
                     }
                 }
             }
 
             var playerUnitDataVM = new PlayerUnitShotDataFilterViewModel
             {
-                PlayerUnitDatas = displayPlayerUnitDatas,
+                QueryUnit = QueryUnit,
+                ShotDatas = displayPlayerUnitDatas,
                 UnitSymbolName = UnitSymbolName
             };
             return View(playerUnitDataVM);
+        }
+
+        static PlayerUnitShotDataDisplayModel CreateShotDataDisplayModel(string shotType, PlayerUnitShotData shot)
+        {
+            return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.phantasm_power_up_rate, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
+        }
+
+        static PlayerUnitShotDataDisplayModel CreateShotDataDisplayModel(string shotType, PlayerUnitSpellcardData shot)
+        {
+            return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.phantasm_power_up_rate, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
         }
 
         [Produces("application/json")]
