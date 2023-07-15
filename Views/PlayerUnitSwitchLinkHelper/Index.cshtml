@@ -12,31 +12,6 @@
 </head>
 
 <style>
-    .swith-link-units {
-        border: none;
-        background: white;
-        padding: 7px 7px;
-        text-align: left;
-        text-decoration: none;
-        display: inline-block;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .units-img-name-box {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        font-size: 12px;
-        padding: 2px 2px;
-        margin-top: 1px;
-    }
-
-    .units-img-name-box img {
-        width: 100%;
-        height: auto;
-        position: relative;
-        margin: 0;
-    }
 </style>
 
 <!-- Modal -->
@@ -119,6 +94,7 @@
 </div>
 
 <div class="home-box">
+    <div class="title-result-box-1">要查询的角色</div>
     <table class="table table-light table-bordered">
         <thead>
             <tr>
@@ -131,28 +107,55 @@
                 <th>
                     泛异记号
                 </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.QueryUnit!)
+        {
+            <tr>
+                <td>
+                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.symbol_name)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">亲密关系角色列表</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
                 <th>
-                    亲密关系角色列表
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    泛异记号
                 </th>
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.PlayerUnitDatas!)
+        @foreach (var item in Model.RelatedUnits!)
         {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.playerUnitData.name)
+                    @Html.DisplayFor(modelItem => item.name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
-                </td>
-                <td>
-                    <div class="swith-link-units">
-                        @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
-                    </div>
+                    @Html.DisplayFor(modelItem => item.symbol_name)
                 </td>
             </tr>
         }

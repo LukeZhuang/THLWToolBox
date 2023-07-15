@@ -36,24 +36,6 @@ namespace THLWToolBox.Helpers
             return text;
         }
 
-        public static string DisplayUnitLists(List<PlayerUnitData> playerUnitDatas, IUrlHelper urlHelper)
-        {
-            List<string> strs = new List<string>();
-            foreach (var pud in playerUnitDatas)
-            {
-                string img = urlHelper.Content("~/res/units_img/" + pud.id + ".png");
-                string curText = "zzz" + pud.name + pud.symbol_name + "xxx" + img + "yyy";
-                strs.Add(curText);
-            }
-            string text = String.Join("", strs);
-            text = HttpUtility.HtmlEncode(text);
-            text = text.Replace("zzz", "<div class=\"units-img-name-box\">");
-            text = text.Replace("xxx", "<img src=\"");
-            string alt_img = HttpUtility.HtmlEncode(urlHelper.Content("~/res/website/noimg.png"));
-            text = text.Replace("yyy", "\" alt=\"暂无图片\" onerror=\"this.src='" + alt_img + "';\" /></div>");
-            return text;
-        }
-
         public static string BulletStrStyle(int BulletStatus, string ElementStr)
         {
             // 0-bit: yin/yang

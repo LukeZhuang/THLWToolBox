@@ -37,13 +37,15 @@ namespace THLWToolBox.Controllers
             var symbols = playerUnitDatas.Select(pud => pud.symbol_name);
             var symbolList = await symbols.Distinct().ToListAsync();
 
-            List<PlayerUnitSwitchLinkDisplayModel> displayPictureDatas = new List<PlayerUnitSwitchLinkDisplayModel>();
+            List<PlayerUnitData> QueryUnit = new();
+            List<PlayerUnitData> RelatedUnits = new();
             if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
                 foreach (var pud in playerUnitDatasList)
                 {
                     if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
+                        QueryUnit.Add(pud);
                         HashSet<int> relatedUnitIds = new HashSet<int>();
                         foreach (var prd in relationList)
                         {
@@ -56,22 +58,21 @@ namespace THLWToolBox.Controllers
                                 relatedUnitIds.Add(prd.person_id);
                             }
                         }
-                        List<PlayerUnitData> relatedUnits = new List<PlayerUnitData>();
                         foreach (var pud2 in playerUnitDatasList)
                         {
                             if (relatedUnitIds.Contains(pud2.person_id))
                             {
-                                relatedUnits.Add(pud2);
+                                RelatedUnits.Add(pud2);
                             }
                         }
-                        displayPictureDatas.Add(new PlayerUnitSwitchLinkDisplayModel(pud, relatedUnits));
                     }
                 }
             }
 
             var playerUnitDataVM = new PlayerUnitSwitchLinkHelperViewModel
             {
-                PlayerUnitDatas = displayPictureDatas,
+                QueryUnit = QueryUnit,
+                RelatedUnits = RelatedUnits,
                 UnitSymbolName = UnitSymbolName
             };
             return View(playerUnitDataVM);
