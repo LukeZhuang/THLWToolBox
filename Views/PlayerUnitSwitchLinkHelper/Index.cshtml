@@ -23,7 +23,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>有关亲密关系详情见我的文章：<a href="https://www.bilibili.com/read/cv22187818">换位连携机制详解</a></p>
+                <p>1. 若只填写角色，则会列举出与其有亲密关系的角色列表</p>
+                <p>2. 若只选择连携类型，则会列举出所有是该连携类型的角色</p>
+                <p>3. 若两个都选，<b><font color="red">则会筛选与该角色有亲密关系且连携类型为选定类型的角色</font></b></p>
+                <p>4. 有关亲密关系详情见我的文章：<a href="https://www.bilibili.com/read/cv22187818">换位连携机制详解</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
@@ -86,6 +89,15 @@
                     <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
                 </div>
             </div>
+            <div class="title-box-1">按连携类型查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">连携类型:</div>
+                <div class="selects-box">
+                    <select asp-for="SwitchLinkType" asp-items="Model.SwitchLinkTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
@@ -107,6 +119,9 @@
                 <th>
                     泛异记号
                 </th>
+                <th>
+                    连携类型
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -114,13 +129,16 @@
         {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.name)
+                    @Html.DisplayFor(modelItem => item.Item1.name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.symbol_name)
+                    @Html.DisplayFor(modelItem => item.Item1.symbol_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2)
                 </td>
             </tr>
         }
@@ -142,6 +160,9 @@
                 <th>
                     泛异记号
                 </th>
+                <th>
+                    连携类型
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -149,13 +170,16 @@
         {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.name)
+                    @Html.DisplayFor(modelItem => item.Item1.name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.symbol_name)
+                    @Html.DisplayFor(modelItem => item.Item1.symbol_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item2)
                 </td>
             </tr>
         }

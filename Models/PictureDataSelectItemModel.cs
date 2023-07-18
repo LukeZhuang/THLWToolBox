@@ -131,4 +131,12 @@
             (this.id, this.name) = new Tuple<int, string>(turnType, Convert.ToString(turnType));
         }
     }
+
+    public class PlayerUnitCharacteristicSelectItemModel : PictureDataSelectItemModel
+    {
+        public PlayerUnitCharacteristicSelectItemModel(PlayerUnitCharacteristicData pucd)
+        {
+            (this.id, this.name) = GeneralTypeMaster.GetTrustCharacteristicName(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype);
+        }
+    }
 }

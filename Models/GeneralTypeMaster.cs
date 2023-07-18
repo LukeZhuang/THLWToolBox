@@ -434,5 +434,32 @@ namespace THLWToolBox.Models
         {
             return maxValue - diff * (10 - level);
         }
+
+        public static Tuple<int, string> GetTrustCharacteristicName(int type, int subtype)
+        {
+            switch (type)
+            {
+                case 18:
+                    switch (subtype)
+                    {
+                        case 1:
+                            return new Tuple<int, string>(0, "攻击连携");
+                        case 2:
+                            return new Tuple<int, string>(1, "防御连携");
+                        case 3:
+                            return new Tuple<int, string>(2, "速度连携");
+                        default:
+                            throw new NotImplementedException();
+                    }
+                case 3:
+                    return new Tuple<int, string>(3, "体力连携");
+                case 4:
+                    return new Tuple<int, string>(4, "屏障连携");
+                case 5:
+                    return new Tuple<int, string>(5, "灵力连携");
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 }
