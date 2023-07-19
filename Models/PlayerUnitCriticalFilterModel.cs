@@ -17,7 +17,8 @@ namespace THLWToolBox.Models
     }
     public class PlayerUnitCriticalFilterModel
     {
-        public List<PlayerUnitCriticalDisplayModel> QueryResults { get; set; }
+        public List<Tuple<PlayerUnitData, string>>? QueryUnit { get; set; }
+        public List<PlayerUnitCriticalDisplayModel> CriticalMatchUnitResults { get; set; }
         public string? RaceList { get; set; }
         public string? RaceName { get; set; }
         public string? UnitSymbolName { get; set; }

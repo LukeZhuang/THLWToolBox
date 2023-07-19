@@ -84,20 +84,24 @@ namespace THLWToolBox.Controllers
 
             HashSet<int> targetRaceIds = new();
 
+            List<Tuple<PlayerUnitData, string>> QueryUnit = new();
+
             if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
                 foreach (var pud in playerUnitDatasList)
                 {
                     if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
-                        List<string> queryRaces = new List<string>();
+                        List<string> queryRaces = new();
                         foreach (var purd in playerUnitRaceDataList)
                         {
                             if (purd.unit_id == pud.id)
                             {
                                 targetRaceIds.Add(purd.race_id);
+                                queryRaces.Add(raceDataDict[purd.race_id]);
                             }
                         }
+                        QueryUnit.Add(new Tuple<PlayerUnitData, string>(pud, string.Join(", ", queryRaces)));
                     }
                 }
             }
@@ -137,8 +141,9 @@ namespace THLWToolBox.Controllers
 
             var playerUnitCriticalFilterVM = new PlayerUnitCriticalFilterModel
             {
+                QueryUnit = QueryUnit,
                 RaceList = String.Join(", ", GetRaces()),
-                QueryResults = displayUnitCriticalDatas,
+                CriticalMatchUnitResults = displayUnitCriticalDatas,
                 UnitSymbolName = UnitSymbolName,
                 RaceName = RaceName
             };

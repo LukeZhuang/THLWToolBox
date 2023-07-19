@@ -127,7 +127,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>1. 查询角色对应的种族请移步“角色种族查询器”</p>
+                <p>1. 查询每个种族对应有哪些角色请移步“角色种族查询器”</p>
                 <p>2. 角色名与种族名任选其一输入，<b><font color="red">如果两个都输入则仅显示角色名结果</font></b></p>
                 <p>3. 排序法则： 按每个角色对选定范围的弹幕总得分从大到小排序 </p>
                 <p>4. 得分计算法则：角色对应攻击力x倍率x子弹数x命中率x(1+会心率)x5级弹幕补正x权重，若特攻则会心率为1，其他与角色界面的“期望威力”计算方式类似，<b>由于不计算其他任何补正以及技能组等因素，因此<font color=#FF0000>排名和得分仅供参考，不反映角色的实际强度</font></b>。角色面板取满级、满强化（满普通香木、满升格、满觉醒）、转生前且未装备任何绘卷的数据 </p>
@@ -183,6 +183,45 @@
 </div>
 
 <div class="home-box">
+    <div class="title-result-box-1">要查询的角色</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    泛异记号
+                </th>
+                <th>
+                    种族
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.QueryUnit!)
+            {
+                <tr>
+                    <td>
+                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.symbol_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item2)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="title-result-box-1">对该角色/种族特攻的角色列表</div>
     <table class="table table-light table-bordered">
         <thead>
             <tr>
@@ -207,7 +246,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.QueryResults!)
+            @foreach (var item in Model.CriticalMatchUnitResults!)
             {
                 <tr>
                     <td>
