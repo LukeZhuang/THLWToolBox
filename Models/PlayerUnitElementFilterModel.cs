@@ -17,7 +17,10 @@
     public class PlayerUnitElementFilterModel
     {
         public List<PlayerUnitElementDisplayModel> QueryResults { get; set; }
-        public int? ShotType { get; set; }
+        public bool? Shot1 { get; set; }
+        public bool? Shot2 { get; set; }
+        public bool? NormalSpellcard { get; set; }
+        public bool? LastWord { get; set; }
         public int? MainBulletElement { get; set; }
         public int? MainBulletType { get; set; }
         public int? MainBulletCategory { get; set; }

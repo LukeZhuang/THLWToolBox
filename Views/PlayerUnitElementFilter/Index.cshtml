@@ -96,15 +96,11 @@
     <form asp-controller="PlayerUnitElementFilter" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">射击类型</div>
-            <div class="selects-grid">
-                <div class="selects-box" style="text-align: right">类型：</div>
-                <div class="selects-box">
-                    <select asp-for="ShotType" class="selector">
-                        <option value=0>普通射击+符卡</option>
-                        <option value=1>仅符卡</option>
-                        <option value=2>仅终符</option>
-                    </select>
-                </div>
+            <div class="buttons-grid">
+                <div class="btn-checkbox">@Html.CheckBox("Shot1", true) 扩散射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("Shot2", true) 集中射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("NormalSpellcard", true) 小符卡</div>
+                <div class="btn-checkbox">@Html.CheckBox("LastWord", true) 终符</div>
             </div>
         </div>
             

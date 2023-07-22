@@ -22,6 +22,9 @@ namespace THLWToolBox.Models
         public string? RaceList { get; set; }
         public string? RaceName { get; set; }
         public string? UnitSymbolName { get; set; }
-        public int? ShotType { get; set; }
+        public bool? Shot1 { get; set; }
+        public bool? Shot2 { get; set; }
+        public bool? NormalSpellcard { get; set; }
+        public bool? LastWord { get; set; }
     }
 }

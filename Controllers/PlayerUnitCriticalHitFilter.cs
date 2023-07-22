@@ -20,7 +20,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PlayerUnitCriticalHitFilter
-        public async Task<IActionResult> Index(int? ShotType, string? UnitSymbolName, string? RaceName)
+        public async Task<IActionResult> Index(bool? Shot1, bool? Shot2, bool? NormalSpellcard, bool? LastWord, string? UnitSymbolName, string? RaceName)
         {
             if (_context.PlayerUnitData == null)
             {
@@ -78,10 +78,6 @@ namespace THLWToolBox.Controllers
             foreach (var rd in raceDataList)
                 raceDataDict[rd.id] = rd.name;
 
-            bool calcShot = (ShotType.GetValueOrDefault(0) <= 0);
-            bool calcSmallSC = (ShotType.GetValueOrDefault(0) <= 1);
-            bool calcLastSC = true;
-
             HashSet<int> targetRaceIds = new();
 
             List<Tuple<PlayerUnitData, string>> QueryUnit = new();
@@ -128,7 +124,7 @@ namespace THLWToolBox.Controllers
                 {
                     List<Tuple<string, List<string>>> unitBulletList = new();
                     double TotalScore = 0;
-                    bool Found = FilterByBullet(pud, targetRaceIds, calcShot, calcSmallSC, calcLastSC, shotDataDict, spellcardDataDict, bulletDataDict, bulletToRaceDict, raceDataDict, ref unitBulletList, ref TotalScore);
+                    bool Found = FilterByBullet(pud, targetRaceIds, Shot1, Shot2, NormalSpellcard, LastWord, shotDataDict, spellcardDataDict, bulletDataDict, bulletToRaceDict, raceDataDict, ref unitBulletList, ref TotalScore);
                     if (Found)
                         displayUnitCriticalDatas.Add(new PlayerUnitCriticalDisplayModel(pud, unitBulletList, TotalScore));
                 }
@@ -145,33 +141,36 @@ namespace THLWToolBox.Controllers
                 RaceList = String.Join(", ", GetRaces()),
                 CriticalMatchUnitResults = displayUnitCriticalDatas,
                 UnitSymbolName = UnitSymbolName,
-                RaceName = RaceName
+                RaceName = RaceName,
+                Shot1 = Shot1,
+                Shot2 = Shot2,
+                NormalSpellcard = NormalSpellcard,
+                LastWord = LastWord
             };
             return View(playerUnitCriticalFilterVM);
         }
 
-        static bool FilterByBullet(PlayerUnitData pud, HashSet<int> targetRaceIds, bool calcShot, bool calcSmallSC, bool calcLastSC, Dictionary<int, PlayerUnitShotData> shotDataDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDataDict, Dictionary<int, PlayerUnitBulletData> bulletDataDict, Dictionary<int, List<int>> bulletToRaceDict, Dictionary<int, string> raceDataDict, ref List<Tuple<string, List<string>>> unitBulletList, ref double TotalScore)
+        static bool FilterByBullet(PlayerUnitData pud, HashSet<int> targetRaceIds, bool? Shot1, bool? Shot2, bool? NormalSpellcard, bool? LastWord, Dictionary<int, PlayerUnitShotData> shotDataDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDataDict, Dictionary<int, PlayerUnitBulletData> bulletDataDict, Dictionary<int, List<int>> bulletToRaceDict, Dictionary<int, string> raceDataDict, ref List<Tuple<string, List<string>>> unitBulletList, ref double TotalScore)
         {
             TotalScore = 0;
             bool Found = false;
             List<Tuple<PlayerUnitShotData, string, double>> shots = new();
             List<Tuple<PlayerUnitSpellcardData, string, double>> scs = new();
 
-            if (calcShot)
-            {
+            if (Shot1 == null || Shot1.GetValueOrDefault() == true)
                 shots.Add(new Tuple<PlayerUnitShotData, string, double>(shotDataDict[pud.shot1_id], "扩散", 1.0));
+            if (Shot2 == null || Shot2.GetValueOrDefault() == true)
                 shots.Add(new Tuple<PlayerUnitShotData, string, double>(shotDataDict[pud.shot2_id], "集中", 1.2));
-            }
 
             foreach (var shot in shots)
                 TotalScore += SearchCriticalRaceInShot(targetRaceIds, shot.Item1, shot.Item2, shot.Item3, pud.yang_attack, pud.yin_attack, bulletDataDict, bulletToRaceDict, raceDataDict, ref Found, ref unitBulletList);
 
-            if (calcSmallSC)
+            if (NormalSpellcard == null || NormalSpellcard.GetValueOrDefault() == true)
             {
                 scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard1_id], "一符", 3.0));
                 scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard2_id], "二符", 3.0));
             }
-            if (calcLastSC)
+            if (LastWord == null || LastWord.GetValueOrDefault() == true)
                 scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard5_id], "终符", 5.0));
 
             foreach (var sc in scs)

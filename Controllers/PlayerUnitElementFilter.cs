@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Identity.Client;
+using System.Collections.Generic;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
 using static THLWToolBox.Models.GeneralTypeMaster;
@@ -10,9 +12,6 @@ namespace THLWToolBox.Controllers
 {
     public class PlayerUnitElementFilter : Controller
     {
-
-        private const double spreadShotWeight = 1.0;
-        private const double focusShotWeight = 1.2;
         private readonly THLWToolBoxContext _context;
 
         public PlayerUnitElementFilter(THLWToolBoxContext context)
@@ -21,7 +20,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PlayerUnitElementFilter
-        public async Task<IActionResult> Index(int? ShotType, int? MainBulletElement, int? MainBulletCategory, int? MainBulletType, int? SubBulletElement, int? SubBulletCategory, int? SubBulletType)
+        public async Task<IActionResult> Index(bool? Shot1, bool? Shot2, bool? NormalSpellcard, bool? LastWord, int? MainBulletElement, int? MainBulletCategory, int? MainBulletType, int? SubBulletElement, int? SubBulletCategory, int? SubBulletType)
         {
             if (_context.PlayerUnitData == null)
             {
@@ -47,10 +46,6 @@ namespace THLWToolBox.Controllers
             foreach (var pubd in playerUnitBulletDatas)
                 bulletDataDict[pubd.id] = pubd;
 
-            bool calcShot = (ShotType.GetValueOrDefault(0) <= 0);
-            bool calcSmallSC = (ShotType.GetValueOrDefault(0) <= 1);
-            bool calcLastSC = true;
-
             List<PlayerUnitElementDisplayModel> displayUnitElementDatas = new();
             if (MainBulletElement != null || MainBulletCategory != null || SubBulletElement != null || SubBulletCategory != null)
             {
@@ -59,23 +54,19 @@ namespace THLWToolBox.Controllers
                     bool Found = true;
                     double TotalMainScore = 0;
                     double TotalSubScore = 0;
-                    List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList = new();
+                    Dictionary<string, List<Tuple<PlayerUnitBulletData?, int>>> unitBulletDict = new();
 
                     if (MainBulletElement != null || MainBulletCategory != null)
-                        Found &= FilterByBullet(pud, 1, MainBulletElement, MainBulletCategory, MainBulletType, calcShot, calcSmallSC, calcLastSC, shotDataDict, spellcardDataDict, bulletDataDict, ref TotalMainScore, ref unitBulletList);
+                        Found &= FilterByBullet(pud, 1, MainBulletElement, MainBulletCategory, MainBulletType, Shot1, Shot2, NormalSpellcard, LastWord, shotDataDict, spellcardDataDict, bulletDataDict, ref TotalMainScore, ref unitBulletDict);
                     if (SubBulletElement != null || SubBulletCategory != null)
-                        Found &= FilterByBullet(pud, 2, SubBulletElement, SubBulletCategory, SubBulletType, calcShot, calcSmallSC, calcLastSC, shotDataDict, spellcardDataDict, bulletDataDict, ref TotalSubScore, ref unitBulletList);
+                        Found &= FilterByBullet(pud, 2, SubBulletElement, SubBulletCategory, SubBulletType, Shot1, Shot2, NormalSpellcard, LastWord, shotDataDict, spellcardDataDict, bulletDataDict, ref TotalSubScore, ref unitBulletDict);
 
                     if (Found)
-                        displayUnitElementDatas.Add(new PlayerUnitElementDisplayModel(pud, unitBulletList, TotalMainScore, TotalSubScore));
+                        displayUnitElementDatas.Add(new PlayerUnitElementDisplayModel(pud, SortBulletList(unitBulletDict), TotalMainScore, TotalSubScore));
                 }
                 displayUnitElementDatas.Sort(delegate (PlayerUnitElementDisplayModel pd1, PlayerUnitElementDisplayModel pd2)
                 {
                     return (-pd1.MainScore - pd1.SubScore).CompareTo(-pd2.MainScore - pd2.SubScore);
-                    //if (pd1.MainScore == pd2.MainScore)
-                    //    return (-pd1.SubScore).CompareTo(-pd2.SubScore);
-                    //else
-                    //    return (-pd1.MainScore).CompareTo(-pd2.MainScore);
                 });
             }
             var playerUnitElementFilterVM = new PlayerUnitElementFilterModel
@@ -86,89 +77,104 @@ namespace THLWToolBox.Controllers
                 MainBulletType = MainBulletType,
                 SubBulletElement = SubBulletElement,
                 SubBulletCategory = SubBulletCategory,
-                SubBulletType = SubBulletType
+                SubBulletType = SubBulletType,
+                Shot1 = Shot1,
+                Shot2 = Shot2,
+                NormalSpellcard = NormalSpellcard,
+                LastWord = LastWord
             };
             return View(playerUnitElementFilterVM);
         }
 
-        public bool FilterByBullet(PlayerUnitData pud, int FilterId, int? BulletElement, int? BulletCategory, int? BulletType, bool calcShot, bool calcSmallSC, bool calcLastSC, Dictionary<int, PlayerUnitShotData> shotDataDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDataDict, Dictionary<int, PlayerUnitBulletData> bulletDataDict, ref double TotalScore, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
+        public bool FilterByBullet(PlayerUnitData pud, int FilterId, int? BulletElement, int? BulletCategory, int? BulletType, bool? Shot1, bool? Shot2, bool? NormalSpellcard, bool? LastWord, Dictionary<int, PlayerUnitShotData> shotDataDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDataDict, Dictionary<int, PlayerUnitBulletData> bulletDataDict, ref double TotalScore, ref Dictionary<string, List<Tuple<PlayerUnitBulletData?, int>>> unitBulletDict)
         {
             bool Found = false;
             List<Tuple<PlayerUnitShotData, string, double>> shots = new();
             List<Tuple<PlayerUnitSpellcardData, string, double>> scs = new();
 
-            if (calcShot)
-            {
+            if (Shot1 == null || Shot1.GetValueOrDefault() == true)
                 shots.Add(new Tuple<PlayerUnitShotData, string, double>(shotDataDict[pud.shot1_id], "扩散", 1.0));
+            if (Shot2 == null || Shot2.GetValueOrDefault() == true)
                 shots.Add(new Tuple<PlayerUnitShotData, string, double>(shotDataDict[pud.shot2_id], "集中", 1.2));
-            }
 
             foreach (var shot in shots)
-                TotalScore += CalcShotElementScore(FilterId, shot.Item1, shot.Item2, shot.Item3, bulletDataDict, pud.yang_attack, pud.yin_attack, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
+                TotalScore += CalcShotElementScore(FilterId, shot.Item1, shot.Item2, shot.Item3, bulletDataDict, pud.yang_attack, pud.yin_attack, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletDict);
 
-
-            if (calcSmallSC)
+            if (NormalSpellcard == null || NormalSpellcard.GetValueOrDefault() == true)
             {
                 scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard1_id], "一符", 3.0));
                 scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard2_id], "二符", 3.0));
             }
-            if (calcLastSC)
+            if (LastWord == null || LastWord.GetValueOrDefault() == true)
                 scs.Add(new Tuple<PlayerUnitSpellcardData, string, double>(spellcardDataDict[pud.spellcard5_id], "终符", 5.0));
 
             foreach (var sc in scs)
-                TotalScore += CalcSpellcardElementScore(FilterId, sc.Item1, sc.Item2, sc.Item3, bulletDataDict, pud.yang_attack, pud.yin_attack, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
+                TotalScore += CalcSpellcardElementScore(FilterId, sc.Item1, sc.Item2, sc.Item3, bulletDataDict, pud.yang_attack, pud.yin_attack, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletDict);
 
             return Found;
         }
 
-        public double CalcShotElementScore(int FilterId, PlayerUnitShotData pusd, string name, double weight, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
+        public double CalcShotElementScore(int FilterId, PlayerUnitShotData pusd, string name, double weight, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref Dictionary<string, List<Tuple<PlayerUnitBulletData?, int>>> unitBulletDict)
         {
             int level5PowerRate = pusd.shot_level5_power_rate;
-            List<SingleBulletInfo> bulletList = new List<SingleBulletInfo> {
+            List<SingleBulletInfo> bulletList = new()
+            {
                 new SingleBulletInfo(pusd.magazine0_bullet_id, pusd.magazine0_bullet_range, pusd.magazine0_bullet_value, pusd.magazine0_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine1_bullet_id, pusd.magazine1_bullet_range, pusd.magazine1_bullet_value, pusd.magazine1_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine2_bullet_id, pusd.magazine2_bullet_range, pusd.magazine2_bullet_value, pusd.magazine2_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine3_bullet_id, pusd.magazine3_bullet_range, pusd.magazine3_bullet_value, pusd.magazine3_bullet_power_rate),
                 new SingleBulletInfo(pusd.magazine4_bullet_id, pusd.magazine4_bullet_range, pusd.magazine4_bullet_value, pusd.magazine4_bullet_power_rate),
-                new SingleBulletInfo(pusd.magazine5_bullet_id, pusd.magazine5_bullet_range, pusd.magazine5_bullet_value, pusd.magazine5_bullet_power_rate) };
-            return CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, level5PowerRate, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
+                new SingleBulletInfo(pusd.magazine5_bullet_id, pusd.magazine5_bullet_range, pusd.magazine5_bullet_value, pusd.magazine5_bullet_power_rate)
+            };
+
+            List<Tuple<PlayerUnitBulletData?, int>> searchResult;
+            if (unitBulletDict.ContainsKey(name))
+                searchResult = unitBulletDict[name];
+            else
+            {
+                searchResult = new();
+                for (int i = 0; i < bulletList.Count; i++)
+                    searchResult.Add(new Tuple<PlayerUnitBulletData?, int>(null, 0));
+            }
+
+            double score = CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, level5PowerRate, BulletElement, BulletCategory, BulletType, ref Found, ref searchResult);
+            if (score > 0)
+                unitBulletDict[name] = searchResult;
+            return score;
         }
 
-        public double CalcSpellcardElementScore(int FilterId, PlayerUnitSpellcardData puscd, string name, double weight, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
+        public double CalcSpellcardElementScore(int FilterId, PlayerUnitSpellcardData puscd, string name, double weight, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref Dictionary<string, List<Tuple<PlayerUnitBulletData?, int>>> unitBulletDict)
         {
             int level5PowerRate = puscd.shot_level5_power_rate;
-            List<SingleBulletInfo> bulletList = new List<SingleBulletInfo> {
+            List<SingleBulletInfo> bulletList = new()
+            {
                 new SingleBulletInfo(puscd.magazine0_bullet_id, puscd.magazine0_bullet_range, puscd.magazine0_bullet_value, puscd.magazine0_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine1_bullet_id, puscd.magazine1_bullet_range, puscd.magazine1_bullet_value, puscd.magazine1_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine2_bullet_id, puscd.magazine2_bullet_range, puscd.magazine2_bullet_value, puscd.magazine2_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine3_bullet_id, puscd.magazine3_bullet_range, puscd.magazine3_bullet_value, puscd.magazine3_bullet_power_rate),
                 new SingleBulletInfo(puscd.magazine4_bullet_id, puscd.magazine4_bullet_range, puscd.magazine4_bullet_value, puscd.magazine4_bullet_power_rate),
-                new SingleBulletInfo(puscd.magazine5_bullet_id, puscd.magazine5_bullet_range, puscd.magazine5_bullet_value, puscd.magazine5_bullet_power_rate) };
-            return CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, level5PowerRate, BulletElement, BulletCategory, BulletType, ref Found, ref unitBulletList);
+                new SingleBulletInfo(puscd.magazine5_bullet_id, puscd.magazine5_bullet_range, puscd.magazine5_bullet_value, puscd.magazine5_bullet_power_rate)
+            };
+            
+            List<Tuple<PlayerUnitBulletData?, int>> searchResult;
+            if (unitBulletDict.ContainsKey(name))
+                searchResult = unitBulletDict[name];
+            else
+            {
+                searchResult = new();
+                for (int i = 0; i < bulletList.Count; i++)
+                    searchResult.Add(new Tuple<PlayerUnitBulletData?, int>(null, 0));
+            }
+
+            double score = CalcBulletListScore(FilterId, name, weight, bulletList, bulletDataDict, yangATK, yinATK, level5PowerRate, BulletElement, BulletCategory, BulletType, ref Found, ref searchResult);
+            if (score > 0)
+                unitBulletDict[name] = searchResult;
+            return score;
         }
 
-        public double CalcBulletListScore(int FilterId, string name, double weight, List<SingleBulletInfo> bulletList, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int level5PowerRate, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList)
+        public double CalcBulletListScore(int FilterId, string name, double weight, List<SingleBulletInfo> bulletList, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int yangATK, int yinATK, int level5PowerRate, int? BulletElement, int? BulletCategory, int? BulletType, ref bool Found, ref List<Tuple<PlayerUnitBulletData?, int>> searchResult)
         {
             double BulletListScore = 0.0;
-
-            // find target shot row
-            int id = -1;
-            for (int i = 0; i < unitBulletList.Count; i++)
-            {
-                if (unitBulletList[i].Item1 == name)
-                {
-                    id = i;
-                    break;
-                }
-            }
-            if (id == -1)
-            {
-                List<Tuple<PlayerUnitBulletData?, int>> bulletRow = new();
-                for (int j = 0; j < bulletList.Count; j++)
-                    bulletRow.Add(new Tuple<PlayerUnitBulletData?, int>(null, 0));
-                unitBulletList.Add(new Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>(name, bulletRow));
-                id = unitBulletList.Count - 1;
-            }
 
             // about the second item (that "int") in the list, this integer record the bullet "status"
             // lowest bit means "yin"/"yang"
@@ -177,13 +183,14 @@ namespace THLWToolBox.Controllers
 
             for (int j = 0; j < bulletList.Count; j++)
             {
-                SingleBulletInfo bullet = bulletList[j];
+                SingleBulletInfo bulletInfo = bulletList[j];
 
-                if (bullet.bullet_id == 0)
+                int bulletId = bulletInfo.bullet_id;
+                if (!bulletDataDict.ContainsKey(bulletId))
                     continue;
 
-                PlayerUnitBulletData bulletRecord = bulletDataDict[bullet.bullet_id];
-                int bulletStatus = unitBulletList[id].Item2[j].Item2;
+                PlayerUnitBulletData bulletRecord = bulletDataDict[bulletInfo.bullet_id];
+                int bulletStatus = searchResult[j].Item2;
                 if (bulletRecord.type != 0 && bulletRecord.type != 1)
                     throw new NotImplementedException("unknown bullet type");
                 bulletStatus |= (bulletRecord.type & 1);
@@ -198,23 +205,36 @@ namespace THLWToolBox.Controllers
 
                 if (match)
                 {
-                    double atk;
-                    if (bulletRecord.type == 0)
-                        atk = yinATK;
-                    else if (bulletRecord.type == 1)
-                        atk = yangATK;
-                    else
-                        throw new NotImplementedException("unknown bullet type");
-
-                    BulletListScore += (atk / 1000.0) * (bullet.bullet_power_rate / 100.0) * bullet.bullet_value * (bulletRecord.hit / 100.0) * (1 + bulletRecord.critical / 100.0) * (level5PowerRate / 100.0) * (bullet.bullet_range == 2 ? 1.5 : 1.0) * weight;
+                    BulletListScore += CalcBulletPower(bulletInfo, bulletRecord, yangATK, yinATK, level5PowerRate, weight, false);
                     bulletStatus |= (1 << FilterId);
 
                     Found = true;
                 }
 
-                unitBulletList[id].Item2[j] = new Tuple<PlayerUnitBulletData?, int>(bulletRecord, bulletStatus);
+                searchResult[j] = new Tuple<PlayerUnitBulletData?, int>(bulletRecord, bulletStatus);
             }
             return BulletListScore;
+        }
+
+        static double CalcBulletPower(SingleBulletInfo bulletInfo, PlayerUnitBulletData bulletRecord, int yangATK, int yinATK, int level5PowerRate, double shotTypeWeight, bool IsCriticalRace)
+        {
+            double ATK = ((bulletRecord.type == 1) ? yangATK : yinATK) / 1000.0;
+            double TotalPower = (bulletInfo.bullet_power_rate / 100.0) * bulletInfo.bullet_value;
+            double Hit = (bulletRecord.hit / 100.0);
+            double Critic = (1 + (IsCriticalRace ? 100.0 : bulletRecord.critical) / 100.0);
+            double RangeWeight = (bulletInfo.bullet_range == 2 ? 1.5 : 1.0);
+            double PowerUpRate = level5PowerRate / 100.0;
+            return ATK * TotalPower * Hit * Critic * PowerUpRate * RangeWeight * shotTypeWeight;
+        }
+
+        static List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> SortBulletList(Dictionary<string, List<Tuple<PlayerUnitBulletData?, int>>> unitBulletDict)
+        {
+            List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> result = new();
+            List<string> shotNameOrder = new List<string> { "扩散", "集中", "一符", "二符", "终符" };
+            foreach (var shotName in shotNameOrder)
+                if (unitBulletDict.ContainsKey(shotName))
+                    result.Add(new Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>(shotName, unitBulletDict[shotName]));
+            return result;
         }
     }
 }
