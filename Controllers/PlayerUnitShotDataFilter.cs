@@ -77,12 +77,12 @@ namespace THLWToolBox.Controllers
 
         static PlayerUnitShotDataDisplayModel CreateShotDataDisplayModel(string shotType, PlayerUnitShotData shot)
         {
-            return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.phantasm_power_up_rate, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
+            return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
         }
 
         static PlayerUnitShotDataDisplayModel CreateShotDataDisplayModel(string shotType, PlayerUnitSpellcardData shot)
         {
-            return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.phantasm_power_up_rate, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
+            return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
         }
 
         [Produces("application/json")]

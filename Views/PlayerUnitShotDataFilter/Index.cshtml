@@ -16,13 +16,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitShotDataFilterHelper">帮助：弹幕隐藏数据查询器</h4>
+                <h4 class="modal-title" id="unitShotDataFilterHelper">帮助：弹幕补正查询器</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>1. "灵力回收效率"为每一发<b><font color="red">命中的</font></b>子弹回收的灵力量</p>
-                <p>2. 有关灵力回收机制详情见我的文章：<a href="https://www.bilibili.com/read/cv20750984">灵力回收机制详解</a></p>
-                <p>3. "弹幕补正"为乘在伤害计算最后的一个隐藏数据。后面的等级为弹幕等级，若是符卡则为觉醒等级，若是射击则为当前持有的灵力（向下取整）</p>
+                <p>"弹幕补正"为乘在伤害计算最后的一个隐藏数据。后面的等级为弹幕等级，若是符卡则为觉醒等级，若是射击则为当前持有的灵力（向下取整）</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
@@ -71,7 +69,7 @@
 <p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
 <div class="text-center">
-    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_bullet.png")" width="60" height="60" /> 弹幕隐藏数据查询器</div>
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_bullet.png")" width="60" height="60" /> 弹幕补正查询器</div>
 </div>
 
 <div class="home-box">
@@ -126,7 +124,7 @@
 </div>
 
 <div class="home-box">
-    <div class="title-result-box-1">该角色射击数据列表</div>
+    <div class="title-result-box-1">该角色弹幕补正数据表</div>
     <table class="table table-light table-bordered">
         <thead>
             <tr>
@@ -137,25 +135,22 @@
                     射击名
                 </th>
                 <th>
-                    灵力回收效率
+                    lv0
                 </th>
                 <th>
-                    弹幕补正lv0
+                    lv1
                 </th>
                 <th>
-                    弹幕补正lv1
+                    lv2
                 </th>
                 <th>
-                    弹幕补正lv2
+                    lv3
                 </th>
                 <th>
-                    弹幕补正lv3
+                    lv4
                 </th>
                 <th>
-                    弹幕补正lv4
-                </th>
-                <th>
-                    弹幕补正lv5
+                    lv5
                 </th>
             </tr>
         </thead>
@@ -167,9 +162,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.shot_name)
-                </td>
-                <td>
-                    @Html.Raw((0.002 * item.phantasm_power_up_rate).ToString("0.000") + " ± " + (0.0008 * item.phantasm_power_up_rate).ToString("0.0000"))
                 </td>
                 <td>
                     @Html.Raw((0.01 * item.shot_level0_power_rate).ToString("0.00"))
