@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Numpy;
+using Python.Runtime;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
 
@@ -169,35 +170,38 @@ namespace THLWToolBox.Controllers
 
         static List<double> CalcShotModel(SpiritRecycleModel shotModel, int? EnemyCount, int? HitRank, int? SourceSmoke, int? TargetCharge, int? ConfidenceLevel)
         {
-            int SPRate = shotModel.phantasm_power_up_rate;
-            if (shotModel.bullet_range == 1)
-                EnemyCount = 1;
-            var AccumulateSP = np.zeros(MONTE_CARLO);
             List<double> BoostRecycles = new();
-            foreach (var CurBoost in shotModel.Boosts)
+            using (Py.GIL())
             {
-                foreach (var BulletInfo in CurBoost)
+                int SPRate = shotModel.phantasm_power_up_rate;
+                if (shotModel.bullet_range == 1)
+                    EnemyCount = 1;
+                var AccumulateSP = np.zeros(MONTE_CARLO);
+                foreach (var CurBoost in shotModel.Boosts)
                 {
-                    int BulletCount = BulletInfo.bullet_value * EnemyCount.GetValueOrDefault(1);
-                    bool IsSureHit = BulletInfo.is_sure_hit;
-                    double ActualHit = IsSureHit ? 0 : GetActualHitRate(BulletInfo.hit, HitRank, SourceSmoke, TargetCharge);
-                    int[] Dim = new int[] { BulletCount, MONTE_CARLO };
-                    var SP = np.floor(SPRate * np.random.randint(3, 8, Dim) * 0.04) * 0.01;
-                    if (!IsSureHit)
+                    foreach (var BulletInfo in CurBoost)
                     {
-                        var HitMask = np.random.rand(BulletCount, MONTE_CARLO) < ActualHit;
-                        SP = SP * HitMask;
+                        int BulletCount = BulletInfo.bullet_value * EnemyCount.GetValueOrDefault(1);
+                        bool IsSureHit = BulletInfo.is_sure_hit;
+                        double ActualHit = IsSureHit ? 0 : GetActualHitRate(BulletInfo.hit, HitRank, SourceSmoke, TargetCharge);
+                        int[] Dim = new int[] { BulletCount, MONTE_CARLO };
+                        var SP = np.floor(SPRate * np.random.randint(3, 8, Dim) * 0.04) * 0.01;
+                        if (!IsSureHit)
+                        {
+                            var HitMask = np.random.rand(BulletCount, MONTE_CARLO) < ActualHit;
+                            SP = SP * HitMask;
+                        }
+                        var MagazineSP = np.sum(SP, 0);
+                        AccumulateSP += MagazineSP;
                     }
-                    var MagazineSP = np.sum(SP, 0);
-                    AccumulateSP += MagazineSP;
+                    var TmpSP = np.sort(np.copy(AccumulateSP));
+                    double SPRecycle;
+                    if (ConfidenceLevel == null || ConfidenceLevel.GetValueOrDefault() == 0)
+                        SPRecycle = np.average(TmpSP);
+                    else
+                        SPRecycle = double.Parse(TmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - ConfidenceLevel) / 1000.0)].repr);
+                    BoostRecycles.Add(SPRecycle);
                 }
-                var TmpSP = np.sort(np.copy(AccumulateSP));
-                double SPRecycle;
-                if (ConfidenceLevel == null || ConfidenceLevel.GetValueOrDefault() == 0)
-                    SPRecycle = np.average(TmpSP);
-                else
-                    SPRecycle = double.Parse(TmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - ConfidenceLevel) / 1000.0)].repr);
-                BoostRecycles.Add(SPRecycle);
             }
             return BoostRecycles;
         }
