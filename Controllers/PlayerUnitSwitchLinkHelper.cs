@@ -126,15 +126,5 @@ namespace THLWToolBox.Controllers
             list.Sort(delegate (PlayerUnitCharacteristicSelectItemModel pucim1, PlayerUnitCharacteristicSelectItemModel pucim2) { return pucim1.id.CompareTo(pucim2.id); });
             return list;
         }
-
-        [Produces("application/json")]
-        public IActionResult SearchUser(string? term)
-        {
-            var playerUnitDatas = from pud in _context.PlayerUnitData
-                               select pud;
-            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => (pud.name + pud.symbol_name)).Distinct().ToList();
-
-            return Json(result);
-        }
     }
 }

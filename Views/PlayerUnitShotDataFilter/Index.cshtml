@@ -37,7 +37,7 @@
         $('#nameinput1').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/PlayerUnitShotDataFilter/SearchUser',
+                    url: '/InputAutoCompleteHelper/SearchUser',
                     dataType: 'json',
                     data: { term: $('#nameinput1').val() },
                     success: function (data) {

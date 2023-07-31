@@ -19,7 +19,7 @@
             $('#nameinput1').autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: '/PlayerUnitRaceFilter/SearchUser',
+                    url: '/InputAutoCompleteHelper/SearchUser',
                         dataType: 'json',
                         data: { term: $('#nameinput1').val() },
                         success: function (data) {
@@ -48,7 +48,7 @@
             $('#nameinput2').autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: '/PlayerUnitRaceFilter/SearchRace',
+                    url: '/InputAutoCompleteHelper/SearchRace',
                         dataType: 'json',
                         data: { term: $('#nameinput2').val() },
                         success: function (data) {

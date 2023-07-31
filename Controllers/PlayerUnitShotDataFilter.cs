@@ -84,15 +84,5 @@ namespace THLWToolBox.Controllers
         {
             return new PlayerUnitShotDataDisplayModel(shotType, shot.name, shot.shot_level0_power_rate, shot.shot_level1_power_rate, shot.shot_level2_power_rate, shot.shot_level3_power_rate, shot.shot_level4_power_rate, shot.shot_level5_power_rate);
         }
-
-        [Produces("application/json")]
-        public IActionResult SearchUser(string? term)
-        {
-            var playerUnitDatas = from pud in _context.PlayerUnitData
-                                  select pud;
-            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => (pud.name + pud.symbol_name)).Distinct().ToList();
-
-            return Json(result);
-        }
     }
 }

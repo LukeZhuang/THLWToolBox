@@ -205,15 +205,5 @@ namespace THLWToolBox.Controllers
             }
             return BoostRecycles;
         }
-
-        [Produces("application/json")]
-        public IActionResult SearchUser(string? term)
-        {
-            var playerUnitDatas = from pud in _context.PlayerUnitData
-                                  select pud;
-            var result = playerUnitDatas.Where(pud => pud.name.Contains(term)).Select(pud => (pud.name + pud.symbol_name)).Distinct().ToList();
-
-            return Json(result);
-        }
     }
 }
