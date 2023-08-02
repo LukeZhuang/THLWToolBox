@@ -1,0 +1,207 @@
+﻿@*@model IEnumerable<THLWToolBox.Models.PlayerUnitData>*@
+@model THLWToolBox.Models.PlayerUnitHitCheckOrderHelperViewModel
+@using THLWToolBox.Helpers;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<style>
+    .magazine-grid {
+        display: inline-grid;
+        grid-template-rows: auto auto auto auto;
+        grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
+        grid-auto-flow: column;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        padding: 2px 2px;
+        /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+    }
+
+    .bullet-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="unitHitCheckOrderHelperModal" tabindex="-1" aria-labelledby="unitHitCheckOrderHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="unitUnitHitCheckOrderHelper">帮助：段落顺序查询器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>aaa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $('#nameinput1').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/InputAutoCompleteHelper/SearchUser',
+                    dataType: 'json',
+                    data: { term: $('#nameinput1').val() },
+                    success: function (data) {
+                        var result = $.map(data, function (item) {
+                            return {
+                                label: item
+                            };
+                        });
+                        return response(result);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                $('#nameinput1').val(ui.item.label);
+            },
+            create: function () {
+                $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+                    return $('<li>')
+                        .append('<div id="ui-id-6" tabindex="-1" class="ui-menu-item-wrapper">'
+                            + item.label + '<br></div>')
+                        .appendTo(ul);
+                };
+            }
+        });
+    </script>
+}
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="60" height="60" /> 段落顺序查询器</div>
+</div>
+
+<div class="home-box">
+    <form asp-controller="PlayerUnitHitCheckOrderHelper" asp-action="Index" method="post">
+        <div class="filter-box">
+            <div class="title-box-1">按角色名查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
+                <div class="selects-box">
+                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
+                </div>
+                <div class="selects-box" style="text-align: right">弹幕类型：</div>
+                <div class="selects-box">
+                    <select asp-for="BarrageId" class="selector">
+                        <option value=1>扩散射击</option>
+                        <option value=2>集中射击</option>
+                        <option value=3>一符</option>
+                        <option value=4>二符</option>
+                        <option value=7>终符</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitShotDataFilterHelperModal">帮助</button>
+    </form>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">要查询的角色</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    泛异记号
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.QueryUnit!)
+            {
+                <tr>
+                    <td>
+                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.symbol_name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">该角色弹幕段落顺序表</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    射击种类
+                </th>
+                <th>
+                    射击名
+                </th>
+                <th>
+                    灵力
+                </th>
+                <th>
+                    总弹数
+                </th>
+                <th>
+                    段落顺序及破盾信息
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.HitCheckOrderDatas!)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.type_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.shot_name)
+                    </td>
+                    <td>
+                        @Html.Raw(item.boost_id + "p")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.total_bullet_count)
+                    </td>
+                    <td>
+                        <div class="magazine-grid">
+                            <div class="bullet-wrapper">段落</div>
+                            <div class="bullet-wrapper">首发弹数</div>
+                            <div class="bullet-wrapper">破属性</div>
+                            <div class="bullet-wrapper">破异常</div>
+                            @Html.Raw(GeneralHelper.DisplayHitCheckOrder(item.hit_check_order_info))
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

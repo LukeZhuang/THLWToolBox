@@ -25,5 +25,6 @@ namespace THLWToolBox.Data
         public DbSet<THLWToolBox.Models.VersionHistoryData> VersionHistoryData { get; set; } = default!;
         public DbSet<THLWToolBox.Models.PlayerUnitBulletData> PlayerUnitBulletData { get; set; } = default!;
         public DbSet<THLWToolBox.Models.PlayerUnitBulletCriticalRaceData> PlayerUnitBulletCriticalRaceData { get; set; } = default!;
+        public DbSet<THLWToolBox.Models.PlayerUnitHitCheckOrderData> PlayerUnitHitCheckOrderData { get; set; } = default!;
     }
 }

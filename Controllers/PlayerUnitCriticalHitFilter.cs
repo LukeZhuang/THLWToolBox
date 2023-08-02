@@ -30,9 +30,6 @@ namespace THLWToolBox.Controllers
                                   select pud;
             var playerUnitDatasList = await playerUnitDatas.Distinct().ToListAsync();
 
-            var symbols = playerUnitDatas.Select(pud => pud.symbol_name);
-            var symbolList = await symbols.Distinct().ToListAsync();
-
             var raceDatas = from rd in _context.RaceData
                             select rd;
             var raceDataList = await raceDatas.Distinct().ToListAsync();

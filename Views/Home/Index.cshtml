@@ -106,7 +106,7 @@
     </div>
     <div class="home-box">
         <div class="title-box-1">角色相关</div>
-        <div class="title-box-2">查看角色信息</div>
+        <div class="title-box-2">查看角色隐藏信息</div>
         <div class="buttons-grid">
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_heart.png")" /></div>
@@ -124,6 +124,10 @@
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_power.png")" /></div>
                 查回灵效率
             </button>
+            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitHitCheckOrderHelper")'" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" /></div>
+                查段落顺序
+            </button>
         </div>
         <div class="title-box-2">找想要的角色</div>
         <div class="buttons-grid">
@@ -134,10 +138,6 @@
             <button type="button" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_skill.png")" /></div>
                 <div class="btn-feature-inprogess">按技能找</div>
-            </button>
-            <button type="button" class="btn-index">
-                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" /></div>
-                <div class="btn-feature-inprogess">按异常破盾找</div>
             </button>
             <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitElementFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_element.png")" /></div>

@@ -104,5 +104,19 @@ namespace THLWToolBox.Helpers
             }
             return text;
         }
+
+        public static string DisplayHitCheckOrder(List<Tuple<int, int, string, string>> hit_check_order_info)
+        {
+            string text = "";
+            foreach (var orderInfo in hit_check_order_info)
+            {
+                text += "<div class=bullet-wrapper>" + orderInfo.Item1 + "</div>";
+                text += "<div class=bullet-wrapper>" + orderInfo.Item2 + "</div>";
+                text += "<div class=bullet-wrapper>" + orderInfo.Item3 + "</div>";
+                text += "<div class=bullet-wrapper>" + orderInfo.Item4 + "</div>";
+            }
+            Console.WriteLine(text);
+            return text;
+        }
     }
 }

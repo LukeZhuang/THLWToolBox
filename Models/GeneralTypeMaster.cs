@@ -461,5 +461,25 @@ namespace THLWToolBox.Models
                     throw new NotImplementedException();
             }
         }
+
+
+        public static string GetAbnormalBreakString(int bulletAddon)
+        {
+            switch (bulletAddon)
+            {
+                case 12:
+                    return "火";
+                case 13:
+                    return "冰";
+                case 14:
+                    return "电";
+                case 15:
+                    return "毒";
+                case 16:
+                    return "暗";
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 }

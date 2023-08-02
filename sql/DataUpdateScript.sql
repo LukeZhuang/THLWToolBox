@@ -38,6 +38,7 @@ delete from [TouhouLostWordRawData].[dbo].[UnitRaceTable];
 delete from [TouhouLostWordRawData].[dbo].[UnitTable];
 delete from [TouhouLostWordRawData].[dbo].[BulletTable];
 delete from [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTable];
+delete from [TouhouLostWordRawData].[dbo].[HitCheckOrderTable];
 
 
 /* step 3: copy new data */
@@ -51,6 +52,7 @@ insert into [TouhouLostWordRawData].[dbo].[UnitRaceTable] select * from [TouhouL
 insert into [TouhouLostWordRawData].[dbo].[UnitTable] select * from [TouhouLostWordRawData].[dbo].[UnitTableNew];
 insert into [TouhouLostWordRawData].[dbo].[BulletTable] select * from [TouhouLostWordRawData].[dbo].[BulletTableNew];
 insert into [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTable] select * from [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTableNew];
+insert into [TouhouLostWordRawData].[dbo].[HitCheckOrderTable] select * from [TouhouLostWordRawData].[dbo].[HitCheckOrderTableNew];
 
 
 /* step 4: drop new data table */
@@ -64,6 +66,7 @@ drop table [TouhouLostWordRawData].[dbo].[UnitRaceTableNew];
 drop table [TouhouLostWordRawData].[dbo].[UnitTableNew];
 drop table [TouhouLostWordRawData].[dbo].[BulletTableNew];
 drop table [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTableNew];
+drop table [TouhouLostWordRawData].[dbo].[HitCheckOrderTableNew];
 
 
 /* step 5: prepare data for website */
@@ -77,6 +80,7 @@ delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[Rac
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitRaceData];
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletData];
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitBulletCriticalRaceData];
+delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitHitCheckOrderData];
 
 SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] ON;
 insert into [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] (
@@ -152,3 +156,10 @@ INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[Pla
 )
 select B.* from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] as A inner join [TouhouLostWordRawData].[dbo].[CharacteristicTable] as B on A.characteristic_id = B.id
 SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitCharacteristicData] OFF;
+
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitHitCheckOrderData] ON;
+INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitHitCheckOrderData] (
+[id],[unit_id],[barrage_id],[boost_id],[hit_check_order]
+)
+select B.* from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] as A inner join [TouhouLostWordRawData].[dbo].[HitCheckOrderTable] as B on A.id = B.unit_id
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitHitCheckOrderData] OFF;
