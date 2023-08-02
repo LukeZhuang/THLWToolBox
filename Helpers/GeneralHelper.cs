@@ -96,7 +96,7 @@ namespace THLWToolBox.Helpers
                 rowText += "<div class=shot-name-grid>" + shotName + "</div>";
 
                 rowText += "<div class=critical-bullet-rows>";
-                rowText += string.Join(", ", shot.Item2);
+                rowText += string.Join("<br/>", shot.Item2);
                 rowText += "</div>";
 
                 rowText += "</div>";
