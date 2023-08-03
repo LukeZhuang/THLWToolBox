@@ -88,7 +88,7 @@
 <p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
 
 <div class="text-center">
-    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="60" height="60" /> 段落顺序查询器</div>
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_hitcheckorder.png")" width="60" height="60" /> 段落顺序查询器</div>
 </div>
 
 <div class="home-box">
@@ -114,7 +114,7 @@
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitShotDataFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitHitCheckOrderHelperModal">帮助</button>
     </form>
 </div>
 
@@ -171,7 +171,7 @@
                     总弹数
                 </th>
                 <th>
-                    段落顺序及破盾信息
+                    段落判定顺序（左至右）及破盾信息
                 </th>
             </tr>
         </thead>
@@ -194,9 +194,9 @@
                     <td>
                         <div class="magazine-grid">
                             <div class="bullet-wrapper">段落</div>
-                            <div class="bullet-wrapper">首发弹数</div>
-                            <div class="bullet-wrapper">破属性</div>
-                            <div class="bullet-wrapper">破异常</div>
+                            <div class="bullet-wrapper">首发</div>
+                            <div class="bullet-wrapper">属性</div>
+                            <div class="bullet-wrapper">异常</div>
                             @Html.Raw(GeneralHelper.DisplayHitCheckOrder(item.hit_check_order_info))
                         </div>
                     </td>

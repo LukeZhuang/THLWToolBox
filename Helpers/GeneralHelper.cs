@@ -110,7 +110,7 @@ namespace THLWToolBox.Helpers
             string text = "";
             foreach (var orderInfo in hit_check_order_info)
             {
-                text += "<div class=bullet-wrapper>" + orderInfo.Item1 + "</div>";
+                text += "<div class=bullet-wrapper><b><font color=#FF6600>" + orderInfo.Item1 + "</font></b></div>";
                 text += "<div class=bullet-wrapper>" + orderInfo.Item2 + "</div>";
                 text += "<div class=bullet-wrapper>" + orderInfo.Item3 + "</div>";
                 text += "<div class=bullet-wrapper>" + orderInfo.Item4 + "</div>";

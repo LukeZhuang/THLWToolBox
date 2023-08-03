@@ -186,9 +186,9 @@ namespace THLWToolBox.Controllers
                     {
                         foreach (var bulletAddon in BulletAddons)
                         {
-                            abnormalInfo += GeneralTypeMaster.GetAbnormalBreakString(bulletAddon) + ", ";
+                            abnormalInfo += GeneralTypeMaster.GetAbnormalBreakString(bulletAddon) + "</br>";
                         }
-                        abnormalInfo = abnormalInfo.Substring(0, abnormalInfo.Length - 2);
+                        abnormalInfo = abnormalInfo.Substring(0, abnormalInfo.Length - 5);
                     }
                     Tuple<int, int, string, string> magazine_info = new(hit_check_order[index] - '0', (index + 1), elementInfo, abnormalInfo);
                     hit_check_order_info.Add(magazine_info);
