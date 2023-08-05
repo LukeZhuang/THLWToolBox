@@ -112,55 +112,55 @@ namespace THLWToolBox.Controllers
 
         public static int GetShotHitCheckOrderInfo(PlayerUnitShotData pusd, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int boostId, string hit_check_order, ref List<Tuple<int, int, string, string>> hit_check_order_info)
         {
-            List<SingleBulletInfo> bulletList = new() { new SingleBulletInfo(pusd.magazine0_bullet_id, 0, pusd.magazine0_bullet_value, 0) };
+            List<BulletMagazineModel> bulletMagazineList = new() { new BulletMagazineModel(pusd.magazine0_bullet_id, 0, pusd.magazine0_bullet_value, 0) };
             if (pusd.magazine1_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(pusd.magazine1_bullet_id, 0, pusd.magazine1_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(pusd.magazine1_bullet_id, 0, pusd.magazine1_bullet_value, 0));
             if (pusd.magazine2_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(pusd.magazine2_bullet_id, 0, pusd.magazine2_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(pusd.magazine2_bullet_id, 0, pusd.magazine2_bullet_value, 0));
             if (pusd.magazine3_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(pusd.magazine3_bullet_id, 0, pusd.magazine3_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(pusd.magazine3_bullet_id, 0, pusd.magazine3_bullet_value, 0));
             if (pusd.magazine4_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(pusd.magazine4_bullet_id, 0, pusd.magazine4_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(pusd.magazine4_bullet_id, 0, pusd.magazine4_bullet_value, 0));
             if (pusd.magazine5_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(pusd.magazine5_bullet_id, 0, pusd.magazine5_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(pusd.magazine5_bullet_id, 0, pusd.magazine5_bullet_value, 0));
             int total_bullet_count = 0;
-            foreach (var bullet in bulletList)
-                total_bullet_count += bullet.bullet_value;
+            foreach (var bulletMagazine in bulletMagazineList)
+                total_bullet_count += bulletMagazine.bullet_value;
             if (hit_check_order != "(empty)")
             {
                 if (total_bullet_count != hit_check_order.Length)
                     throw new NotImplementedException("mismatched bullet count");
-                GetHitCheckOrderInfo(bulletList, bulletDataDict, hit_check_order, ref hit_check_order_info);
+                GetHitCheckOrderInfo(bulletMagazineList, bulletDataDict, hit_check_order, ref hit_check_order_info);
             }
             return total_bullet_count;
         }
 
         public static int GetSpellcardHitCheckOrderInfo(PlayerUnitSpellcardData puscd, Dictionary<int, PlayerUnitBulletData> bulletDataDict, int boostId, string hit_check_order, ref List<Tuple<int, int, string, string>> hit_check_order_info)
         {
-            List<SingleBulletInfo> bulletList = new() { new SingleBulletInfo(puscd.magazine0_bullet_id, 0, puscd.magazine0_bullet_value, 0) };
+            List<BulletMagazineModel> bulletMagazineList = new() { new BulletMagazineModel(puscd.magazine0_bullet_id, 0, puscd.magazine0_bullet_value, 0) };
             if (puscd.magazine1_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(puscd.magazine1_bullet_id, 0, puscd.magazine1_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(puscd.magazine1_bullet_id, 0, puscd.magazine1_bullet_value, 0));
             if (puscd.magazine2_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(puscd.magazine2_bullet_id, 0, puscd.magazine2_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(puscd.magazine2_bullet_id, 0, puscd.magazine2_bullet_value, 0));
             if (puscd.magazine3_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(puscd.magazine3_bullet_id, 0, puscd.magazine3_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(puscd.magazine3_bullet_id, 0, puscd.magazine3_bullet_value, 0));
             if (puscd.magazine4_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(puscd.magazine4_bullet_id, 0, puscd.magazine4_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(puscd.magazine4_bullet_id, 0, puscd.magazine4_bullet_value, 0));
             if (puscd.magazine5_boost_count <= boostId)
-                bulletList.Add(new SingleBulletInfo(puscd.magazine5_bullet_id, 0, puscd.magazine5_bullet_value, 0));
+                bulletMagazineList.Add(new BulletMagazineModel(puscd.magazine5_bullet_id, 0, puscd.magazine5_bullet_value, 0));
             int total_bullet_count = 0;
-            foreach (var bullet in bulletList)
-                total_bullet_count += bullet.bullet_value;
+            foreach (var bulletMagazine in bulletMagazineList)
+                total_bullet_count += bulletMagazine.bullet_value;
             if (hit_check_order != "(empty)")
             {
                 if (total_bullet_count != hit_check_order.Length)
                     throw new NotImplementedException("mismatched bullet count");
-                GetHitCheckOrderInfo(bulletList, bulletDataDict, hit_check_order, ref hit_check_order_info);
+                GetHitCheckOrderInfo(bulletMagazineList, bulletDataDict, hit_check_order, ref hit_check_order_info);
             }
             return total_bullet_count;
         }
 
-        public static void GetHitCheckOrderInfo(List<SingleBulletInfo> bulletList, Dictionary<int, PlayerUnitBulletData> bulletDataDict, string hit_check_order, ref List<Tuple<int, int, string, string>> hit_check_order_info)
+        public static void GetHitCheckOrderInfo(List<BulletMagazineModel> bulletMagazineList, Dictionary<int, PlayerUnitBulletData> bulletDataDict, string hit_check_order, ref List<Tuple<int, int, string, string>> hit_check_order_info)
         {
             Dictionary<int, int> FirstBulletId = new(); 
             for (int index = 0; index < hit_check_order.Length; index++)
@@ -169,8 +169,8 @@ namespace THLWToolBox.Controllers
                 if (!FirstBulletId.ContainsKey(magazine_id))
                 {
                     FirstBulletId[magazine_id] = index;
-                    SingleBulletInfo bulletInfo = bulletList[magazine_id];
-                    PlayerUnitBulletData bulletRecord = bulletDataDict[bulletInfo.bullet_id];
+                    BulletMagazineModel bulletMagazine = bulletMagazineList[magazine_id];
+                    PlayerUnitBulletData bulletRecord = bulletDataDict[bulletMagazine.bullet_id];
                     string elementInfo = "";
                     if (bulletRecord.element != 9)
                         elementInfo = GeneralTypeMaster.GetElementTypeString(bulletRecord.element);

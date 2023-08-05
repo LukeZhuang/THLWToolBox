@@ -16,6 +16,35 @@ namespace THLWToolBox.Helpers
     {
         public static string VERSION_STR = "v1.2 alpha";
         public static string DATA_UPDATE_DATE = "2023/06/12";
+
+        public static double CalcBulletPower(BulletMagazineModel bulletMagazine, PlayerUnitBulletData bulletRecord, PlayerUnitData pud, int level5PowerRate, double shotTypeWeight, bool IsCriticalRace)
+        {
+            double ATK = ((bulletRecord.type == 1) ? pud.yang_attack : pud.yin_attack) / 1000.0;
+            double TotalPower = (bulletMagazine.bullet_power_rate / 100.0) * bulletMagazine.bullet_value;
+            double Hit = (bulletRecord.hit / 100.0);
+            double Critic = (1 + (IsCriticalRace ? 100.0 : bulletRecord.critical) / 100.0);
+            double RangeWeight = (bulletMagazine.bullet_range == 2 ? 1.5 : 1.0);
+            double PowerUpRate = level5PowerRate / 100.0;
+
+            List<Tuple<int, int>> AddOns = new() {
+                new Tuple<int, int> (bulletRecord.bullet1_addon_id, bulletRecord.bullet1_addon_value),
+                new Tuple<int, int> (bulletRecord.bullet2_addon_id, bulletRecord.bullet2_addon_value),
+                new Tuple<int, int> (bulletRecord.bullet3_addon_id, bulletRecord.bullet3_addon_value),
+            };
+            foreach (var AddOn in AddOns)
+            {
+                if (AddOn.Item1 == 1)
+                    Hit = 1.0;
+                /* hard */
+                if (AddOn.Item1 == 4)
+                    ATK += ((bulletRecord.type == 1) ? pud.yang_defense : pud.yin_defense) * (AddOn.Item2 / 100.0) / 1000.0;
+                /* slash */
+                if (AddOn.Item1 == 5)
+                    ATK += pud.speed * (AddOn.Item2 / 100.0) / 1000.0;
+            }
+
+            return ATK * TotalPower * Hit * Critic * PowerUpRate * RangeWeight * shotTypeWeight;
+        }
         public static string StringFromDatabaseForDisplay(string originalText)
         {
             string text = originalText;

@@ -4,13 +4,13 @@ namespace THLWToolBox.Models
 {
     public class GeneralTypeMaster
     {
-        public class SingleBulletInfo
+        public class BulletMagazineModel
         {
             public int bullet_id { get; set; }
             public int bullet_range { get; set; }
             public int bullet_value { get; set; }
             public int bullet_power_rate { get; set; }
-            public SingleBulletInfo(int bullet_id, int bullet_range, int bullet_value, int bullet_power_rate)
+            public BulletMagazineModel(int bullet_id, int bullet_range, int bullet_value, int bullet_power_rate)
             {
                 this.bullet_id = bullet_id;
                 this.bullet_range = bullet_range;
