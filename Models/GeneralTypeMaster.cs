@@ -19,6 +19,23 @@ namespace THLWToolBox.Models
             }
         }
 
+        public class EffectModel
+        {
+            public int effect { get; set; }
+            public int sub_effect { get; set; }
+            public int range { get; set; }
+            public int unit_role { get; set; }
+            public int turn { get; set; }
+            public EffectModel(int effect, int sub_effect, int range, int unit_role, int turn)
+            {
+                this.effect = effect;
+                this.sub_effect = sub_effect;
+                this.range = range;
+                this.unit_role = unit_role;
+                this.turn = turn;
+            }
+        }
+
         public static string GetRangeTypeString(int range)
         {
             switch (range)

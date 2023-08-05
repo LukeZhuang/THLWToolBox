@@ -105,25 +105,25 @@ namespace THLWToolBox.Controllers
         Tuple<int, string> GetPlayerUnitTrustCharacteristicName(PlayerUnitData pud, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
         {
             PlayerUnitCharacteristicData pucd = playerUnitCharacteristicDataDict[pud.characteristic_id];
-            PlayerUnitCharacteristicSelectItemModel pucim = new PlayerUnitCharacteristicSelectItemModel(pucd);
+            SelectItemModelForSwitchLinkEffectType pucim = new SelectItemModelForSwitchLinkEffectType(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype);
             return new Tuple<int, string>(pucim.id, pucim.name);
         }
 
-        List<PlayerUnitCharacteristicSelectItemModel> GetSelectListItems(List<PlayerUnitData> PlayerUnitDatasList, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
+        List<SelectItemModelForSwitchLinkEffectType> GetSelectListItems(List<PlayerUnitData> PlayerUnitDatasList, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
         {
-            List<PlayerUnitCharacteristicSelectItemModel> list = new();
+            List<SelectItemModelForSwitchLinkEffectType> list = new();
             HashSet<int> vis = new HashSet<int>();
             foreach (PlayerUnitData pud in PlayerUnitDatasList)
             {
                 PlayerUnitCharacteristicData pucd = playerUnitCharacteristicDataDict[pud.characteristic_id];
-                PlayerUnitCharacteristicSelectItemModel pucim = new PlayerUnitCharacteristicSelectItemModel(pucd);
+                SelectItemModelForSwitchLinkEffectType pucim = new SelectItemModelForSwitchLinkEffectType(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype);
                 if (!vis.Contains(pucim.id))
                 {
                     vis.Add(pucim.id);
                     list.Add(pucim);
                 }
             }
-            list.Sort(delegate (PlayerUnitCharacteristicSelectItemModel pucim1, PlayerUnitCharacteristicSelectItemModel pucim2) { return pucim1.id.CompareTo(pucim2.id); });
+            list.Sort(delegate (SelectItemModelForSwitchLinkEffectType pucim1, SelectItemModelForSwitchLinkEffectType pucim2) { return pucim1.id.CompareTo(pucim2.id); });
             return list;
         }
     }

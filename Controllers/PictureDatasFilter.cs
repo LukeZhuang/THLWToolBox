@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
+using static THLWToolBox.Models.GeneralTypeMaster;
 
 namespace THLWToolBox.Controllers
 {
@@ -53,11 +54,11 @@ namespace THLWToolBox.Controllers
 
             var pictureDataVM = new PictureDataViewModel
             {
-                EffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemEffectModel>(pictureDatasList), "id", "name", null),
-                SubeffectTypes = new SelectList(GetSelectListItems<PictureDataSelectItemSubeffectModel>(pictureDatasList), "id", "name", null),
-                RangeTypes = new SelectList(GetSelectListItems<PictureDataSelectItemRangeModel>(pictureDatasList), "id", "name", null),
-                UnitRoleTypes = new SelectList(GetSelectListItems<PictureDataSelectItemUnitRoleTypeModel>(pictureDatasList), "id", "name", null),
-                TurnTypes = new SelectList(GetSelectListItems<PictureDataSelectItemTurnTypeModel>(pictureDatasList), "id", "name", null),
+                EffectTypes = new SelectList(GetSelectListItems<SelectItemModelForEffectType>(pictureDatasList), "id", "name", null),
+                SubeffectTypes = new SelectList(GetSelectListItems<SelectItemModelForSubEffectType>(pictureDatasList), "id", "name", null),
+                RangeTypes = new SelectList(GetSelectListItems<SelectItemModelForRangeType>(pictureDatasList), "id", "name", null),
+                UnitRoleTypes = new SelectList(GetSelectListItems<SelectItemModelForUnitRoleType>(pictureDatasList), "id", "name", null),
+                TurnTypes = new SelectList(GetSelectListItems<SelectItemModelForTurnType>(pictureDatasList), "id", "name", null),
                 PictureDatas = displayPictureDatas,
                 //PictureDatas = pictureDatasList,
                 EffectId = EffectId,
@@ -179,15 +180,21 @@ namespace THLWToolBox.Controllers
                 return -1;
         }
 
-        List<PictureDataSelectItemModel> GetSelectListItems<T>(List<PictureData> PictureDatasList)
+        List<SelectItemModel> GetSelectListItems<T>(List<PictureData> PictureDatasList)
         {
-            List<PictureDataSelectItemModel> list = new List<PictureDataSelectItemModel>();
+            List<SelectItemModel> list = new List<SelectItemModel>();
             HashSet<int> vis = new HashSet<int>();
             foreach (PictureData pd in PictureDatasList)
             {
-                for (int effectId = 1; effectId <= 3; effectId++)
+                List<EffectModel> pdEffects = new List<EffectModel>
                 {
-                    PictureDataSelectItemModel pdim = (PictureDataSelectItemModel)Activator.CreateInstance(typeof(T), new object[] { pd, effectId });
+                    new EffectModel(pd.picture_characteristic1_effect_type, pd.picture_characteristic1_effect_subtype, pd.picture_characteristic1_effect_range, pd.picture_characteristic1_effect_type, pd.picture_characteristic1_effect_turn),
+                    new EffectModel(pd.picture_characteristic2_effect_type, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic2_effect_range, pd.picture_characteristic2_effect_type, pd.picture_characteristic2_effect_turn),
+                    new EffectModel(pd.picture_characteristic3_effect_type, pd.picture_characteristic3_effect_subtype, pd.picture_characteristic3_effect_range, pd.picture_characteristic3_effect_type, pd.picture_characteristic3_effect_turn),
+                };
+                for (int index = 0; index < pdEffects.Count; index++)
+                {
+                    SelectItemModel pdim = (SelectItemModel)Activator.CreateInstance(typeof(T), new object[] { pdEffects, index });
                     if (pdim.id == 0)
                         continue;
                     if (!vis.Contains(pdim.id))
@@ -197,7 +204,7 @@ namespace THLWToolBox.Controllers
                     }
                 }
             }
-            list.Sort(delegate (PictureDataSelectItemModel pdim1, PictureDataSelectItemModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
+            list.Sort(delegate (SelectItemModel pdim1, SelectItemModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
             return list;
         }
     }
