@@ -117,9 +117,6 @@
                     角色名
                 </th>
                 <th>
-                    泛异记号
-                </th>
-                <th>
                     连携类型
                 </th>
             </tr>
@@ -132,10 +129,7 @@
                     <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item1.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Item1.symbol_name)
+                    @Html.Raw(item.Item1.name + item.Item1.symbol_name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Item2)
@@ -158,9 +152,6 @@
                     角色名
                 </th>
                 <th>
-                    泛异记号
-                </th>
-                <th>
                     连携类型
                 </th>
             </tr>
@@ -173,10 +164,7 @@
                     <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item1.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Item1.symbol_name)
+                    @Html.Raw(item.Item1.name + item.Item1.symbol_name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Item2)

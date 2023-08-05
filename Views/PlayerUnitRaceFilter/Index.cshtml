@@ -139,9 +139,6 @@
                     角色名
                 </th>
                 <th>
-                    泛异记号
-                </th>
-                <th>
                     种族列表
                 </th>
             </tr>
@@ -154,10 +151,7 @@
                         <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.playerUnitData.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.playerUnitData.symbol_name)
+                        @Html.Raw(item.playerUnitData.name + item.playerUnitData.symbol_name)
                     </td>
                     <td>
                         @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(String.Join(", ", item.queryRaces)))

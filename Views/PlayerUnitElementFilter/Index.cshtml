@@ -212,9 +212,6 @@
                     角色名
                 </th>
                 <th>
-                    泛异记号
-                </th>
-                <th>
                     阳攻/阴攻
                 </th>
                 <th>
@@ -233,10 +230,7 @@
                         <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.PlayerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PlayerUnitData.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PlayerUnitData.symbol_name)
+                        @Html.Raw(item.PlayerUnitData.name + item.PlayerUnitData.symbol_name)
                     </td>
                     <td>
                         @Html.Raw(item.PlayerUnitData.yang_attack + "/" + item.PlayerUnitData.yin_attack)

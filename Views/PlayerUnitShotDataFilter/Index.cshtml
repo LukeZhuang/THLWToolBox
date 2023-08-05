@@ -100,9 +100,6 @@
                 <th>
                     角色名
                 </th>
-                <th>
-                    泛异记号
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -112,10 +109,7 @@
                     <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.symbol_name)
+                    @Html.Raw(item.name + item.symbol_name)
                 </td>
             </tr>
         }

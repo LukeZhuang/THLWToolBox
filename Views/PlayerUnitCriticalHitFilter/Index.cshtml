@@ -189,9 +189,6 @@
                     角色名
                 </th>
                 <th>
-                    泛异记号
-                </th>
-                <th>
                     种族
                 </th>
             </tr>
@@ -201,16 +198,13 @@
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Item1.name)
+                        @Html.Raw(item.playerUnitData.name + item.playerUnitData.symbol_name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Item1.symbol_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Item2)
+                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(String.Join(", ", item.queryRaces)))
                     </td>
                 </tr>
             }
@@ -225,9 +219,6 @@
                 </th>
                 <th>
                     角色名
-                </th>
-                <th>
-                    泛异记号
                 </th>
                 <th>
                     阳攻/阴攻
@@ -248,10 +239,7 @@
                         <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.PlayerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PlayerUnitData.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PlayerUnitData.symbol_name)
+                        @Html.Raw(item.PlayerUnitData.name + item.PlayerUnitData.symbol_name)
                     </td>
                     <td>
                         @Html.Raw(item.PlayerUnitData.yang_attack + "/" + item.PlayerUnitData.yin_attack)

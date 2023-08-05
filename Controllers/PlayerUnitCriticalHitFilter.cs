@@ -78,7 +78,7 @@ namespace THLWToolBox.Controllers
 
             HashSet<int> targetRaceIds = new();
 
-            List<Tuple<PlayerUnitData, string>> QueryUnit = new();
+            List<PlayerUnitRaceDisplayModel> QueryUnit = new();
 
             if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
@@ -95,7 +95,7 @@ namespace THLWToolBox.Controllers
                                 queryRaces.Add(raceDataDict[purd.race_id]);
                             }
                         }
-                        QueryUnit.Add(new Tuple<PlayerUnitData, string>(pud, string.Join(", ", queryRaces)));
+                        QueryUnit.Add(new PlayerUnitRaceDisplayModel(pud, queryRaces));
                     }
                 }
             }
