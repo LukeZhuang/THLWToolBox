@@ -2,58 +2,43 @@
 
 namespace THLWToolBox.Models
 {
+    public enum SelectItemTypes
+    {
+        EffectType = 0,
+        SubEffectType = 1,
+        RangeType = 2,
+        UnitRoleType = 3,
+        TurnType = 4,
+        SwitchLinkEffectType = 5,
+    }
     public class SelectItemModel
     {
         public int id { get; set; }
         public string name { get; set; }
-    }
-
-    public class SelectItemModelForEffectType : SelectItemModel
-    {
-        public SelectItemModelForEffectType(List<EffectModel> allEffects, int index)
+        public SelectItemModel(int id = 0, string name = "")
         {
-            (this.id, this.name) = GeneralTypeMaster.GetEffectRemappedInfo(allEffects[index].effect);
+            this.id = id;
+            this.name = name;
         }
-    }
-
-    public class SelectItemModelForSubEffectType : SelectItemModel
-    {
-        public SelectItemModelForSubEffectType(List<EffectModel> allEffects, int index)
+        public static SelectItemModel CreateSelectItemForEffect(EffectModel effect, SelectItemTypes type)
         {
-            (this.id, this.name) = GeneralTypeMaster.GetSubEffectRemappedInfo(allEffects[index].effect, allEffects[index].sub_effect);
-        }
-    }
-
-    public class SelectItemModelForRangeType : SelectItemModel
-    {
-        public SelectItemModelForRangeType(List<EffectModel> allEffects, int index)
-        {
-            (this.id, this.name) = GeneralTypeMaster.GetRangeRemappedInfo(allEffects[index].range);
-        }
-    }
-
-    public class SelectItemModelForUnitRoleType : SelectItemModel
-    {
-        public SelectItemModelForUnitRoleType(List<EffectModel> allEffects, int index)
-        {
-            (this.id, this.name) = GeneralTypeMaster.GetEffectByRoleRemappedInfo(allEffects[index].effect);
-        }
-    }
-
-    public class SelectItemModelForTurnType : SelectItemModel
-    {
-        public SelectItemModelForTurnType(List<EffectModel> allEffects, int index)
-        {
-            int turnType = allEffects[index].turn;
-            (this.id, this.name) = new Tuple<int, string>(turnType, Convert.ToString(turnType));
-        }
-    }
-
-    public class SelectItemModelForSwitchLinkEffectType : SelectItemModel
-    {
-        public SelectItemModelForSwitchLinkEffectType(int effectType, int subEffectType)
-        {
-            (this.id, this.name) = GeneralTypeMaster.GetTrustCharacteristicName(effectType, subEffectType);
+            switch (type)
+            {
+                case SelectItemTypes.EffectType:
+                    return GetEffectRemappedInfo(effect.effect_type);
+                case SelectItemTypes.SubEffectType:
+                    return GetSubEffectRemappedInfo(effect.effect_type, effect.sub_effect_type);
+                case SelectItemTypes.RangeType:
+                    return GetRangeRemappedInfo(effect.range);
+                case SelectItemTypes.UnitRoleType:
+                    return GetEffectByRoleRemappedInfo(effect.effect_type);
+                case SelectItemTypes.TurnType:
+                    return new SelectItemModel(effect.turn, Convert.ToString(effect.turn));
+                case SelectItemTypes.SwitchLinkEffectType:
+                    return GetTrustCharacteristicName(effect.effect_type, effect.sub_effect_type);
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

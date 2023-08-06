@@ -21,15 +21,15 @@ namespace THLWToolBox.Models
 
         public class EffectModel
         {
-            public int effect { get; set; }
-            public int sub_effect { get; set; }
+            public int effect_type { get; set; }
+            public int sub_effect_type { get; set; }
             public int range { get; set; }
             public int unit_role { get; set; }
             public int turn { get; set; }
-            public EffectModel(int effect, int sub_effect, int range, int unit_role, int turn)
+            public EffectModel(int effect_type, int sub_effect_type, int range, int unit_role, int turn)
             {
-                this.effect = effect;
-                this.sub_effect = sub_effect;
+                this.effect_type = effect_type;
+                this.sub_effect_type = sub_effect_type;
                 this.range = range;
                 this.unit_role = unit_role;
                 this.turn = turn;
@@ -283,7 +283,7 @@ namespace THLWToolBox.Models
             }
         }
 
-        public static Tuple<int, string> GetEffectRemappedInfo(int effectType)
+        public static SelectItemModel GetEffectRemappedInfo(int effectType)
         {
             switch (effectType)
             {
@@ -295,7 +295,7 @@ namespace THLWToolBox.Models
                 case 26:  /* "技巧式使用时施加Buff" */
                 case 27:  /* "速攻式使用时施加Buff" */
                 case 28:  /* "破坏式使用时施加Buff" */
-                    return new Tuple<int, string>(1, GetEffectTypeName(1));
+                    return new SelectItemModel(1, GetEffectTypeName(1));
                 case 31:  /* "防御式使用时施加Debuff" */
                 case 32:  /* "支援式使用时施加Debuff" */
                 case 33:  /* "回复式使用时施加Debuff" */
@@ -304,13 +304,13 @@ namespace THLWToolBox.Models
                 case 36:  /* "技巧式使用时施加Debuff" */
                 case 37:  /* "速攻式使用时施加Debuff" */
                 case 38:  /* "破坏式使用时施加Debuff" */
-                    return new Tuple<int, string>(2, GetEffectTypeName(2));
+                    return new SelectItemModel(2, GetEffectTypeName(2));
                 default:
-                    return new Tuple<int, string>(effectType, GetEffectTypeName(effectType));
+                    return new SelectItemModel(effectType, GetEffectTypeName(effectType));
             }
         }
 
-        public static Tuple<int, string> GetSubEffectRemappedInfo(int effectType, int subEffectType)
+        public static SelectItemModel GetSubEffectRemappedInfo(int effectType, int subEffectType)
         {
             switch (effectType)
             {
@@ -321,7 +321,7 @@ namespace THLWToolBox.Models
                 case 5:   /* "灵力上升" */
                 case 14:  /* "受来自X种族攻击时伤害下降" */
                 case 17:  /* "灵力回收效率上升" */
-                    return new Tuple<int, string>(0, "空");
+                    return new SelectItemModel(0, "空");
 
                 /* Has subtype but not implemented */
                 case 6:   /* "施加结界异常" */
@@ -343,7 +343,7 @@ namespace THLWToolBox.Models
                 case 26:  /* "技巧式使用时施加Buff" */
                 case 27:  /* "速攻式使用时施加Buff" */
                 case 28:  /* "破坏式使用时施加Buff" */
-                    return new Tuple<int, string>(1000 + subEffectType, GetBuffDebuffTypeString(subEffectType, true));
+                    return new SelectItemModel(1000 + subEffectType, GetBuffDebuffTypeString(subEffectType, true));
 
                 case 2:   /* "Debuff" */
                 case 31:  /* "防御式使用时施加Debuff" */
@@ -354,33 +354,33 @@ namespace THLWToolBox.Models
                 case 36:  /* "技巧式使用时施加Debuff" */
                 case 37:  /* "速攻式使用时施加Debuff" */
                 case 38:  /* "破坏式使用时施加Debuff" */
-                    return new Tuple<int, string>(2000 + subEffectType, GetBuffDebuffTypeString(subEffectType, false));
+                    return new SelectItemModel(2000 + subEffectType, GetBuffDebuffTypeString(subEffectType, false));
 
                 case 12:  /* "受X弹种攻击时伤害下降" */
                 case 15:  /* "X弹种威力上升" */
-                    return new Tuple<int, string>(3000 + subEffectType, GetBulletTypeStringForSelect(subEffectType));
+                    return new SelectItemModel(3000 + subEffectType, GetBulletTypeStringForSelect(subEffectType));
 
                 case 13:  /* "受X属性攻击时伤害下降" */
                 case 16:  /* "X属性威力上升" */
-                    return new Tuple<int, string>(4000 + subEffectType, GetElementTypeStringForSelect(subEffectType));
+                    return new SelectItemModel(4000 + subEffectType, GetElementTypeStringForSelect(subEffectType));
 
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public static Tuple<int, string> GetRangeRemappedInfo(int rangeType)
+        public static SelectItemModel GetRangeRemappedInfo(int rangeType)
         {
             switch (rangeType)
             {
                 case 0:  /* "装备者" */
-                    return new Tuple<int, string>(1, GetRangeTypeString(1));
+                    return new SelectItemModel(1, GetRangeTypeString(1));
                 default:
-                    return new Tuple<int, string>(rangeType, GetRangeTypeString(rangeType));
+                    return new SelectItemModel(rangeType, GetRangeTypeString(rangeType));
             }
         }
 
-        public static Tuple<int, string> GetEffectByRoleRemappedInfo(int effectType)
+        public static SelectItemModel GetEffectByRoleRemappedInfo(int effectType)
         {
             switch (effectType)
             {
@@ -392,7 +392,7 @@ namespace THLWToolBox.Models
                 case 26:  /* "技巧式使用时施加Buff" */
                 case 27:  /* "速攻式使用时施加Buff" */
                 case 28:  /* "破坏式使用时施加Buff" */
-                    return new Tuple<int, string>(effectType - 20, GetUnitRoleString(effectType - 20));
+                    return new SelectItemModel(effectType - 20, GetUnitRoleString(effectType - 20));
                 case 31:  /* "防御式使用时施加Debuff" */
                 case 32:  /* "支援式使用时施加Debuff" */
                 case 33:  /* "回复式使用时施加Debuff" */
@@ -401,9 +401,9 @@ namespace THLWToolBox.Models
                 case 36:  /* "技巧式使用时施加Debuff" */
                 case 37:  /* "速攻式使用时施加Debuff" */
                 case 38:  /* "破坏式使用时施加Debuff" */
-                    return new Tuple<int, string>(effectType - 30, GetUnitRoleString(effectType - 30));
+                    return new SelectItemModel(effectType - 30, GetUnitRoleString(effectType - 30));
                 default:
-                    return new Tuple<int, string>(0, "空");
+                    return new SelectItemModel(0, "空");
             }
         }
 
@@ -452,28 +452,28 @@ namespace THLWToolBox.Models
             return maxValue - diff * (10 - level);
         }
 
-        public static Tuple<int, string> GetTrustCharacteristicName(int type, int subtype)
+        public static SelectItemModel GetTrustCharacteristicName(int effectType, int subEffectType)
         {
-            switch (type)
+            switch (effectType)
             {
                 case 18:
-                    switch (subtype)
+                    switch (subEffectType)
                     {
                         case 1:
-                            return new Tuple<int, string>(0, "攻击连携");
+                            return new SelectItemModel(0, "攻击连携");
                         case 2:
-                            return new Tuple<int, string>(1, "防御连携");
+                            return new SelectItemModel(1, "防御连携");
                         case 3:
-                            return new Tuple<int, string>(2, "速度连携");
+                            return new SelectItemModel(2, "速度连携");
                         default:
                             throw new NotImplementedException();
                     }
                 case 3:
-                    return new Tuple<int, string>(3, "体力连携");
+                    return new SelectItemModel(3, "体力连携");
                 case 4:
-                    return new Tuple<int, string>(4, "屏障连携");
+                    return new SelectItemModel(4, "屏障连携");
                 case 5:
-                    return new Tuple<int, string>(5, "灵力连携");
+                    return new SelectItemModel(5, "灵力连携");
                 default:
                     throw new NotImplementedException();
             }

@@ -22,15 +22,8 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PictureDatasFilter
-        public async Task<IActionResult> Index(int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId,
-                                               int? Effect2Id, int? Subeffect2Id, int? Range2, int? UnitRoleType2Id, int? TurnType2Id,
-                                               bool? RareType3, bool? RareType4, bool? RareType5,
-                                               bool? SimplifiedEffect, int? DisplayPictureLevel,
-                                               int? CorrTypeMain, int? CorrTypeSub)
+        public async Task<IActionResult> Index(PictureDataViewModel request)
         {
-            //return _context.PictureData != null ?
-            //            View(await _context.PictureData.ToListAsync()) :
-            //            Problem("Entity set 'THLWToolBoxContext.PictureData'  is null.");
             if (_context.PictureData == null)
             {
                 return Problem("Entity set 'THLWToolBoxContext.PictureData' is null.");
@@ -47,56 +40,26 @@ namespace THLWToolBox.Controllers
             foreach (var raceData in raceDataList)
                 raceDict[raceData.id] = raceData.name;
 
-            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, EffectId, SubeffectId, Range, UnitRoleTypeId, TurnTypeId,
-                                                              Effect2Id, Subeffect2Id, Range2, UnitRoleType2Id, TurnType2Id,
-                                                              RareType3, RareType4, RareType5,
-                                                              CorrTypeMain, CorrTypeSub, DisplayPictureLevel);
+            var displayPictureDatas = GetSelectedPictureDatas(pictureDatasList, request);
 
-            var pictureDataVM = new PictureDataViewModel
-            {
-                EffectTypes = new SelectList(GetSelectListItems<SelectItemModelForEffectType>(pictureDatasList), "id", "name", null),
-                SubeffectTypes = new SelectList(GetSelectListItems<SelectItemModelForSubEffectType>(pictureDatasList), "id", "name", null),
-                RangeTypes = new SelectList(GetSelectListItems<SelectItemModelForRangeType>(pictureDatasList), "id", "name", null),
-                UnitRoleTypes = new SelectList(GetSelectListItems<SelectItemModelForUnitRoleType>(pictureDatasList), "id", "name", null),
-                TurnTypes = new SelectList(GetSelectListItems<SelectItemModelForTurnType>(pictureDatasList), "id", "name", null),
-                PictureDatas = displayPictureDatas,
-                //PictureDatas = pictureDatasList,
-                EffectId = EffectId,
-                SubeffectId = SubeffectId,
-                Range = Range,
-                UnitRoleTypeId = UnitRoleTypeId,
-                TurnTypeId = TurnTypeId,
-                Effect2Id = Effect2Id,
-                Subeffect2Id = Subeffect2Id,
-                Range2 = Range2,
-                UnitRoleType2Id = UnitRoleType2Id,
-                TurnType2Id = TurnType2Id,
-                RareType3 = RareType3,
-                RareType4 = RareType4,
-                RareType5 = RareType5,
-                SimplifiedEffect = SimplifiedEffect,
-                RaceDict= raceDict,
-                DisplayPictureLevel = DisplayPictureLevel.GetValueOrDefault(0),
-                CorrTypeMain = CorrTypeMain,
-                CorrTypeSub = CorrTypeSub
-            };
-            return View(pictureDataVM);
+            CreateSelectLists(ref request, pictureDatasList);
+            request.PictureDatas = displayPictureDatas;
+            request.RaceDict = raceDict;
+
+            return View(request);
         }
 
         /* It's too complex for LINQ, so just use naive list operation */
-        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId,
-                                                  int? Effect2Id, int? Subeffect2Id, int? Range2, int? UnitRoleType2Id, int? TurnType2Id,
-                                                  bool? RareType3, bool? RareType4, bool? RareType5,
-                                                  int? CorrTypeMain, int? CorrTypeSub, int? DisplayPictureLevel)
+        List<PictureData> GetSelectedPictureDatas(List<PictureData> pds, PictureDataViewModel request)
         {
             List <PictureData> queryResult = new List<PictureData>();
             foreach (var pd in pds)
             {
                 bool isSelected = true;
                 /* --- check rare --- */
-                if (   (pd.rare == 3 && RareType3 != null && RareType3.GetValueOrDefault() == false)
-                    || (pd.rare == 4 && RareType4 != null && RareType4.GetValueOrDefault() == false)
-                    || (pd.rare == 5 && RareType5 != null && RareType5.GetValueOrDefault() == false))
+                if (   (pd.rare == 3 && request.RareType3 != null && request.RareType3.GetValueOrDefault() == false)
+                    || (pd.rare == 4 && request.RareType4 != null && request.RareType4.GetValueOrDefault() == false)
+                    || (pd.rare == 5 && request.RareType5 != null && request.RareType5.GetValueOrDefault() == false))
                 {
                     isSelected = false;
                     continue;
@@ -105,10 +68,10 @@ namespace THLWToolBox.Controllers
                 /* --- check correction_type --- */
                 List<int> currentCorrTypes = new List<int> { pd.correction1_type, pd.correction2_type };
                 List<int> selectedCorrTypes = new List<int>();
-                if (CorrTypeMain != null)
-                    selectedCorrTypes.Add(CorrTypeMain.GetValueOrDefault());
-                if (CorrTypeSub != null)
-                    selectedCorrTypes.Add(CorrTypeSub.GetValueOrDefault());
+                if (request.CorrTypeMain != null)
+                    selectedCorrTypes.Add(request.CorrTypeMain.GetValueOrDefault());
+                if (request.CorrTypeSub != null)
+                    selectedCorrTypes.Add(request.CorrTypeSub.GetValueOrDefault());
                 if (selectedCorrTypes.Except(currentCorrTypes).Any())
                 {
                     isSelected = false;
@@ -116,8 +79,8 @@ namespace THLWToolBox.Controllers
                 }
 
                 /* --- check effect --- */
-                isSelected &= FilterByEffect(pd, EffectId,  SubeffectId,  Range,  UnitRoleTypeId,  TurnTypeId);
-                isSelected &= FilterByEffect(pd, Effect2Id, Subeffect2Id, Range2, UnitRoleType2Id, TurnType2Id);
+                isSelected &= FilterByEffect(pd, request.EffectId, request.SubeffectId, request.Range, request.UnitRoleTypeId, request.TurnTypeId);
+                isSelected &= FilterByEffect(pd, request.Effect2Id, request.Subeffect2Id, request.Range2, request.UnitRoleType2Id, request.TurnType2Id);
 
                 if (isSelected)
                 {
@@ -126,10 +89,13 @@ namespace THLWToolBox.Controllers
             }
             queryResult.Sort(delegate (PictureData pd1, PictureData pd2)
             {
-                if (CorrTypeMain != null && GetCorrTypeValue(CorrTypeMain.GetValueOrDefault(), pd1, DisplayPictureLevel.GetValueOrDefault()) != GetCorrTypeValue(CorrTypeMain.GetValueOrDefault(), pd2, DisplayPictureLevel.GetValueOrDefault()))
-                    return -GetCorrTypeValue(CorrTypeMain.GetValueOrDefault(), pd1, DisplayPictureLevel.GetValueOrDefault()).CompareTo(GetCorrTypeValue(CorrTypeMain.GetValueOrDefault(), pd2, DisplayPictureLevel.GetValueOrDefault()));
-                else if (CorrTypeSub != null && GetCorrTypeValue(CorrTypeSub.GetValueOrDefault(), pd1, DisplayPictureLevel.GetValueOrDefault()) != GetCorrTypeValue(CorrTypeSub.GetValueOrDefault(), pd2, DisplayPictureLevel.GetValueOrDefault()))
-                    return -GetCorrTypeValue(CorrTypeSub.GetValueOrDefault(), pd1, DisplayPictureLevel.GetValueOrDefault()).CompareTo(GetCorrTypeValue(CorrTypeSub.GetValueOrDefault(), pd2, DisplayPictureLevel.GetValueOrDefault()));
+                int corrTypeMain = request.CorrTypeMain.GetValueOrDefault();
+                int corrTypeSub = request.CorrTypeMain.GetValueOrDefault();
+                int displayPictureLevel = request.DisplayPictureLevel.GetValueOrDefault(0);
+                if (request.CorrTypeMain != null && GetCorrTypeValue(corrTypeMain, pd1, displayPictureLevel) != GetCorrTypeValue(corrTypeMain, pd2, displayPictureLevel))
+                    return -GetCorrTypeValue(corrTypeMain, pd1, displayPictureLevel).CompareTo(GetCorrTypeValue(corrTypeMain, pd2, displayPictureLevel));
+                else if (request.CorrTypeSub != null && GetCorrTypeValue(corrTypeSub, pd1, displayPictureLevel) != GetCorrTypeValue(corrTypeSub, pd2, displayPictureLevel))
+                    return -GetCorrTypeValue(corrTypeSub, pd1, displayPictureLevel).CompareTo(GetCorrTypeValue(corrTypeSub, pd2, displayPictureLevel));
                 else if (pd1.rare != pd2.rare)
                     return -pd1.rare.CompareTo(pd2.rare);
                 else
@@ -138,74 +104,80 @@ namespace THLWToolBox.Controllers
             return queryResult;
         }
 
-        bool FilterByEffect(PictureData pd, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId)
+        static List<EffectModel> GetEffectModels(PictureData pd)
+        {
+            return new List<EffectModel>{
+                new EffectModel(pd.picture_characteristic1_effect_type, pd.picture_characteristic1_effect_subtype, pd.picture_characteristic1_effect_range, pd.picture_characteristic1_effect_type, pd.picture_characteristic1_effect_turn),
+                new EffectModel(pd.picture_characteristic2_effect_type, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic2_effect_range, pd.picture_characteristic2_effect_type, pd.picture_characteristic2_effect_turn),
+                new EffectModel(pd.picture_characteristic3_effect_type, pd.picture_characteristic3_effect_subtype, pd.picture_characteristic3_effect_range, pd.picture_characteristic3_effect_type, pd.picture_characteristic3_effect_turn)
+            };
+        }
+
+        static bool FilterByEffect(PictureData pd, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId)
         {
             if (EffectId == null)
                 return true;
             int effectType = EffectId.GetValueOrDefault();
-            List<int> effectTypes = new List<int> { pd.picture_characteristic1_effect_type, pd.picture_characteristic2_effect_type, pd.picture_characteristic3_effect_type };
-            List<int> subEffectTypes = new List<int> { pd.picture_characteristic1_effect_subtype, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic3_effect_subtype };
-            List<int> rangeTypes = new List<int> { pd.picture_characteristic1_effect_range, pd.picture_characteristic2_effect_range, pd.picture_characteristic3_effect_range };
-            List<int> turnTypes = new List<int> { pd.picture_characteristic1_effect_turn, pd.picture_characteristic2_effect_turn, pd.picture_characteristic3_effect_turn };
 
-            for (int i = 0; i < 3; i++)
+            List<EffectModel> pdEffects = GetEffectModels(pd);
+            foreach (var effect in pdEffects)
             {
                 bool currentMatch = true;
-                int curEffectType = effectTypes[i];
-                int curSubEffectType = subEffectTypes[i];
-                int curRangeType = rangeTypes[i];
-                int curTurnType = turnTypes[i];
-                currentMatch &= (GeneralTypeMaster.GetEffectRemappedInfo(curEffectType).Item1 == effectType);
+                currentMatch &= (SelectItemModel.CreateSelectItemForEffect(effect, SelectItemTypes.EffectType).id == effectType);
                 if (SubeffectId != null)
-                    currentMatch &= (GeneralTypeMaster.GetSubEffectRemappedInfo(curEffectType, curSubEffectType).Item1 == SubeffectId.GetValueOrDefault());
+                    currentMatch &= (SelectItemModel.CreateSelectItemForEffect(effect, SelectItemTypes.SubEffectType).id == SubeffectId.GetValueOrDefault());
                 if (Range != null)
-                    currentMatch &= (GeneralTypeMaster.GetRangeRemappedInfo(curRangeType).Item1 == Range.GetValueOrDefault());
+                    currentMatch &= (SelectItemModel.CreateSelectItemForEffect(effect, SelectItemTypes.RangeType).id == Range.GetValueOrDefault());
                 if (UnitRoleTypeId != null)
-                    currentMatch &= (GeneralTypeMaster.GetEffectByRoleRemappedInfo(curEffectType).Item1 == UnitRoleTypeId.GetValueOrDefault());
+                    currentMatch &= (SelectItemModel.CreateSelectItemForEffect(effect, SelectItemTypes.UnitRoleType).id == UnitRoleTypeId.GetValueOrDefault());
                 if (TurnTypeId != null)
-                    currentMatch &= (curTurnType == TurnTypeId.GetValueOrDefault());
+                    currentMatch &= (SelectItemModel.CreateSelectItemForEffect(effect, SelectItemTypes.TurnType).id == TurnTypeId.GetValueOrDefault());
                 if (currentMatch)
                     return true;
             }
             return false;
         }
 
-        int GetCorrTypeValue(int CorrType, PictureData pd, int DisplayPictureLevel)
+        static void CreateSelectLists(ref PictureDataViewModel request, List<PictureData> pictureDatasList)
         {
-            if (pd.correction1_type == CorrType)
-                return GeneralTypeMaster.CorrectionValueByLevel(pd.correction1_value, pd.correction1_diff, DisplayPictureLevel);
-            else if (pd.correction2_type == CorrType)
-                return GeneralTypeMaster.CorrectionValueByLevel(pd.correction2_value, pd.correction2_diff, DisplayPictureLevel);
-            else
-                return -1;
+            request.EffectTypes = new SelectList(GetSelectListItems(pictureDatasList, SelectItemTypes.EffectType), "id", "name", null);
+            request.SubeffectTypes = new SelectList(GetSelectListItems(pictureDatasList, SelectItemTypes.SubEffectType), "id", "name", null);
+            request.RangeTypes = new SelectList(GetSelectListItems(pictureDatasList, SelectItemTypes.RangeType), "id", "name", null);
+            request.UnitRoleTypes = new SelectList(GetSelectListItems(pictureDatasList, SelectItemTypes.UnitRoleType), "id", "name", null);
+            request.TurnTypes = new SelectList(GetSelectListItems(pictureDatasList, SelectItemTypes.TurnType), "id", "name", null);
         }
 
-        List<SelectItemModel> GetSelectListItems<T>(List<PictureData> PictureDatasList)
+        static List<SelectItemModel> GetSelectListItems(List<PictureData> PictureDatasList, SelectItemTypes selectItemTypes)
         {
-            List<SelectItemModel> list = new List<SelectItemModel>();
-            HashSet<int> vis = new HashSet<int>();
+            List<SelectItemModel> list = new();
+            HashSet<int> vis = new();
             foreach (PictureData pd in PictureDatasList)
             {
-                List<EffectModel> pdEffects = new List<EffectModel>
+                List<EffectModel> pdEffects = GetEffectModels(pd);
+                foreach (var effect in pdEffects)
                 {
-                    new EffectModel(pd.picture_characteristic1_effect_type, pd.picture_characteristic1_effect_subtype, pd.picture_characteristic1_effect_range, pd.picture_characteristic1_effect_type, pd.picture_characteristic1_effect_turn),
-                    new EffectModel(pd.picture_characteristic2_effect_type, pd.picture_characteristic2_effect_subtype, pd.picture_characteristic2_effect_range, pd.picture_characteristic2_effect_type, pd.picture_characteristic2_effect_turn),
-                    new EffectModel(pd.picture_characteristic3_effect_type, pd.picture_characteristic3_effect_subtype, pd.picture_characteristic3_effect_range, pd.picture_characteristic3_effect_type, pd.picture_characteristic3_effect_turn),
-                };
-                for (int index = 0; index < pdEffects.Count; index++)
-                {
-                    SelectItemModel pdim = (SelectItemModel)Activator.CreateInstance(typeof(T), new object[] { pdEffects, index });
-                    if (pdim.id == 0)
+                    SelectItemModel sim = SelectItemModel.CreateSelectItemForEffect(effect, selectItemTypes);
+                    if (sim.id == 0)
                         continue;
-                    if (!vis.Contains(pdim.id))
+                    if (!vis.Contains(sim.id))
                     {
-                        vis.Add(pdim.id);
-                        list.Add(pdim);
+                        vis.Add(sim.id);
+                        list.Add(sim);
                     }
                 }
             }
-            list.Sort(delegate (SelectItemModel pdim1, SelectItemModel pdim2) { return pdim1.id.CompareTo(pdim2.id); });
+            list.Sort(delegate (SelectItemModel sim1, SelectItemModel sim2) { return sim1.id.CompareTo(sim2.id); });
             return list;
+        }
+
+        static int GetCorrTypeValue(int CorrType, PictureData pd, int DisplayPictureLevel)
+        {
+            if (pd.correction1_type == CorrType)
+                return CorrectionValueByLevel(pd.correction1_value, pd.correction1_diff, DisplayPictureLevel);
+            else if (pd.correction2_type == CorrType)
+                return CorrectionValueByLevel(pd.correction2_value, pd.correction2_diff, DisplayPictureLevel);
+            else
+                return -1;
         }
     }
 }

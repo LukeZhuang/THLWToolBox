@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
+using static THLWToolBox.Models.GeneralTypeMaster;
 
 namespace THLWToolBox.Controllers
 {
@@ -50,7 +51,7 @@ namespace THLWToolBox.Controllers
                 {
                     if (UnitSymbolName.Equals(pud.name + pud.symbol_name))
                     {
-                        QueryUnit.Add(new Tuple<PlayerUnitData, string>(pud, GetPlayerUnitTrustCharacteristicName(pud, playerUnitCharacteristicDataDict).Item2));
+                        QueryUnit.Add(new Tuple<PlayerUnitData, string>(pud, GetPlayerUnitTrustCharacteristicName(pud, playerUnitCharacteristicDataDict).name));
                         HashSet<int> relatedUnitIds = new HashSet<int>();
                         foreach (var prd in relationList)
                         {
@@ -69,11 +70,11 @@ namespace THLWToolBox.Controllers
                             {
                                 if (SwitchLinkType != null)
                                 {
-                                    int pud2ChId = GetPlayerUnitTrustCharacteristicName(pud2, playerUnitCharacteristicDataDict).Item1;
+                                    int pud2ChId = GetPlayerUnitTrustCharacteristicName(pud2, playerUnitCharacteristicDataDict).id;
                                     if (pud2ChId != SwitchLinkType.GetValueOrDefault())
                                         continue;
                                 }
-                                RelatedUnits.Add(new Tuple<PlayerUnitData, string>(pud2, GetPlayerUnitTrustCharacteristicName(pud2, playerUnitCharacteristicDataDict).Item2));
+                                RelatedUnits.Add(new Tuple<PlayerUnitData, string>(pud2, GetPlayerUnitTrustCharacteristicName(pud2, playerUnitCharacteristicDataDict).name));
                             }
                         }
                     }
@@ -84,9 +85,9 @@ namespace THLWToolBox.Controllers
                 foreach (var pud in playerUnitDatasList)
                 {
                     var curInfo = GetPlayerUnitTrustCharacteristicName(pud, playerUnitCharacteristicDataDict);
-                    if (curInfo.Item1 == SwitchLinkType.GetValueOrDefault())
+                    if (curInfo.id == SwitchLinkType.GetValueOrDefault())
                     {
-                        QueryUnit.Add(new Tuple<PlayerUnitData, string>(pud, curInfo.Item2));
+                        QueryUnit.Add(new Tuple<PlayerUnitData, string>(pud, curInfo.name));
                     }
                 }
             }
@@ -102,28 +103,27 @@ namespace THLWToolBox.Controllers
             return View(playerUnitDataVM);
         }
 
-        Tuple<int, string> GetPlayerUnitTrustCharacteristicName(PlayerUnitData pud, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
+        SelectItemModel GetPlayerUnitTrustCharacteristicName(PlayerUnitData pud, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
         {
             PlayerUnitCharacteristicData pucd = playerUnitCharacteristicDataDict[pud.characteristic_id];
-            SelectItemModelForSwitchLinkEffectType pucim = new SelectItemModelForSwitchLinkEffectType(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype);
-            return new Tuple<int, string>(pucim.id, pucim.name);
+            return SelectItemModel.CreateSelectItemForEffect(new EffectModel(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype, 0, 0, 0), SelectItemTypes.SwitchLinkEffectType);
         }
 
-        List<SelectItemModelForSwitchLinkEffectType> GetSelectListItems(List<PlayerUnitData> PlayerUnitDatasList, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
+        List<SelectItemModel> GetSelectListItems(List<PlayerUnitData> PlayerUnitDatasList, Dictionary<int, PlayerUnitCharacteristicData> playerUnitCharacteristicDataDict)
         {
-            List<SelectItemModelForSwitchLinkEffectType> list = new();
+            List<SelectItemModel> list = new();
             HashSet<int> vis = new HashSet<int>();
             foreach (PlayerUnitData pud in PlayerUnitDatasList)
             {
                 PlayerUnitCharacteristicData pucd = playerUnitCharacteristicDataDict[pud.characteristic_id];
-                SelectItemModelForSwitchLinkEffectType pucim = new SelectItemModelForSwitchLinkEffectType(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype);
+                SelectItemModel pucim = SelectItemModel.CreateSelectItemForEffect(new EffectModel(pucd.trust_characteristic_rear_effect_type, pucd.trust_characteristic_rear_effect_subtype, 0, 0, 0), SelectItemTypes.SwitchLinkEffectType);
                 if (!vis.Contains(pucim.id))
                 {
                     vis.Add(pucim.id);
                     list.Add(pucim);
                 }
             }
-            list.Sort(delegate (SelectItemModelForSwitchLinkEffectType pucim1, SelectItemModelForSwitchLinkEffectType pucim2) { return pucim1.id.CompareTo(pucim2.id); });
+            list.Sort(delegate (SelectItemModel pucim1, SelectItemModel pucim2) { return pucim1.id.CompareTo(pucim2.id); });
             return list;
         }
     }
