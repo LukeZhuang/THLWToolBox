@@ -447,11 +447,6 @@ namespace THLWToolBox.Models
             return correctionTypeStr + "+" + correctionValueWrapper;
         }
 
-        public static int CorrectionValueByLevel(int maxValue, int diff, int level)
-        {
-            return maxValue - diff * (10 - level);
-        }
-
         public static SelectItemModel GetTrustCharacteristicName(int effectType, int subEffectType)
         {
             switch (effectType)

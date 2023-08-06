@@ -45,6 +45,13 @@ namespace THLWToolBox.Helpers
 
             return ATK * TotalPower * Hit * Critic * PowerUpRate * RangeWeight * shotTypeWeight;
         }
+
+
+        public static int CorrectionValueByLevel(int maxValue, int diff, int level)
+        {
+            return maxValue - diff * (10 - level);
+        }
+
         public static string StringFromDatabaseForDisplay(string originalText)
         {
             string text = originalText;

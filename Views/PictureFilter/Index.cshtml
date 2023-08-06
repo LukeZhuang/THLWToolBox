@@ -12,11 +12,11 @@
 </head>
 
 <!-- Modal -->
-<div class="modal fade" id="pictureDatasFilterHelperModal" tabindex="-1" aria-labelledby="pictureDatasFilterHelper" aria-hidden="true">
+<div class="modal fade" id="pictureFilterModal" tabindex="-1" aria-labelledby="pictureFilter" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="pictureDatasFilterHelper">帮助：绘卷筛选器</h4>
+                <h4 class="modal-title" id="pictureFilter">帮助：绘卷筛选器</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -38,7 +38,7 @@
 </div>
 
 <div class="home-box">
-<form asp-controller="PictureDatasFilter" asp-action="Index" method="post">
+<form asp-controller="PictureFilter" asp-action="Index" method="post">
     <div class="filter-box">
         <div class="title-box-1">通用</div>
         <div class="buttons-grid">
@@ -63,39 +63,39 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">主类型:</div>
                 <div class="selects-box">
-                    <select asp-for="EffectId" asp-items="Model.EffectTypes" class="selector">
+                    <select asp-for="EffectId1" asp-items="Model.EffectTypes" class="selector">
                         <option value=null>任意</option>
                     </select>
                 </div>
                 <div class="selects-box" style="text-align: right">子类型:</div>
                 <div class="selects-box">
-                    <select asp-for="SubeffectId" asp-items="Model.SubeffectTypes" class="selector">
+                    <select asp-for="SubeffectId1" asp-items="Model.SubeffectTypes" class="selector">
                         <option value=null>任意</option>
                     </select>
                 </div>
             </div>
             <div id="accordion" class="accordion effect-expand-label">
-                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureeffectbox1">
+                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureEffectFoldBox1">
                     <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
                 </div>
             </div>
-            <div class="card-body collapse" id="pictureeffectbox1" data-parent="#accordion">
+            <div class="card-body collapse" id="pictureEffectFoldBox1" data-parent="#accordion">
                 <div class="selects-grid">
                     <div class="selects-box" style="text-align: right">范围:</div>
                     <div class="selects-box">
-                        <select asp-for="Range" asp-items="Model.RangeTypes" class="selector">
+                        <select asp-for="Range1" asp-items="Model.RangeTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
                     </div>
                     <div class="selects-box" style="text-align: right">式专用:</div>
                     <div class="selects-box">
-                        <select asp-for="UnitRoleTypeId" asp-items="Model.UnitRoleTypes" class="selector">
+                        <select asp-for="UnitRoleTypeId1" asp-items="Model.UnitRoleTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
                     </div>
                     <div class="selects-box" style="text-align: right">回合数:</div>
                     <div class="selects-box">
-                        <select asp-for="TurnTypeId" asp-items="Model.TurnTypes" class="selector">
+                        <select asp-for="TurnTypeId1" asp-items="Model.TurnTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
                     </div>
@@ -108,23 +108,23 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">主类型:</div>
                 <div class="selects-box">
-                    <select asp-for="Effect2Id" asp-items="Model.EffectTypes" class="selector">
+                    <select asp-for="EffectId2" asp-items="Model.EffectTypes" class="selector">
                         <option value=null>任意</option>
                     </select>
                 </div>
                 <div class="selects-box" style="text-align: right">子类型:</div>
                 <div class="selects-box">
-                    <select asp-for="Subeffect2Id" asp-items="Model.SubeffectTypes" class="selector">
+                    <select asp-for="SubeffectId2" asp-items="Model.SubeffectTypes" class="selector">
                         <option value=null>任意</option>
                     </select>
                 </div>
             </div>
             <div id="accordion" class="accordion effect-expand-label">
-                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureeffectbox2">
+                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureEffectFoldBox2">
                     <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
                 </div>
             </div>
-            <div class="card-body collapse" id="pictureeffectbox2" data-parent="#accordion">
+            <div class="card-body collapse" id="pictureEffectFoldBox2" data-parent="#accordion">
                 <div class="selects-grid">
                     <div class="selects-box" style="text-align: right">范围:</div>
                     <div class="selects-box">
@@ -134,13 +134,13 @@
                     </div>
                     <div class="selects-box" style="text-align: right">式专用:</div>
                     <div class="selects-box">
-                        <select asp-for="UnitRoleType2Id" asp-items="Model.UnitRoleTypes" class="selector">
+                        <select asp-for="UnitRoleTypeId2" asp-items="Model.UnitRoleTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
                     </div>
                     <div class="selects-box" style="text-align: right">回合数:</div>
                     <div class="selects-box">
-                        <select asp-for="TurnType2Id" asp-items="Model.TurnTypes" class="selector">
+                        <select asp-for="TurnTypeId2" asp-items="Model.TurnTypes" class="selector">
                             <option value=null>任意</option>
                         </select>
                     </div>
@@ -154,7 +154,7 @@
         <div class="selects-grid">
             <div class="selects-box" style="text-align: right">面板等级:</div>
             <div class="selects-box">
-                <select asp-for="DisplayPictureLevel" class="selector">
+                <select asp-for="CorrLevel" class="selector">
                     <option value=0>0级</option>
                     <option value=1>1级</option>
                     <option value=2>2级</option>
@@ -196,7 +196,7 @@
     </div>
     <div class="submit-title-box-1"></div>
     <input type="submit" value="确定" class="btn-submit" />
-    <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#pictureDatasFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#pictureFilterModal">帮助</button>
 </form>
 </div>
 
@@ -229,7 +229,7 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.PictureDatas!)
+    @foreach (var item in Model.DisplayPictureList!)
     {
         <tr>
             <td>
@@ -239,10 +239,10 @@
                 @Html.DisplayFor(modelItem => item.rare)
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction1_type, GeneralTypeMaster.CorrectionValueByLevel(item.correction1_value, item.correction1_diff, Model.DisplayPictureLevel.GetValueOrDefault()), Model.CorrTypeMain, Model.CorrTypeSub)))
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction1_type, GeneralHelper.CorrectionValueByLevel(item.correction1_value, item.correction1_diff, Model.CorrLevel.GetValueOrDefault()), Model.CorrTypeMain, Model.CorrTypeSub)))
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction2_type, GeneralTypeMaster.CorrectionValueByLevel(item.correction2_value, item.correction2_diff, Model.DisplayPictureLevel.GetValueOrDefault()), Model.CorrTypeMain, Model.CorrTypeSub)))
+                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction2_type, GeneralHelper.CorrectionValueByLevel(item.correction2_value, item.correction2_diff, Model.CorrLevel.GetValueOrDefault()), Model.CorrTypeMain, Model.CorrTypeSub)))
             </td>
             <td>
                 @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(Model.SimplifiedEffect.GetValueOrDefault(true) ? SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic1_effect_type, item.picture_characteristic1_effect_subtype, item.picture_characteristic1_effect_value, item.picture_characteristic1_effect_turn, item.picture_characteristic1_effect_range, Model.RaceDict) + "<ret>" +
