@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Numpy;
 using Python.Runtime;
 using THLWToolBox.Data;
-using THLWToolBox.Models;
+using THLWToolBox.Models.DataTypes;
+using THLWToolBox.Models.ViewModels;
 
 namespace THLWToolBox.Controllers
 {

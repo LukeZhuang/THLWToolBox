@@ -1,8 +1,8 @@
-﻿namespace THLWToolBox.Models
+﻿namespace THLWToolBox.Models.DataTypes
 {
     public class PlayerUnitHitCheckOrderData
     {
-        public int id {  get; set; }
+        public int id { get; set; }
         public int unit_id { get; set; }
         public int barrage_id { get; set; }
         public int boost_id { get; set; }

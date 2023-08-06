@@ -5,9 +5,10 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Identity.Client;
 using System.Collections.Generic;
 using THLWToolBox.Data;
-using THLWToolBox.Models;
 using static THLWToolBox.Models.GeneralTypeMaster;
 using THLWToolBox.Helpers;
+using THLWToolBox.Models.DataTypes;
+using THLWToolBox.Models.ViewModels;
 
 namespace THLWToolBox.Controllers
 {

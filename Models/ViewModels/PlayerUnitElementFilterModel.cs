@@ -1,4 +1,6 @@
-﻿namespace THLWToolBox.Models
+﻿using THLWToolBox.Models.DataTypes;
+
+namespace THLWToolBox.Models.ViewModels
 {
     public class PlayerUnitElementDisplayModel
     {
@@ -8,10 +10,10 @@
         public double SubScore { get; set; }
         public PlayerUnitElementDisplayModel(PlayerUnitData playerUnitData, List<Tuple<string, List<Tuple<PlayerUnitBulletData?, int>>>> unitBulletList, double mainScore, double subScore)
         {
-            this.PlayerUnitData = playerUnitData;
-            this.UnitBulletList = unitBulletList;
-            this.MainScore = mainScore;
-            this.SubScore = subScore;
+            PlayerUnitData = playerUnitData;
+            UnitBulletList = unitBulletList;
+            MainScore = mainScore;
+            SubScore = subScore;
         }
     }
     public class PlayerUnitElementFilterModel

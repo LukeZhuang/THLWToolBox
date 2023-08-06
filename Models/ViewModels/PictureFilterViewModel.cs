@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using THLWToolBox.Models.DataTypes;
 
-namespace THLWToolBox.Models
+namespace THLWToolBox.Models.ViewModels
 {
-    public class PictureDataViewModel
+    public class PictureFilterViewModel
     {
         public List<PictureData>? DisplayPictureList { get; set; }
         public SelectList? EffectTypes { get; set; }

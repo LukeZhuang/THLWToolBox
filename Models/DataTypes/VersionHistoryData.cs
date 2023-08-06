@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace THLWToolBox.Models
+namespace THLWToolBox.Models.DataTypes
 {
     public class VersionHistoryData
     {

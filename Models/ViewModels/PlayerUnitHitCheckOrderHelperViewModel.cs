@@ -1,4 +1,6 @@
-﻿namespace THLWToolBox.Models
+﻿using THLWToolBox.Models.DataTypes;
+
+namespace THLWToolBox.Models.ViewModels
 {
     public class PlayerUnitHitCheckOrderDisplayModel
     {

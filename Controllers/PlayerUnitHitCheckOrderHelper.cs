@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
+using THLWToolBox.Models.DataTypes;
+using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.GeneralTypeMaster;
 
 namespace THLWToolBox.Controllers

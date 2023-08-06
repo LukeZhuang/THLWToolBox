@@ -6,7 +6,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Web;
-using THLWToolBox.Models;
+using THLWToolBox.Models.DataTypes;
 using static System.Net.Mime.MediaTypeNames;
 using static THLWToolBox.Models.GeneralTypeMaster;
 

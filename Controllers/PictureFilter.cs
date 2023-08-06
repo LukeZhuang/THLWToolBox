@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
+using THLWToolBox.Models.DataTypes;
+using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Helpers.GeneralHelper;
 using static THLWToolBox.Models.GeneralTypeMaster;
 
@@ -18,7 +20,7 @@ namespace THLWToolBox.Controllers
         }
 
         // POST: PictureDatasFilter
-        public async Task<IActionResult> Index(PictureDataViewModel request)
+        public async Task<IActionResult> Index(PictureFilterViewModel request)
         {
             if (_context.PictureData == null)
             {
@@ -50,7 +52,7 @@ namespace THLWToolBox.Controllers
         }
 
         // It's too complex for LINQ, so just use naive list operation
-        static List<PictureData> GetSelectedPictureDatas(List<PictureData> pictureList, PictureDataViewModel request)
+        static List<PictureData> GetSelectedPictureDatas(List<PictureData> pictureList, PictureFilterViewModel request)
         {
             List <PictureData> queryResult = new();
 
@@ -157,7 +159,7 @@ namespace THLWToolBox.Controllers
             return false;
         }
 
-        static void CreateSelectLists(ref PictureDataViewModel request, List<PictureData> pictureList)
+        static void CreateSelectLists(ref PictureFilterViewModel request, List<PictureData> pictureList)
         {
             request.EffectTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.EffectType), "id", "name", null);
             request.SubeffectTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.SubEffectType), "id", "name", null);

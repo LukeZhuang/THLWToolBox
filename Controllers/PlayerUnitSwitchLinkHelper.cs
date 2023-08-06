@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
 using THLWToolBox.Models;
+using THLWToolBox.Models.DataTypes;
+using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.GeneralTypeMaster;
 
 namespace THLWToolBox.Controllers

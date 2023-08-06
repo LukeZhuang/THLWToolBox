@@ -1,4 +1,4 @@
-﻿namespace THLWToolBox.Models
+﻿namespace THLWToolBox.Models.DataTypes
 {
     public class PlayerUnitRaceData
     {

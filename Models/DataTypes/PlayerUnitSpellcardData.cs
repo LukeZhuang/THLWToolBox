@@ -1,11 +1,12 @@
-﻿namespace THLWToolBox.Models
+﻿namespace THLWToolBox.Models.DataTypes
 {
-    public class PlayerUnitShotData
+    public class PlayerUnitSpellcardData
     {
         public int id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string specification { get; set; }
+        public int type { get; set; }
         public int magazine0_bullet_id { get; set; }
         public int magazine0_bullet_range { get; set; }
         public int magazine0_bullet_value { get; set; }
@@ -42,5 +43,25 @@
         public int shot_level3_power_rate { get; set; }
         public int shot_level4_power_rate { get; set; }
         public int shot_level5_power_rate { get; set; }
+        public int spellcard_skill1_effect_id { get; set; }
+        public int spellcard_skill1_level_type { get; set; }
+        public int spellcard_skill1_level_value { get; set; }
+        public int spellcard_skill1_timing { get; set; }
+        public int spellcard_skill2_effect_id { get; set; }
+        public int spellcard_skill2_level_type { get; set; }
+        public int spellcard_skill2_level_value { get; set; }
+        public int spellcard_skill2_timing { get; set; }
+        public int spellcard_skill3_effect_id { get; set; }
+        public int spellcard_skill3_level_type { get; set; }
+        public int spellcard_skill3_level_value { get; set; }
+        public int spellcard_skill3_timing { get; set; }
+        public int spellcard_skill4_effect_id { get; set; }
+        public int spellcard_skill4_level_type { get; set; }
+        public int spellcard_skill4_level_value { get; set; }
+        public int spellcard_skill4_timing { get; set; }
+        public int spellcard_skill5_effect_id { get; set; }
+        public int spellcard_skill5_level_type { get; set; }
+        public int spellcard_skill5_level_value { get; set; }
+        public int spellcard_skill5_timing { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using THLWToolBox.Models.DataTypes;
 
-namespace THLWToolBox.Models
+namespace THLWToolBox.Models.ViewModels
 {
     public class PlayerUnitRaceDisplayModel
     {
