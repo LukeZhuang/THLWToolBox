@@ -4,16 +4,8 @@
     {
         public int id { get; set; }
         public string name { get; set; }
-        public int album_id { get; set; }
         public int type { get; set; }
         public int rare { get; set; }
-        public string illustrator_name { get; set; }
-        public string circle_name { get; set; }
-        public string flavor_text1 { get; set; }
-        public string flavor_text2 { get; set; }
-        public string flavor_text3 { get; set; }
-        public string flavor_text4 { get; set; }
-        public string flavor_text5 { get; set; }
         public int correction1_type { get; set; }
         public int correction1_value { get; set; }
         public int correction1_diff { get; set; }
@@ -40,7 +32,5 @@
         public int picture_characteristic3_effect_range { get; set; }
         public string picture_characteristic_text { get; set; }
         public string picture_characteristic_text_max { get; set; }
-        public int recycle_id { get; set; }
-        public int is_show { get; set; }
     }
 }
