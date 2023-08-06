@@ -39,6 +39,5 @@
         public int level10_value { get; set; }
         public int level10_success_rate { get; set; }
         public int level10_add_value { get; set; }
-        public string icon_filename { get; set; }
     }
 }

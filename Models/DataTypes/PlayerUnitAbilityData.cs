@@ -4,7 +4,6 @@
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string description { get; set; }
         public string resist_ability_description { get; set; }
         public int good_element_take_damage_rate { get; set; }
         public int weak_element_take_damage_rate { get; set; }

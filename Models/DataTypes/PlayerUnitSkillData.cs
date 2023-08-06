@@ -4,7 +4,6 @@
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string description { get; set; }
         public int type { get; set; }
         public int exp_id { get; set; }
         public int level1_turn { get; set; }
@@ -26,7 +25,5 @@
         public int effect3_id { get; set; }
         public int effect3_level_type { get; set; }
         public int effect3_level_value { get; set; }
-        public string icon_filename { get; set; }
-        public string reincarnation_level_name { get; set; }
     }
 }

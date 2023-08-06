@@ -4,8 +4,6 @@
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string description { get; set; }
-        public string specification { get; set; }
         public int magazine0_bullet_id { get; set; }
         public int magazine0_bullet_range { get; set; }
         public int magazine0_bullet_value { get; set; }
