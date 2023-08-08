@@ -28,16 +28,13 @@ namespace THLWToolBox.Controllers
             }
 
             // --- query data tables ---
-            var unitTable = from pud in _context.PlayerUnitData
-                               select pud;
+            var unitTable = from pud in _context.PlayerUnitData select pud;
             var unitList = await unitTable.Distinct().ToListAsync();
 
-            var personRelationTable = from prd in _context.PersonRelationData
-                                      select prd;
+            var personRelationTable = from prd in _context.PersonRelationData select prd;
             var personRelationList = await personRelationTable.Distinct().ToListAsync();
 
-            var unitCharacteristicTable = from pucd in _context.PlayerUnitCharacteristicData
-                                          select pucd;
+            var unitCharacteristicTable = from pucd in _context.PlayerUnitCharacteristicData select pucd;
             var unitCharacteristicList = await unitCharacteristicTable.Distinct().ToListAsync();
 
             Dictionary<int, PlayerUnitCharacteristicData> unitCharacteristicDict = new();
@@ -48,6 +45,7 @@ namespace THLWToolBox.Controllers
 
             List<UnitsDisplayModel> queryUnits = new();
             List<UnitsDisplayModel> relatedUnits = new();
+
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
                 foreach (var unitRecord in unitList)

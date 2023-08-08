@@ -29,13 +29,12 @@ namespace THLWToolBox.Controllers
 
 
             // --- query data tables ---
-            var pictureTable = from pd in _context.PictureData
-                               select pd;
+            var pictureTable = from pd in _context.PictureData select pd;
             var pictureList = await pictureTable.Distinct().ToListAsync();
 
-            var raceTable = from rd in _context.RaceData
-                            select rd;
+            var raceTable = from rd in _context.RaceData select rd;
             var raceList = await raceTable.Distinct().ToListAsync();
+
             Dictionary<int, string> raceDict = new();
             foreach (var raceRecord in raceList)
                 raceDict[raceRecord.id] = raceRecord.name;
