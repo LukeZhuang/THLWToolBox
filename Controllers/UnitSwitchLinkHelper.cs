@@ -19,7 +19,7 @@ namespace THLWToolBox.Controllers
             _context = context;
         }
 
-        // POST: PlayerUnitSwitchLinkHelper
+        // POST: UnitSwitchLinkHelper
         public async Task<IActionResult> Index(UnitSwitchLinkHelperViewModel request)
         {
             if (_context.PlayerUnitData == null)

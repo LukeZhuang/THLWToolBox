@@ -6,19 +6,26 @@ namespace THLWToolBox.Models.ViewModels
 {
     public class UnitSwitchLinkHelperViewModel
     {
+        // Display model definition
         public class UnitsDisplayModel
         {
             public PlayerUnitData unit { get; set; }
-            public string SwitchLinkTypeStr { get; set; }
+            public string switchLinkTypeStr { get; set; }
             public UnitsDisplayModel(PlayerUnitData unit, string switchLinkTypeStr)
             {
                 this.unit = unit;
-                SwitchLinkTypeStr = switchLinkTypeStr;
+                this.switchLinkTypeStr = switchLinkTypeStr;
             }
         }
+
+        // Display models
         public List<UnitsDisplayModel>? QueryUnits { get; set; }
         public List<UnitsDisplayModel>? RelatedUnits { get; set; }
+
+        // Select Lists
         public SelectList? SwitchLinkTypes { get; set; }
+
+        // Webpage query Parameters
         public string? UnitSymbolName { get; set; }
         public int? SwitchLinkType { get; set; }
     }

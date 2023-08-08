@@ -19,7 +19,7 @@ namespace THLWToolBox.Controllers
             _context = context;
         }
 
-        // POST: PictureDatasFilter
+        // POST: PictureFilter
         public async Task<IActionResult> Index(PictureFilterViewModel request)
         {
             if (_context.PictureData == null)

@@ -199,13 +199,13 @@
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.playerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.unit.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
                     </td>
                     <td>
-                        @Html.Raw(item.playerUnitData.name + item.playerUnitData.symbol_name)
+                        @Html.Raw(item.unit.name + item.unit.symbol_name)
                     </td>
                     <td>
-                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(String.Join(", ", item.queryRaces)))
+                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.races))
                     </td>
                 </tr>
             }

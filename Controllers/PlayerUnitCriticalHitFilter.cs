@@ -80,7 +80,7 @@ namespace THLWToolBox.Controllers
 
             HashSet<int> targetRaceIds = new();
 
-            List<PlayerUnitRaceDisplayModel> QueryUnit = new();
+            List<UnitRaceHelperViewModel.UnitRaceDisplayModel> QueryUnit = new();
 
             if (UnitSymbolName != null && UnitSymbolName.Length > 0)
             {
@@ -97,7 +97,7 @@ namespace THLWToolBox.Controllers
                                 queryRaces.Add(raceDataDict[purd.race_id]);
                             }
                         }
-                        QueryUnit.Add(new PlayerUnitRaceDisplayModel(pud, queryRaces));
+                        QueryUnit.Add(new UnitRaceHelperViewModel.UnitRaceDisplayModel(pud, string.Join(", ", queryRaces)));
                     }
                 }
             }
