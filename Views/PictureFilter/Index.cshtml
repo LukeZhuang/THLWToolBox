@@ -2,6 +2,7 @@
 @using System.Text.RegularExpressions;
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
 
 @{
     ViewData["Title"] = "Index";
@@ -209,6 +210,9 @@
                 名称
             </th>
             <th>
+                图片
+            </th>
+            <th>
                 星级
             </th>
             <th>
@@ -223,9 +227,6 @@
             <th>
                 满破效果
             </th>
-            <th>
-                图片
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -236,28 +237,22 @@
                 <a href=@Html.Raw("https://wiki.biligame.com/touhoulostword/" + item.name)>@Html.DisplayFor(modelItem => item.name)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.rare)
+                @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/pictures_img/" + item.id + ".png")))
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction1_type, GeneralHelper.CorrectionValueByLevel(item.correction1_value, item.correction1_diff, Model.CorrLevel.GetValueOrDefault()), Model.CorrTypeMain, Model.CorrTypeSub)))
+                @Html.Raw(item.rare)
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(GeneralTypeMaster.CorrectionStr(item.correction2_type, GeneralHelper.CorrectionValueByLevel(item.correction2_value, item.correction2_diff, Model.CorrLevel.GetValueOrDefault()), Model.CorrTypeMain, Model.CorrTypeSub)))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionStr(item, 1)))
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(Model.SimplifiedEffect.GetValueOrDefault(true) ? SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic1_effect_type, item.picture_characteristic1_effect_subtype, item.picture_characteristic1_effect_value, item.picture_characteristic1_effect_turn, item.picture_characteristic1_effect_range, Model.RaceDict) + "<ret>" +
-                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic2_effect_type, item.picture_characteristic2_effect_subtype, item.picture_characteristic2_effect_value, item.picture_characteristic2_effect_turn, item.picture_characteristic2_effect_range, Model.RaceDict) + "<ret>" +
-                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic3_effect_type, item.picture_characteristic3_effect_subtype, item.picture_characteristic3_effect_value, item.picture_characteristic3_effect_turn, item.picture_characteristic3_effect_range, Model.RaceDict)
-                                                                                                                    : item.picture_characteristic_text))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionStr(item, 2)))
             </td>
             <td>
-                @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(Model.SimplifiedEffect.GetValueOrDefault(true) ? SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic1_effect_type, item.picture_characteristic1_effect_subtype, item.picture_characteristic1_effect_value_max, item.picture_characteristic1_effect_turn, item.picture_characteristic1_effect_range, Model.RaceDict) + "<ret>" +
-                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic2_effect_type, item.picture_characteristic2_effect_subtype, item.picture_characteristic2_effect_value_max, item.picture_characteristic2_effect_turn, item.picture_characteristic2_effect_range, Model.RaceDict) + "<ret>" +
-                                                                                                                      SimplifyEffectsHelper.CreateSimplifiedEffectStr(item.picture_characteristic3_effect_type, item.picture_characteristic3_effect_subtype, item.picture_characteristic3_effect_value_max, item.picture_characteristic3_effect_turn, item.picture_characteristic3_effect_range, Model.RaceDict)
-                                                                                                                    : item.picture_characteristic_text_max))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffect(item, false)))
             </td>
             <td>
-                <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/pictures_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffect(item, true)))
             </td>
         </tr>
 }

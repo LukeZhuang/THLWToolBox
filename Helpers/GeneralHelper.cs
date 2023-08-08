@@ -52,6 +52,11 @@ namespace THLWToolBox.Helpers
             return maxValue - diff * (10 - level);
         }
 
+        public static string GetImageHtmlRaw(string imgUrl)
+        {
+            return "<div class=\"picture-unit-img-wrapper\"><img src=\"" + imgUrl + "\" alt=\"暂无图片\" onerror=\"this.src='/res/website/noimg.png';\" /></div>";
+        }
+
         public static string StringFromDatabaseForDisplay(string originalText)
         {
             string text = originalText;

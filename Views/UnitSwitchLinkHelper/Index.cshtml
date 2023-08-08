@@ -1,6 +1,7 @@
-﻿@model PlayerUnitSwitchLinkHelperViewModel
+﻿@model UnitSwitchLinkHelperViewModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
 
 @{
     ViewData["Title"] = "Index";
@@ -15,11 +16,11 @@
 </style>
 
 <!-- Modal -->
-<div class="modal fade" id="unitSwitchLinkFilterHelperModal" tabindex="-1" aria-labelledby="unitSwitchLinkFilterHelper" aria-hidden="true">
+<div class="modal fade" id="UnitSwitchLinkHelperModal" tabindex="-1" aria-labelledby="UnitSwitchLinkHelper" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitSwitchLinkFilterHelper">帮助：亲密关系查询器</h4>
+                <h4 class="modal-title" id="UnitSwitchLinkHelper">帮助：亲密关系查询器</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -38,15 +39,12 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
-        //$('#nameinput1').autocomplete({
-        //    source: '/PlayerUnitSwitchLinkHelper/SearchUser' + $('#nameinput1').val()
-        //});
-        $('#nameinput1').autocomplete({
+        $('#UnitSymbolNameInput').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/InputAutoCompleteHelper/SearchUser',
                     dataType: 'json',
-                    data: { term: $('#nameinput1').val() },
+                    data: { term: $('#UnitSymbolNameInput').val() },
                     success: function (data) {
                         var result = $.map(data, function (item) {
                             return {
@@ -59,7 +57,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
-                $('#nameinput1').val(ui.item.label);
+                $('#UnitSymbolNameInput').val(ui.item.label);
             },
             create: function () {
                 $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -80,13 +78,13 @@
 </div>
 
 <div class="home-box">
-    <form asp-controller="PlayerUnitSwitchLinkHelper" asp-action="Index" method="post">
+    <form asp-controller="UnitSwitchLinkHelper" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">按角色名查询</div>
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
                 </div>
             </div>
             <div class="title-box-1">按连携类型查询</div>
@@ -101,7 +99,7 @@
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitSwitchLinkFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitSwitchLinkHelperModal">帮助</button>
     </form>
 </div>
 
@@ -122,17 +120,17 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.QueryUnit!)
+        @foreach (var item in Model.QueryUnits!)
         {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.unit.id + ".png")))
                 </td>
                 <td>
-                    @Html.Raw(item.Item1.name + item.Item1.symbol_name)
+                    @Html.Raw(item.unit.name + item.unit.symbol_name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item2)
+                    @Html.Raw(item.SwitchLinkTypeStr)
                 </td>
             </tr>
         }
@@ -161,13 +159,13 @@
         {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.Item1.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.unit.id + ".png")))
                 </td>
                 <td>
-                    @Html.Raw(item.Item1.name + item.Item1.symbol_name)
+                    @Html.Raw(item.unit.name + item.unit.symbol_name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Item2)
+                    @Html.Raw(item.SwitchLinkTypeStr)
                 </td>
             </tr>
         }

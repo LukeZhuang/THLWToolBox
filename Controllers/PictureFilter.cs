@@ -172,10 +172,10 @@ namespace THLWToolBox.Controllers
         {
             List<SelectItemModel> selectList = new();
             HashSet<int> visited = new();
-            foreach (PictureData pd in pictureList)
+            foreach (PictureData pictureRecord in pictureList)
             {
-                List<EffectModel> pdEffects = GetEffectModels(pd);
-                foreach (var effect in pdEffects)
+                List<EffectModel> pictureEffects = GetEffectModels(pictureRecord);
+                foreach (var effect in pictureEffects)
                 {
                     SelectItemModel sim = SelectItemModel.CreateSelectItemForEffect(effect, selectItemTypes);
                     if (sim.id == 0)

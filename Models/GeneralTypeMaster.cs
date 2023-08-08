@@ -412,41 +412,6 @@ namespace THLWToolBox.Models
             return isActive ? "是" : "否";
         }
 
-        public static string CorrectionStr(int correctionType, int correctionValue, int? corrTypeMain, int? corrTypeSub)
-        {
-            string correctionTypeStr = "";
-            switch (correctionType)
-            {
-                case 1:
-                    correctionTypeStr = "体力";
-                    break;
-                case 2:
-                    correctionTypeStr = "阳攻";
-                    break;
-                case 3:
-                    correctionTypeStr = "阳防";
-                    break;
-                case 4:
-                    correctionTypeStr = "阴攻";
-                    break;
-                case 5:
-                    correctionTypeStr = "阴防";
-                    break;
-                case 6:
-                    correctionTypeStr = "速度";
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-            string correctionValueWrapper = Convert.ToString(correctionValue);
-            if (corrTypeMain != null && corrTypeMain.GetValueOrDefault() == correctionType)
-                correctionValueWrapper = "<b><color=#FF6600>" + correctionValueWrapper + "</color></b>";
-            else if (corrTypeSub != null && corrTypeSub.GetValueOrDefault() == correctionType)
-                correctionValueWrapper = "<b><color=#4CAFFF>" + correctionValueWrapper + "</color></b>";
-
-            return correctionTypeStr + "+" + correctionValueWrapper;
-        }
-
         public static SelectItemModel GetTrustCharacteristicName(int effectType, int subEffectType)
         {
             switch (effectType)
