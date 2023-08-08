@@ -1,6 +1,8 @@
-﻿@model PlayerUnitShotDataFilterViewModel
+﻿@model UnitShotPowerUpHelperViewModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitShotPowerUpHelperViewModel;
 
 @{
     ViewData["Title"] = "Index";
@@ -12,11 +14,11 @@
 </head>
 
 <!-- Modal -->
-<div class="modal fade" id="unitShotDataFilterHelperModal" tabindex="-1" aria-labelledby="unitShotDataFilterHelper" aria-hidden="true">
+<div class="modal fade" id="UnitShotPowerUpHelperModal" tabindex="-1" aria-labelledby="UnitShotPowerUpHelper" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitShotDataFilterHelper">帮助：弹幕补正查询器</h4>
+                <h4 class="modal-title" id="UnitShotPowerUpHelper">帮助：弹幕补正查询器</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -30,16 +32,14 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script type="text/javascript">
-        $('#nameinput1').autocomplete({
+        $('#UnitSymbolNameInput').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/InputAutoCompleteHelper/SearchUser',
                     dataType: 'json',
-                    data: { term: $('#nameinput1').val() },
+                    data: { term: $('#UnitSymbolNameInput').val() },
                     success: function (data) {
                         var result = $.map(data, function (item) {
                             return {
@@ -52,7 +52,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
-                $('#nameinput1').val(ui.item.label);
+                $('#UnitSymbolNameInput').val(ui.item.label);
             },
             create: function () {
                 $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -73,19 +73,19 @@
 </div>
 
 <div class="home-box">
-    <form asp-controller="PlayerUnitShotDataFilter" asp-action="Index" method="post">
+    <form asp-controller="UnitShotPowerUpHelper" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">按角色名查询</div>
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
                 </div>
             </div>
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitShotDataFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitShotPowerUpHelperModal">帮助</button>
     </form>
 </div>
 
@@ -103,10 +103,10 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.QueryUnit!) {
+        @foreach (var item in Model.QueryUnits!) {
             <tr>
                 <td>
-                    <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                    @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.id + ".png")))
                 </td>
                 <td>
                     @Html.Raw(item.name + item.symbol_name)
@@ -149,31 +149,31 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.ShotDatas!) {
+        @foreach (var item in Model.PowerUpDatas!) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.type_name)
+                    @Html.DisplayFor(modelItem => item.attack_data.attack_type_name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.shot_name)
+                    @Html.DisplayFor(modelItem => item.attack_data.name)
                 </td>
                 <td>
-                    @Html.Raw((0.01 * item.shot_level0_power_rate).ToString("0.00"))
+                    @Html.Raw(CreatePowerUpRateStr(item.attack_data.power_up_rates[0]))
                 </td>
                 <td>
-                    @Html.Raw((0.01 * item.shot_level1_power_rate).ToString("0.00"))
+                    @Html.Raw(CreatePowerUpRateStr(item.attack_data.power_up_rates[1]))
                 </td>
                 <td>
-                    @Html.Raw((0.01 * item.shot_level2_power_rate).ToString("0.00"))
+                    @Html.Raw(CreatePowerUpRateStr(item.attack_data.power_up_rates[2]))
                 </td>
                 <td>
-                    @Html.Raw((0.01 * item.shot_level3_power_rate).ToString("0.00"))
+                    @Html.Raw(CreatePowerUpRateStr(item.attack_data.power_up_rates[3]))
                 </td>
                 <td>
-                    @Html.Raw((0.01 * item.shot_level4_power_rate).ToString("0.00"))
+                    @Html.Raw(CreatePowerUpRateStr(item.attack_data.power_up_rates[4]))
                 </td>
                 <td>
-                    @Html.Raw((0.01 * item.shot_level5_power_rate).ToString())
+                    @Html.Raw(CreatePowerUpRateStr(item.attack_data.power_up_rates[5]))
                 </td>
             </tr>
         }
