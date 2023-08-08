@@ -36,6 +36,43 @@ namespace THLWToolBox.Models
             }
         }
 
+        public enum BulletAddonType
+        {
+            AbsHit = 1,
+            Penetration = 2,
+            Mirror = 3,
+            Hard = 4,
+            Slash = 5,
+            Rapid = 6,
+            Blast = 7,
+            Elastic = 8,
+            Accuracy = 9,
+            Recoil = 10,
+            Absorb = 11,
+            Burn = 12,
+            Melt = 13,
+            Discharge = 14,
+            Drastic = 15,
+            Flash = 16,
+            BreakBarrier = 17,
+            BreakIgnition = 18,
+            BreakFreeze = 19,
+            BreakCharge = 20,
+            BreakBelch = 21,
+            BreakSmoke = 22,
+        }
+
+        public class BulletAddonModel
+        {
+            public BulletAddonType id { get; set; }
+            public int value { get; set; }
+            public BulletAddonModel(BulletAddonType id, int value)
+            {
+                this.id = id;
+                this.value = value;
+            }
+        }
+
         public static string GetRangeTypeString(int range)
         {
             switch (range)

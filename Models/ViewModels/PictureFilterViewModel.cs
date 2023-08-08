@@ -42,6 +42,11 @@ namespace THLWToolBox.Models.ViewModels
 
 
         // Methods
+        public static int CorrectionValueByLevel(int maxValue, int diff, int level)
+        {
+            return maxValue - diff * (10 - level);
+        }
+
         public string CreateCorrectionStr(PictureData pictureRecord, int corrId)
         {
             int corrType, corrValue, corrDiff;

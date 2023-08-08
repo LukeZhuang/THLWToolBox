@@ -248,7 +248,7 @@
                     <td>
                         @*@Html.DisplayFor(modelItem => item.unitBulletList)*@
                         <div class="shot-element-display-grid">
-                            @Html.Raw(GeneralHelper.DisplayShotCriticals(item.unitBulletList))
+                            @Html.Raw(PlayerUnitCriticalFilterModel.DisplayShotCriticals(item.unitBulletList))
                         </div>
                     </td>
                     <td>

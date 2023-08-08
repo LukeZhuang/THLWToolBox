@@ -24,5 +24,20 @@ namespace THLWToolBox.Models.ViewModels
         public List<PlayerUnitHitCheckOrderDisplayModel>? HitCheckOrderDatas { get; set; }
         public string? UnitSymbolName { get; set; }
         public int? BarrageId { get; set; }
+
+
+        public static string DisplayHitCheckOrder(List<Tuple<int, int, string, string>> hit_check_order_info)
+        {
+            string text = "";
+            foreach (var orderInfo in hit_check_order_info)
+            {
+                text += "<div class=bullet-wrapper><b><font color=#FF6600>" + orderInfo.Item1 + "</font></b></div>";
+                text += "<div class=bullet-wrapper>" + orderInfo.Item2 + "</div>";
+                text += "<div class=bullet-wrapper>" + orderInfo.Item3 + "</div>";
+                text += "<div class=bullet-wrapper>" + orderInfo.Item4 + "</div>";
+            }
+            Console.WriteLine(text);
+            return text;
+        }
     }
 }

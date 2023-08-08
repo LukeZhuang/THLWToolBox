@@ -28,5 +28,26 @@ namespace THLWToolBox.Models
         public bool? Shot2 { get; set; }
         public bool? NormalSpellcard { get; set; }
         public bool? LastWord { get; set; }
+
+
+
+        public static string DisplayShotCriticals(List<Tuple<string, List<string>>> unitBulletList)
+        {
+            string text = "";
+            foreach (var shot in unitBulletList)
+            {
+                string rowText = "<div class=shot-row>";
+                string shotName = shot.Item1;
+                rowText += "<div class=shot-name-grid>" + shotName + "</div>";
+
+                rowText += "<div class=critical-bullet-rows>";
+                rowText += string.Join("<br/>", shot.Item2);
+                rowText += "</div>";
+
+                rowText += "</div>";
+                text += rowText;
+            }
+            return text;
+        }
     }
 }
