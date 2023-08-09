@@ -5,7 +5,7 @@ using Python.Runtime;
 using THLWToolBox.Data;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Models.GeneralModels;
 using static THLWToolBox.Models.ViewModels.UnitShotSpiritRecycleHelperViewModel;
 
 namespace THLWToolBox.Controllers

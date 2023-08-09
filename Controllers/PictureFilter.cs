@@ -5,7 +5,7 @@ using THLWToolBox.Data;
 using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Models.GeneralModels;
 using static THLWToolBox.Models.ViewModels.PictureFilterViewModel;
 
 namespace THLWToolBox.Controllers

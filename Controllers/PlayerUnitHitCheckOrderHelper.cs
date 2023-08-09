@@ -5,7 +5,8 @@ using THLWToolBox.Data;
 using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Models.GeneralModels;
+using static THLWToolBox.Helpers.TypeHelper;
 
 namespace THLWToolBox.Controllers
 {
@@ -175,7 +176,7 @@ namespace THLWToolBox.Controllers
                     PlayerUnitBulletData bulletRecord = bulletDataDict[bulletMagazine.bullet_id];
                     string elementInfo = "";
                     if (bulletRecord.element != 9)
-                        elementInfo = GeneralTypeMaster.GetElementTypeString(bulletRecord.element);
+                        elementInfo = GetElementTypeString(bulletRecord.element);
                     List<int> BulletAddons = new();
                     if (bulletRecord.bullet1_addon_id >= 12 && bulletRecord.bullet1_addon_id <= 16)
                         BulletAddons.Add(bulletRecord.bullet1_addon_id);
@@ -188,7 +189,7 @@ namespace THLWToolBox.Controllers
                     {
                         foreach (var bulletAddon in BulletAddons)
                         {
-                            abnormalInfo += GeneralTypeMaster.GetAbnormalBreakString(bulletAddon) + "</br>";
+                            abnormalInfo += GetAbnormalBreakString(bulletAddon) + "</br>";
                         }
                         abnormalInfo = abnormalInfo.Substring(0, abnormalInfo.Length - 5);
                     }

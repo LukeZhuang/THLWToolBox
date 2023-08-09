@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Identity.Client;
 using System.Collections.Generic;
 using THLWToolBox.Data;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Models.GeneralModels;
 using THLWToolBox.Helpers;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;

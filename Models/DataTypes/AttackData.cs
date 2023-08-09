@@ -1,4 +1,4 @@
-﻿using static THLWToolBox.Models.GeneralTypeMaster;
+﻿using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Models.DataTypes
 {

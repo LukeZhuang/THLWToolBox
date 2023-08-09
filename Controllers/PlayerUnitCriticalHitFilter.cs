@@ -9,7 +9,7 @@ using THLWToolBox.Helpers;
 using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Controllers
 {

@@ -1,7 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using System.Web;
 using THLWToolBox.Models.DataTypes;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Helpers.TypeHelper;
+using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Helpers
 {

@@ -1,5 +1,5 @@
 ﻿using THLWToolBox.Models.DataTypes;
-using static THLWToolBox.Models.GeneralTypeMaster;
+using static THLWToolBox.Helpers.TypeHelper;
 
 namespace THLWToolBox.Models.ViewModels
 {
