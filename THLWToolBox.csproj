@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="data_samples\" />
     <Folder Include="wwwroot\res\pictures_img\" />
   </ItemGroup>
 
