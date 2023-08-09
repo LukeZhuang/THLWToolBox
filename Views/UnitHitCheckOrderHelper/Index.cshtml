@@ -1,6 +1,8 @@
-﻿@model PlayerUnitHitCheckOrderHelperViewModel
+﻿@model UnitHitCheckOrderHelperViewModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitHitCheckOrderHelperViewModel;
 
 @{
     ViewData["Title"] = "Index";
@@ -31,11 +33,11 @@
 </style>
 
 <!-- Modal -->
-<div class="modal fade" id="unitHitCheckOrderHelperModal" tabindex="-1" aria-labelledby="unitHitCheckOrderHelper" aria-hidden="true">
+<div class="modal fade" id="UnitHitCheckOrderHelperModal" tabindex="-1" aria-labelledby="UnitHitCheckOrderHelper" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitUnitHitCheckOrderHelper">帮助：段落顺序查询器</h4>
+                <h4 class="modal-title" id="UnitHitCheckOrderHelper">帮助：段落顺序查询器</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -49,16 +51,14 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script type="text/javascript">
-        $('#nameinput1').autocomplete({
+        $('#UnitSymbolNameInput').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/InputAutoCompleteHelper/SearchUser',
                     dataType: 'json',
-                    data: { term: $('#nameinput1').val() },
+                    data: { term: $('#UnitSymbolNameInput').val() },
                     success: function (data) {
                         var result = $.map(data, function (item) {
                             return {
@@ -71,7 +71,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
-                $('#nameinput1').val(ui.item.label);
+                $('#UnitSymbolNameInput').val(ui.item.label);
             },
             create: function () {
                 $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -92,13 +92,13 @@
 </div>
 
 <div class="home-box">
-    <form asp-controller="PlayerUnitHitCheckOrderHelper" asp-action="Index" method="post">
+    <form asp-controller="UnitHitCheckOrderHelper" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">按角色名查询</div>
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
                 </div>
                 <div class="selects-box" style="text-align: right">弹幕类型：</div>
                 <div class="selects-box">
@@ -114,7 +114,7 @@
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitHitCheckOrderHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitHitCheckOrderHelperModal">帮助</button>
     </form>
 </div>
 
@@ -132,11 +132,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.QueryUnit!)
+            @foreach (var item in Model.QueryUnits!)
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.id + ".png")))
                     </td>
                     <td>
                         @Html.Raw(item.name + item.symbol_name)
@@ -174,25 +174,19 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.type_name)
+                        @Html.Raw(item.type_name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.shot_name)
+                        @Html.Raw(item.shot_name)
                     </td>
                     <td>
                         @Html.Raw(item.boost_id + "p")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.total_bullet_count)
+                        @Html.Raw(item.total_bullet_count)
                     </td>
                     <td>
-                        <div class="magazine-grid">
-                            <div class="bullet-wrapper">段落</div>
-                            <div class="bullet-wrapper">首发</div>
-                            <div class="bullet-wrapper">属性</div>
-                            <div class="bullet-wrapper">异常</div>
-                            @Html.Raw(PlayerUnitHitCheckOrderHelperViewModel.DisplayHitCheckOrder(item.hit_check_order_info))
-                        </div>
+                        @Html.Raw(DisplayHitCheckOrder(item.hit_check_order_info))
                     </td>
                 </tr>
             }

@@ -10,12 +10,15 @@ namespace THLWToolBox.Models
             public int bullet_range { get; set; }
             public int bullet_value { get; set; }
             public int bullet_power_rate { get; set; }
-            public BulletMagazineModel(int bullet_id, int bullet_range, int bullet_value, int bullet_power_rate)
+            public int boost_count { get; set; }
+            // TODO: remove default value for boost_count
+            public BulletMagazineModel(int bullet_id, int bullet_range, int bullet_value, int bullet_power_rate, int boost_count=0)
             {
                 this.bullet_id = bullet_id;
                 this.bullet_range = bullet_range;
                 this.bullet_value = bullet_value;
                 this.bullet_power_rate = bullet_power_rate;
+                this.boost_count = boost_count;
             }
         }
 
@@ -38,9 +41,9 @@ namespace THLWToolBox.Models
 
         public class BulletAddonModel
         {
-            public BulletAddonType id { get; set; }
+            public int id { get; set; }
             public int value { get; set; }
-            public BulletAddonModel(BulletAddonType id, int value)
+            public BulletAddonModel(int id, int value)
             {
                 this.id = id;
                 this.value = value;

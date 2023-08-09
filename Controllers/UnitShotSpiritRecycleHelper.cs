@@ -85,7 +85,7 @@ namespace THLWToolBox.Controllers
             return View(request);
         }
 
-        static void AddBulletToBoost(BulletMagazineModel magazine, int bulletBoostId, Dictionary<int, PlayerUnitBulletData> bulletDict, ref List<List<MagazineInfo>> boosts_info)
+        static void AddBulletToBoost(BulletMagazineModel magazine, Dictionary<int, PlayerUnitBulletData> bulletDict, ref List<List<MagazineInfo>> boosts_info)
         {
             if (!bulletDict.ContainsKey(magazine.bullet_id))
                 return;
@@ -94,7 +94,7 @@ namespace THLWToolBox.Controllers
             bool isSureHit = false;
             if (bulletRecord.bullet1_addon_id == 1 || bulletRecord.bullet2_addon_id == 1 || bulletRecord.bullet3_addon_id == 1)
                 isSureHit = true;
-            boosts_info[bulletBoostId].Add(new MagazineInfo(magazine.bullet_value, hit, isSureHit));
+            boosts_info[magazine.boost_count].Add(new MagazineInfo(magazine.bullet_value, hit, isSureHit));
         }
 
         static UnitShotSpiritRecycleHelperDisplayModel CreateSpiritPowerRecycleDisplayModel(AttackData attack, Dictionary<int, PlayerUnitBulletData> bulletDict, UnitShotSpiritRecycleHelperViewModel request)
@@ -103,7 +103,7 @@ namespace THLWToolBox.Controllers
             for (int boostId = 0; boostId < 4; boostId++)
                 boosts_info.Add(new List<MagazineInfo>());
             for (int magazineId = 0; magazineId < 6; magazineId++)
-                AddBulletToBoost(attack.magazines[magazineId], attack.boost_counts[magazineId], bulletDict, ref boosts_info);
+                AddBulletToBoost(attack.magazines[magazineId], bulletDict, ref boosts_info);
             SpiritRecycleModel spiritRecycleInput = new(attack.phantasm_power_up_rate, attack.magazines[0].bullet_range, boosts_info);
             List<double> spiritRecycles = CalcShotModel(spiritRecycleInput, request);
             return new UnitShotSpiritRecycleHelperDisplayModel(attack.attack_type_name, attack.name, attack.magazines[0].bullet_range, spiritRecycles);

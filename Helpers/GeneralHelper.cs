@@ -11,6 +11,15 @@ namespace THLWToolBox.Helpers
         public static string VERSION_STR = "v1.2 alpha";
         public static string DATA_UPDATE_DATE = "2023/06/12";
 
+        public static List<BulletAddonModel> GetBulletAddons(PlayerUnitBulletData bulletRecord)
+        {
+            return new List<BulletAddonModel>() {
+                new BulletAddonModel(bulletRecord.bullet1_addon_id, bulletRecord.bullet1_addon_value),
+                new BulletAddonModel(bulletRecord.bullet2_addon_id, bulletRecord.bullet2_addon_value),
+                new BulletAddonModel(bulletRecord.bullet3_addon_id, bulletRecord.bullet3_addon_value),
+            };
+        }
+
         public static double CalcBulletPower(BulletMagazineModel bulletMagazine, PlayerUnitBulletData bulletRecord, PlayerUnitData unitRecord,
                                              int powerRate, double shotTypeWeight, bool isCriticalRace)
         {
@@ -21,19 +30,15 @@ namespace THLWToolBox.Helpers
             double rangeWeight = (bulletMagazine.bullet_range == 2 ? 1.5 : 1.0);
             double powerUpRate = powerRate / 100.0;
 
-            List<BulletAddonModel> AddOns = new() {
-                new BulletAddonModel((BulletAddonType)bulletRecord.bullet1_addon_id, bulletRecord.bullet1_addon_value),
-                new BulletAddonModel((BulletAddonType)bulletRecord.bullet2_addon_id, bulletRecord.bullet2_addon_value),
-                new BulletAddonModel((BulletAddonType)bulletRecord.bullet3_addon_id, bulletRecord.bullet3_addon_value),
-            };
-            foreach (var AddOn in AddOns)
+            List<BulletAddonModel> bulletAddons = GetBulletAddons(bulletRecord);
+            foreach (var bulletAddon in bulletAddons)
             {
-                if (AddOn.id == BulletAddonType.AbsHit)
+                if (bulletAddon.id == (int)BulletAddonType.AbsHit)
                     hit = 1.0;
-                else if (AddOn.id == BulletAddonType.Hard)
-                    atk += ((bulletRecord.type == 1) ? unitRecord.yang_defense : unitRecord.yin_defense) * (AddOn.value / 100.0) / 1000.0;
-                else if (AddOn.id == BulletAddonType.Slash)
-                    atk += unitRecord.speed * (AddOn.value / 100.0) / 1000.0;
+                else if (bulletAddon.id == (int)BulletAddonType.Hard)
+                    atk += ((bulletRecord.type == 1) ? unitRecord.yang_defense : unitRecord.yin_defense) * (bulletAddon.value / 100.0) / 1000.0;
+                else if (bulletAddon.id == (int)BulletAddonType.Slash)
+                    atk += unitRecord.speed * (bulletAddon.value / 100.0) / 1000.0;
             }
 
             return atk * totalPower * hit * critic * powerUpRate * rangeWeight * shotTypeWeight;

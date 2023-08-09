@@ -35,12 +35,12 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script type="text/javascript">
-        $('#nameinput1').autocomplete({
+        $('#UnitSymbolNameInput').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/InputAutoCompleteHelper/SearchUser',
                     dataType: 'json',
-                    data: { term: $('#nameinput1').val() },
+                    data: { term: $('#UnitSymbolNameInput').val() },
                     success: function (data) {
                         var result = $.map(data, function (item) {
                             return {
@@ -53,7 +53,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
-                $('#nameinput1').val(ui.item.label);
+                $('#UnitSymbolNameInput').val(ui.item.label);
             },
             create: function () {
                 $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -80,7 +80,7 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
                 </div>
             </div>
             <div class="title-box-1">查询信息</div>

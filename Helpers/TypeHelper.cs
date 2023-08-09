@@ -27,6 +27,7 @@
             BreakBelch = 21,
             BreakSmoke = 22,
         }
+
         public static string GetRangeTypeString(int range)
         {
             return range switch
@@ -39,6 +40,7 @@
                 _ => throw new NotImplementedException(),
             };
         }
+
         public static string GetBuffDebuffTypeString(int effectType)
         {
             return effectType switch
@@ -169,6 +171,15 @@
                 15 => "毒",
                 16 => "暗",
                 _ => throw new NotImplementedException(),
+            };
+        }
+
+        public static bool IsBreakingAbnormalAddon(int bulletAddon)
+        {
+            return bulletAddon switch
+            {
+                12 or 13 or 14 or 15 or 16 => true,
+                _ => false,
             };
         }
 
