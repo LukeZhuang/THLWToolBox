@@ -47,7 +47,7 @@ namespace THLWToolBox.Models.ViewModels
             return maxValue - diff * (10 - level);
         }
 
-        public string CreateCorrectionStr(PictureData pictureRecord, int corrId)
+        public string CreateCorrectionString(PictureData pictureRecord, int corrId)
         {
             int corrType, corrValue, corrDiff;
             if (corrId == 1)
@@ -86,7 +86,7 @@ namespace THLWToolBox.Models.ViewModels
             return correctionTypeStr + "+" + correctionValueStr;
         }
 
-        public string CreateSimplifiedPictureEffect(PictureData pictureRecord, bool maxEffect)
+        public string CreateSimplifiedPictureEffectString(PictureData pictureRecord, bool maxEffect)
         {
             if (RaceDict == null)
                 throw new NotImplementedException();

@@ -23,7 +23,7 @@ namespace THLWToolBox.Models.ViewModels
 
 
         // Methods
-        public static string CreatePowerUpRateStr(int powerUpRate)
+        public static string CreatePowerUpRateString(int powerUpRate)
         {
             return (0.01 * powerUpRate).ToString("0.00");
         }

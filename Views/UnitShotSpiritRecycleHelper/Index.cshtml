@@ -1,6 +1,9 @@
-﻿@model PlayerUnitSpiritRecycleFilterViewModel
+﻿@model UnitShotSpiritRecycleHelperViewModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.GeneralTypeMaster;
+@using static THLWToolBox.Models.ViewModels.UnitShotSpiritRecycleHelperViewModel;
 
 @{
     ViewData["Title"] = "Index";
@@ -12,11 +15,11 @@
 </head>
 
 <!-- Modal -->
-<div class="modal fade" id="unitSpiritRecycleFilterHelperModal" tabindex="-1" aria-labelledby="unitSpiritRecycleFilterHelper" aria-hidden="true">
+<div class="modal fade" id="UnitShotSpiritRecycleHelperModal" tabindex="-1" aria-labelledby="UnitShotSpiritRecycleHelper" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitSpiritRecycleFilterHelper">帮助：灵力回收查询器</h4>
+                <h4 class="modal-title" id="UnitShotSpiritRecycleHelper">帮助：灵力回收查询器</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -30,9 +33,7 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script type="text/javascript">
         $('#nameinput1').autocomplete({
             source: function (request, response) {
@@ -73,7 +74,7 @@
 </div>
 
 <div class="home-box">
-    <form asp-controller="PlayerUnitSpiritRecycleFilter" asp-action="Index" method="post">
+    <form asp-controller="UnitShotSpiritRecycleHelper" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">按角色名查询</div>
             <div class="selects-grid">
@@ -158,7 +159,7 @@
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitShotDataFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitShotSpiritRecycleHelperModal">帮助</button>
     </form>
 </div>
 
@@ -176,11 +177,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.QueryUnit!)
+            @foreach (var item in Model.QueryUnits!)
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.id + ".png")))
                     </td>
                     <td>
                         @Html.Raw(item.name + item.symbol_name)
@@ -220,29 +221,29 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ShotDatas!)
+            @foreach (var item in Model.SpiritRecycleDatas!)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.type_name)
+                        @Html.Raw(item.type_name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.shot_name)
+                        @Html.Raw(item.shot_name)
                     </td>
                     <td>
-                        @Html.Raw(item.range == 1 ? "单体" : "全体")
+                        @Html.Raw(GetBulletRangeString(item.range))
                     </td>
                     <td>
-                        @Html.Raw(item.boost_recycles[0].ToString("0.00"))
+                        @Html.Raw(CreateSpiritRecycleStr(item.boost_recycles[0]))
                     </td>
                     <td>
-                        @Html.Raw(item.boost_recycles[1].ToString("0.00"))
+                        @Html.Raw(CreateSpiritRecycleStr(item.boost_recycles[1]))
                     </td>
                     <td>
-                        @Html.Raw(item.boost_recycles[2].ToString("0.00"))
+                        @Html.Raw(CreateSpiritRecycleStr(item.boost_recycles[2]))
                     </td>
                     <td>
-                        @Html.Raw(item.boost_recycles[3].ToString("0.00"))
+                        @Html.Raw(CreateSpiritRecycleStr(item.boost_recycles[3]))
                     </td>
                 </tr>
             }

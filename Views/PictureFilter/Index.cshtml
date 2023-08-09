@@ -242,16 +242,16 @@
                 @Html.Raw(item.rare)
             </td>
             <td>
-                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionStr(item, 1)))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionString(item, 1)))
             </td>
             <td>
-                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionStr(item, 2)))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionString(item, 2)))
             </td>
             <td>
-                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffect(item, false)))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffectString(item, false)))
             </td>
             <td>
-                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffect(item, true)))
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffectString(item, true)))
             </td>
         </tr>
 }

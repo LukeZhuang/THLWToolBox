@@ -495,5 +495,15 @@ namespace THLWToolBox.Models
                     throw new NotImplementedException();
             }
         }
+
+        public static string GetBulletRangeString(int range)
+        {
+            return range switch
+            {
+                1 => "单体",
+                2 => "全体",
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }
