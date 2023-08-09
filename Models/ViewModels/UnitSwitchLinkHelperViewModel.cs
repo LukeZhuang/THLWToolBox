@@ -4,20 +4,20 @@ using THLWToolBox.Models.DataTypes;
 
 namespace THLWToolBox.Models.ViewModels
 {
+    // Display model definition
+    public class UnitsDisplayModel
+    {
+        public PlayerUnitData unit { get; set; }
+        public string switchLinkTypeStr { get; set; }
+        public UnitsDisplayModel(PlayerUnitData unit, string switchLinkTypeStr)
+        {
+            this.unit = unit;
+            this.switchLinkTypeStr = switchLinkTypeStr;
+        }
+    }
+
     public class UnitSwitchLinkHelperViewModel
     {
-        // Display model definition
-        public class UnitsDisplayModel
-        {
-            public PlayerUnitData unit { get; set; }
-            public string switchLinkTypeStr { get; set; }
-            public UnitsDisplayModel(PlayerUnitData unit, string switchLinkTypeStr)
-            {
-                this.unit = unit;
-                this.switchLinkTypeStr = switchLinkTypeStr;
-            }
-        }
-
         // Display models
         public List<UnitsDisplayModel>? QueryUnits { get; set; }
         public List<UnitsDisplayModel>? RelatedUnits { get; set; }

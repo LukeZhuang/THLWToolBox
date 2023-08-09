@@ -3,20 +3,20 @@ using THLWToolBox.Models.DataTypes;
 
 namespace THLWToolBox.Models.ViewModels
 {
+    // Display model definition
+    public class UnitRaceDisplayModel
+    {
+        public PlayerUnitData unit { get; set; }
+        public string races { get; set; }
+        public UnitRaceDisplayModel(PlayerUnitData unit, string races)
+        {
+            this.unit = unit;
+            this.races = races;
+        }
+    }
+
     public class UnitRaceHelperViewModel
     {
-        // Display model definition
-        public class UnitRaceDisplayModel
-        {
-            public PlayerUnitData unit { get; set; }
-            public string races { get; set; }
-            public UnitRaceDisplayModel(PlayerUnitData unit, string races)
-            {
-                this.unit = unit;
-                this.races = races;
-            }
-        }
-
         // Display models
         public List<UnitRaceDisplayModel>? QueryUnits { get; set; }
         public List<UnitRaceDisplayModel>? QueryRaces { get; set; }
