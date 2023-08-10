@@ -187,11 +187,11 @@ namespace THLWToolBox.Controllers
             {
                 BulletMagazineModel bulletMagazine = bulletMagazineList[j];
 
-                int bulletId = bulletMagazine.bullet_id;
+                int bulletId = bulletMagazine.BulletId;
                 if (!bulletDataDict.ContainsKey(bulletId))
                     continue;
 
-                PlayerUnitBulletData bulletRecord = bulletDataDict[bulletMagazine.bullet_id];
+                PlayerUnitBulletData bulletRecord = bulletDataDict[bulletMagazine.BulletId];
                 int bulletStatus = searchResult[j].Item2;
                 if (bulletRecord.type != 0 && bulletRecord.type != 1)
                     throw new NotImplementedException("unknown bullet type");

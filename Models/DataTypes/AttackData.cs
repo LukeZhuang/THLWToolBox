@@ -5,19 +5,19 @@ namespace THLWToolBox.Models.DataTypes
     // this class is manually created for generalizing PlayerUnitShotData and PlayerUnitSpellcardData
     public class AttackData
     {
-        public string attack_type_name { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
-        public List<BulletMagazineModel> magazines { get; set; }
-        public int phantasm_power_up_rate { get; set; }
-        public List<int> power_up_rates { get; set; }
+        public string AttackTypeName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<BulletMagazineModel> Magazines { get; set; }
+        public int PhantasmPowerUpRate { get; set; }
+        public List<int> PowerUpRates { get; set; }
 
         public AttackData(string attackTypeName, PlayerUnitShotData shotRecord)
         {
-            this.attack_type_name = attackTypeName;
-            this.id = shotRecord.id;
-            this.name = shotRecord.name;
-            this.magazines = new()
+            this.AttackTypeName = attackTypeName;
+            this.Id = shotRecord.id;
+            this.Name = shotRecord.name;
+            this.Magazines = new()
             {
                 new BulletMagazineModel(shotRecord.magazine0_bullet_id, shotRecord.magazine0_bullet_range, shotRecord.magazine0_bullet_value, shotRecord.magazine0_bullet_power_rate, 0),
                 new BulletMagazineModel(shotRecord.magazine1_bullet_id, shotRecord.magazine1_bullet_range, shotRecord.magazine1_bullet_value, shotRecord.magazine1_bullet_power_rate, shotRecord.magazine1_boost_count),
@@ -26,8 +26,8 @@ namespace THLWToolBox.Models.DataTypes
                 new BulletMagazineModel(shotRecord.magazine4_bullet_id, shotRecord.magazine4_bullet_range, shotRecord.magazine4_bullet_value, shotRecord.magazine4_bullet_power_rate, shotRecord.magazine4_boost_count),
                 new BulletMagazineModel(shotRecord.magazine5_bullet_id, shotRecord.magazine5_bullet_range, shotRecord.magazine5_bullet_value, shotRecord.magazine5_bullet_power_rate, shotRecord.magazine5_boost_count),
             };
-            this.phantasm_power_up_rate = shotRecord.phantasm_power_up_rate;
-            this.power_up_rates = new()
+            this.PhantasmPowerUpRate = shotRecord.phantasm_power_up_rate;
+            this.PowerUpRates = new()
             {
                 shotRecord.shot_level0_power_rate,
                 shotRecord.shot_level1_power_rate,
@@ -39,10 +39,10 @@ namespace THLWToolBox.Models.DataTypes
         }
         public AttackData(string attackTypeName, PlayerUnitSpellcardData spellcardRecord)
         {
-            this.attack_type_name = attackTypeName;
-            this.id = spellcardRecord.id;
-            this.name = spellcardRecord.name;
-            this.magazines = new()
+            this.AttackTypeName = attackTypeName;
+            this.Id = spellcardRecord.id;
+            this.Name = spellcardRecord.name;
+            this.Magazines = new()
             {
                 new BulletMagazineModel(spellcardRecord.magazine0_bullet_id, spellcardRecord.magazine0_bullet_range, spellcardRecord.magazine0_bullet_value, spellcardRecord.magazine0_bullet_power_rate, 0),
                 new BulletMagazineModel(spellcardRecord.magazine1_bullet_id, spellcardRecord.magazine1_bullet_range, spellcardRecord.magazine1_bullet_value, spellcardRecord.magazine1_bullet_power_rate, spellcardRecord.magazine1_boost_count),
@@ -51,8 +51,8 @@ namespace THLWToolBox.Models.DataTypes
                 new BulletMagazineModel(spellcardRecord.magazine4_bullet_id, spellcardRecord.magazine4_bullet_range, spellcardRecord.magazine4_bullet_value, spellcardRecord.magazine4_bullet_power_rate, spellcardRecord.magazine4_boost_count),
                 new BulletMagazineModel(spellcardRecord.magazine5_bullet_id, spellcardRecord.magazine5_bullet_range, spellcardRecord.magazine5_bullet_value, spellcardRecord.magazine5_bullet_power_rate, spellcardRecord.magazine5_boost_count),
             };
-            this.phantasm_power_up_rate = spellcardRecord.phantasm_power_up_rate;
-            this.power_up_rates = new()
+            this.PhantasmPowerUpRate = spellcardRecord.phantasm_power_up_rate;
+            this.PowerUpRates = new()
             {
                 spellcardRecord.shot_level0_power_rate,
                 spellcardRecord.shot_level1_power_rate,

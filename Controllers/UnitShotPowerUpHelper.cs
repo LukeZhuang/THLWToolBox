@@ -44,7 +44,7 @@ namespace THLWToolBox.Controllers
 
 
             List<PlayerUnitData> queryUnits = new();
-            List<UnitShotPowerUpHelperDisplayModel> powerUpDatas = new();
+            List<UnitShotPowerUpDisplayModel> powerUpDatas = new();
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
@@ -54,13 +54,13 @@ namespace THLWToolBox.Controllers
                     if (!request.UnitSymbolName.Equals(curUnitSymbolName))
                         continue;
                     queryUnits.Add(unitRecord);
-                    List<UnitShotPowerUpHelperDisplayModel> unitPowerUpDatas = new()
+                    List<UnitShotPowerUpDisplayModel> unitPowerUpDatas = new()
                     {
-                        new UnitShotPowerUpHelperDisplayModel(new AttackData("扩散", shotDict[unitRecord.shot1_id])),
-                        new UnitShotPowerUpHelperDisplayModel(new AttackData("集中", shotDict[unitRecord.shot2_id])),
-                        new UnitShotPowerUpHelperDisplayModel(new AttackData("一符", spellcardDict[unitRecord.spellcard1_id])),
-                        new UnitShotPowerUpHelperDisplayModel(new AttackData("二符", spellcardDict[unitRecord.spellcard2_id])),
-                        new UnitShotPowerUpHelperDisplayModel(new AttackData("终符", spellcardDict[unitRecord.spellcard5_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData("扩散", shotDict[unitRecord.shot1_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData("集中", shotDict[unitRecord.shot2_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData("一符", spellcardDict[unitRecord.spellcard1_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData("二符", spellcardDict[unitRecord.spellcard2_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData("终符", spellcardDict[unitRecord.spellcard5_id])),
                     };
                     powerUpDatas.AddRange(unitPowerUpDatas);
                 }

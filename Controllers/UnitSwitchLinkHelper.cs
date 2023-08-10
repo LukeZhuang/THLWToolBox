@@ -42,8 +42,8 @@ namespace THLWToolBox.Controllers
             // ------ query end ------
 
 
-            List<UnitsDisplayModel> queryUnits = new();
-            List<UnitsDisplayModel> relatedUnits = new();
+            List<UnitSwitchLinkDisplayModel> queryUnits = new();
+            List<UnitSwitchLinkDisplayModel> relatedUnits = new();
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
@@ -52,7 +52,7 @@ namespace THLWToolBox.Controllers
                     string curUnitSymbolName = unitRecord.name + unitRecord.symbol_name;
                     if (!request.UnitSymbolName.Equals(curUnitSymbolName))
                         continue;
-                    queryUnits.Add(new UnitsDisplayModel(unitRecord, GetUnitTrustCharacteristicSIM(unitRecord, unitCharacteristicDict).name));
+                    queryUnits.Add(new UnitSwitchLinkDisplayModel(unitRecord, GetUnitTrustCharacteristicSIM(unitRecord, unitCharacteristicDict).name));
                     HashSet<int> relatedUnitIdSet = GetRelatedUnitIds(unitRecord, personRelationList);
                     foreach (var targetUnitRecord in unitList)
                     {
@@ -65,7 +65,7 @@ namespace THLWToolBox.Controllers
                                 if (targetUnitCharacteristicId != request.SwitchLinkType.GetValueOrDefault())
                                     continue;
                             }
-                            relatedUnits.Add(new UnitsDisplayModel(targetUnitRecord, targetUnitCharacteristicSIM.name));
+                            relatedUnits.Add(new UnitSwitchLinkDisplayModel(targetUnitRecord, targetUnitCharacteristicSIM.name));
                         }
                     }
                 }
@@ -77,7 +77,7 @@ namespace THLWToolBox.Controllers
                     var unitTrustCharacteristicSIM = GetUnitTrustCharacteristicSIM(unitRecord, unitCharacteristicDict);
                     if (unitTrustCharacteristicSIM.id == request.SwitchLinkType.GetValueOrDefault())
                     {
-                        queryUnits.Add(new UnitsDisplayModel(unitRecord, unitTrustCharacteristicSIM.name));
+                        queryUnits.Add(new UnitSwitchLinkDisplayModel(unitRecord, unitTrustCharacteristicSIM.name));
                     }
                 }
             }

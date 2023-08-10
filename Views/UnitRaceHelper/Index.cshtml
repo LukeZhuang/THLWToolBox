@@ -148,13 +148,13 @@
             {
                 <tr>
                     <td>
-                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.unit.id + ".png")))
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.unit.name + item.unit.symbol_name)
+                        @Html.Raw(item.Unit.name + item.Unit.symbol_name)
                     </td>
                     <td>
-                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.races))
+                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.Races))
                     </td>
                 </tr>
             }
@@ -180,13 +180,13 @@
             {
                 <tr>
                     <td>
-                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.unit.id + ".png")))
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.unit.name + item.unit.symbol_name)
+                        @Html.Raw(item.Unit.name + item.Unit.symbol_name)
                     </td>
                     <td>
-                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.races))
+                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.Races))
                     </td>
                 </tr>
             }

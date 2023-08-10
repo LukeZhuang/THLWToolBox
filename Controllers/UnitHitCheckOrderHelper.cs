@@ -95,8 +95,8 @@ namespace THLWToolBox.Controllers
         static UnitHitCheckOrderHelperDisplayModel CreateHitCheckOrderDisplayModel(AttackData attack, Dictionary<int, PlayerUnitBulletData> bulletDict,
                                                                                    PlayerUnitHitCheckOrderData hitCheckOrderRecord)
         {
-            string typeName = attack.attack_type_name;
-            string shotName = attack.name;
+            string typeName = attack.AttackTypeName;
+            string shotName = attack.Name;
             int boostId = hitCheckOrderRecord.boost_id;
 
             if (hitCheckOrderRecord.hit_check_order.Equals("(empty)"))
@@ -104,12 +104,12 @@ namespace THLWToolBox.Controllers
             
             int totalBulletCount = 0;
             List<BulletMagazineModel> boostMagazines = new();
-            foreach (var magazine in attack.magazines)
+            foreach (var magazine in attack.Magazines)
             {
-                if (magazine.boost_count <= hitCheckOrderRecord.boost_id)
+                if (magazine.BoostCount <= hitCheckOrderRecord.boost_id)
                 {
                     boostMagazines.Add(magazine);
-                    totalBulletCount += magazine.bullet_value;
+                    totalBulletCount += magazine.BulletValue;
                 }
             }
             List<MagazineHitCheckInfo> hitCheckInfos = GetHitCheckOrderInfo(boostMagazines, bulletDict, hitCheckOrderRecord.hit_check_order);
@@ -128,7 +128,7 @@ namespace THLWToolBox.Controllers
                 {
                     bulletVisited.Add(magazineId);
                     BulletMagazineModel magazine = boostMagazines[magazineId - 1];
-                    PlayerUnitBulletData bulletRecord = bulletDict[magazine.bullet_id];
+                    PlayerUnitBulletData bulletRecord = bulletDict[magazine.BulletId];
 
                     string elementInfo = "";
                     if (bulletRecord.element != 9)
@@ -137,8 +137,8 @@ namespace THLWToolBox.Controllers
                     List<string> abnormals = new();
                     List<BulletAddonModel> bulletAddons = GetBulletAddons(bulletRecord);
                     foreach (var bulletAddon in bulletAddons)
-                        if (IsBreakingAbnormalAddon(bulletAddon.id))
-                            abnormals.Add(GetAbnormalBreakString(bulletAddon.id));
+                        if (IsBreakingAbnormalAddon(bulletAddon.Id))
+                            abnormals.Add(GetAbnormalBreakString(bulletAddon.Id));
                     string abnormalInfo = string.Join("</br>", abnormals);
 
                     MagazineHitCheckInfo magazine_info = new(magazineId, index + 1, elementInfo, abnormalInfo);

@@ -26,17 +26,17 @@ namespace THLWToolBox.Models
             switch (type)
             {
                 case SelectItemTypes.EffectType:
-                    return GetEffectRemappedInfo(effect.effect_type);
+                    return GetEffectRemappedInfo(effect.EffectType);
                 case SelectItemTypes.SubEffectType:
-                    return GetSubEffectRemappedInfo(effect.effect_type, effect.sub_effect_type);
+                    return GetSubEffectRemappedInfo(effect.EffectType, effect.SubEffectType);
                 case SelectItemTypes.RangeType:
-                    return GetRangeRemappedInfo(effect.range);
+                    return GetRangeRemappedInfo(effect.Range);
                 case SelectItemTypes.UnitRoleType:
-                    return GetEffectByRoleRemappedInfo(effect.effect_type);
+                    return GetEffectByRoleRemappedInfo(effect.EffectType);
                 case SelectItemTypes.TurnType:
-                    return new SelectItemModel(effect.turn, Convert.ToString(effect.turn));
+                    return new SelectItemModel(effect.Turn, Convert.ToString(effect.Turn));
                 case SelectItemTypes.SwitchLinkEffectType:
-                    return GetTrustCharacteristicName(effect.effect_type, effect.sub_effect_type);
+                    return GetTrustCharacteristicName(effect.EffectType, effect.SubEffectType);
                 default:
                     throw new NotImplementedException();
             }

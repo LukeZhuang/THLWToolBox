@@ -4,47 +4,47 @@
     {
         public class BulletMagazineModel
         {
-            public int bullet_id { get; set; }
-            public int bullet_range { get; set; }
-            public int bullet_value { get; set; }
-            public int bullet_power_rate { get; set; }
-            public int boost_count { get; set; }
+            public int BulletId { get; set; }
+            public int BulletRange { get; set; }
+            public int BulletValue { get; set; }
+            public int BulletPowerRate { get; set; }
+            public int BoostCount { get; set; }
             // TODO: remove default value for boost_count
-            public BulletMagazineModel(int bullet_id, int bullet_range, int bullet_value, int bullet_power_rate, int boost_count=0)
+            public BulletMagazineModel(int bulletId, int bulletRange, int bulletValue, int bulletPowerRate, int boostCount = 0)
             {
-                this.bullet_id = bullet_id;
-                this.bullet_range = bullet_range;
-                this.bullet_value = bullet_value;
-                this.bullet_power_rate = bullet_power_rate;
-                this.boost_count = boost_count;
+                this.BulletId = bulletId;
+                this.BulletRange = bulletRange;
+                this.BulletValue = bulletValue;
+                this.BulletPowerRate = bulletPowerRate;
+                this.BoostCount = boostCount;
             }
         }
 
         public class EffectModel
         {
-            public int effect_type { get; set; }
-            public int sub_effect_type { get; set; }
-            public int range { get; set; }
-            public int unit_role { get; set; }
-            public int turn { get; set; }
-            public EffectModel(int effect_type, int sub_effect_type, int range, int unit_role, int turn)
+            public int EffectType { get; set; }
+            public int SubEffectType { get; set; }
+            public int Range { get; set; }
+            public int UnitRole { get; set; }
+            public int Turn { get; set; }
+            public EffectModel(int effectType, int subEffectType, int range, int unitRole, int turn)
             {
-                this.effect_type = effect_type;
-                this.sub_effect_type = sub_effect_type;
-                this.range = range;
-                this.unit_role = unit_role;
-                this.turn = turn;
+                this.EffectType = effectType;
+                this.SubEffectType = subEffectType;
+                this.Range = range;
+                this.UnitRole = unitRole;
+                this.Turn = turn;
             }
         }
 
         public class BulletAddonModel
         {
-            public int id { get; set; }
-            public int value { get; set; }
+            public int Id { get; set; }
+            public int Value { get; set; }
             public BulletAddonModel(int id, int value)
             {
-                this.id = id;
-                this.value = value;
+                this.Id = id;
+                this.Value = value;
             }
         }
     }

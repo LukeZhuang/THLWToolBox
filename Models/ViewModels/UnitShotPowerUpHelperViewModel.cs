@@ -3,12 +3,12 @@
 namespace THLWToolBox.Models.ViewModels
 {
     // Display model definition
-    public class UnitShotPowerUpHelperDisplayModel
+    public class UnitShotPowerUpDisplayModel
     {
-        public AttackData attack_data { get; set; }
-        public UnitShotPowerUpHelperDisplayModel(AttackData attack_data)
+        public AttackData AttackData { get; set; }
+        public UnitShotPowerUpDisplayModel(AttackData attackData)
         {
-            this.attack_data = attack_data;
+            this.AttackData = attackData;
         }
     }
 
@@ -16,7 +16,7 @@ namespace THLWToolBox.Models.ViewModels
     {
         // Display models
         public List<PlayerUnitData>? QueryUnits { get; set; }
-        public List<UnitShotPowerUpHelperDisplayModel>? PowerUpDatas { get; set; }
+        public List<UnitShotPowerUpDisplayModel>? PowerUpDatas { get; set; }
 
         // Webpage query Parameters
         public string? UnitSymbolName { get; set; }

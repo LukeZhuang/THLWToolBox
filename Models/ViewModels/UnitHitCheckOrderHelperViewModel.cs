@@ -4,34 +4,34 @@ namespace THLWToolBox.Models.ViewModels
 {
     public class MagazineHitCheckInfo
     {
-        public int magazine_id { get; set; }
-        public int first_bullet_id { get; set; }
-        public string element_info { get; set; }
-        public string break_abnormal_info { get; set; }
-        public MagazineHitCheckInfo(int magazine_id, int first_bullet_id, string element_info, string break_abnormal_info)
+        public int MagazineId { get; set; }
+        public int FirstBulletId { get; set; }
+        public string ElementInfo { get; set; }
+        public string BreakAbnormalInfo { get; set; }
+        public MagazineHitCheckInfo(int magazineId, int firstBulletId, string elementInfo, string breakAbnormalInfo)
         {
-            this.magazine_id = magazine_id;
-            this.first_bullet_id = first_bullet_id;
-            this.element_info = element_info;
-            this.break_abnormal_info = break_abnormal_info;
+            this.MagazineId = magazineId;
+            this.FirstBulletId = firstBulletId;
+            this.ElementInfo = elementInfo;
+            this.BreakAbnormalInfo = breakAbnormalInfo;
         }
     }
 
     // Display model definition
     public class UnitHitCheckOrderHelperDisplayModel
     {
-        public string type_name { get; set; }
-        public string shot_name { get; set; }
-        public int boost_id { get; set; }
-        public int total_bullet_count { get; set; }
-        public List<MagazineHitCheckInfo> hit_check_order_info { get; set; }
-        public UnitHitCheckOrderHelperDisplayModel(string type_name, string shot_name, int boost_id, int total_bullet_count, List<MagazineHitCheckInfo> hit_check_order_info)
+        public string TypeName { get; set; }
+        public string ShotName { get; set; }
+        public int BoostId { get; set; }
+        public int TotalBulletCount { get; set; }
+        public List<MagazineHitCheckInfo> HitCheckOrderInfo { get; set; }
+        public UnitHitCheckOrderHelperDisplayModel(string typeName, string shotName, int boostId, int totalBulletCount, List<MagazineHitCheckInfo> hitCheckOrderInfo)
         {
-            this.type_name = type_name;
-            this.shot_name = shot_name;
-            this.boost_id = boost_id;
-            this.total_bullet_count = total_bullet_count;
-            this.hit_check_order_info = hit_check_order_info;
+            this.TypeName = typeName;
+            this.ShotName = shotName;
+            this.BoostId = boostId;
+            this.TotalBulletCount = totalBulletCount;
+            this.HitCheckOrderInfo = hitCheckOrderInfo;
         }
     }
     public class UnitHitCheckOrderHelperViewModel
@@ -56,10 +56,10 @@ namespace THLWToolBox.Models.ViewModels
             text += bulletGridWrapper + "异常" + "</div>";
             foreach (var hitCheckInfo in hitCheckInfos)
             {
-                text += bulletGridWrapper + "<b><font color=#FF6600>" + hitCheckInfo.magazine_id + "</font></b>" + "</div>";
-                text += bulletGridWrapper + hitCheckInfo.first_bullet_id + "</div>";
-                text += bulletGridWrapper + hitCheckInfo.element_info + "</div>";
-                text += bulletGridWrapper + hitCheckInfo.break_abnormal_info + "</div>";
+                text += bulletGridWrapper + "<b><font color=#FF6600>" + hitCheckInfo.MagazineId + "</font></b>" + "</div>";
+                text += bulletGridWrapper + hitCheckInfo.FirstBulletId + "</div>";
+                text += bulletGridWrapper + hitCheckInfo.ElementInfo + "</div>";
+                text += bulletGridWrapper + hitCheckInfo.BreakAbnormalInfo + "</div>";
             }
             text += "</div>";
             return text;

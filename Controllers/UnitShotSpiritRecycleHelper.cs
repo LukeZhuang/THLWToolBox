@@ -56,7 +56,7 @@ namespace THLWToolBox.Controllers
 
 
             List<PlayerUnitData> queryUnits = new();
-            List<UnitShotSpiritRecycleHelperDisplayModel> spiritRecycleDatas = new();
+            List<UnitShotSpiritRecycleDisplayModel> spiritRecycleDatas = new();
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
@@ -66,7 +66,7 @@ namespace THLWToolBox.Controllers
                     if (!request.UnitSymbolName.Equals(curUnitSymbolName))
                         continue;
                     queryUnits.Add(unitRecord);
-                    List<UnitShotSpiritRecycleHelperDisplayModel> unitSpiritRecycleDatas = new()
+                    List<UnitShotSpiritRecycleDisplayModel> unitSpiritRecycleDatas = new()
                     {
                         CreateSpiritPowerRecycleDisplayModel(new AttackData("扩散", shotDict[unitRecord.shot1_id]), bulletDict, request),
                         CreateSpiritPowerRecycleDisplayModel(new AttackData("集中", shotDict[unitRecord.shot2_id]), bulletDict, request),
@@ -86,26 +86,26 @@ namespace THLWToolBox.Controllers
 
         static void AddBulletToBoost(BulletMagazineModel magazine, Dictionary<int, PlayerUnitBulletData> bulletDict, ref List<List<MagazineInfo>> boosts_info)
         {
-            if (!bulletDict.ContainsKey(magazine.bullet_id))
+            if (!bulletDict.ContainsKey(magazine.BulletId))
                 return;
-            PlayerUnitBulletData bulletRecord = bulletDict[magazine.bullet_id];
+            PlayerUnitBulletData bulletRecord = bulletDict[magazine.BulletId];
             int hit = bulletRecord.hit;
             bool isSureHit = false;
             if (bulletRecord.bullet1_addon_id == 1 || bulletRecord.bullet2_addon_id == 1 || bulletRecord.bullet3_addon_id == 1)
                 isSureHit = true;
-            boosts_info[magazine.boost_count].Add(new MagazineInfo(magazine.bullet_value, hit, isSureHit));
+            boosts_info[magazine.BoostCount].Add(new MagazineInfo(magazine.BulletValue, hit, isSureHit));
         }
 
-        static UnitShotSpiritRecycleHelperDisplayModel CreateSpiritPowerRecycleDisplayModel(AttackData attack, Dictionary<int, PlayerUnitBulletData> bulletDict, UnitShotSpiritRecycleHelperViewModel request)
+        static UnitShotSpiritRecycleDisplayModel CreateSpiritPowerRecycleDisplayModel(AttackData attack, Dictionary<int, PlayerUnitBulletData> bulletDict, UnitShotSpiritRecycleHelperViewModel request)
         {
             List<List<MagazineInfo>> boosts_info = new();
             for (int boostId = 0; boostId < 4; boostId++)
                 boosts_info.Add(new List<MagazineInfo>());
             for (int magazineId = 0; magazineId < 6; magazineId++)
-                AddBulletToBoost(attack.magazines[magazineId], bulletDict, ref boosts_info);
-            SpiritRecycleModel spiritRecycleInput = new(attack.phantasm_power_up_rate, attack.magazines[0].bullet_range, boosts_info);
+                AddBulletToBoost(attack.Magazines[magazineId], bulletDict, ref boosts_info);
+            SpiritRecycleModel spiritRecycleInput = new(attack.PhantasmPowerUpRate, attack.Magazines[0].BulletRange, boosts_info);
             List<double> spiritRecycles = CalcShotModel(spiritRecycleInput, request);
-            return new UnitShotSpiritRecycleHelperDisplayModel(attack.attack_type_name, attack.name, attack.magazines[0].bullet_range, spiritRecycles);
+            return new UnitShotSpiritRecycleDisplayModel(attack.AttackTypeName, attack.Name, attack.Magazines[0].BulletRange, spiritRecycles);
         }
 
         static double GetActualHitRate(int bulletHit, int hitRank, int sourceSmoke, int targetCharge)
@@ -122,8 +122,8 @@ namespace THLWToolBox.Controllers
         static List<double> CalcShotModel(SpiritRecycleModel spiritRecycleInput, UnitShotSpiritRecycleHelperViewModel request)
         {
             List<double> spiritRecycles = new();
-            int spRate = spiritRecycleInput.phantasm_power_up_rate;
-            int enemyCount = (spiritRecycleInput.bullet_range == 1) ? 1 : request.EnemyCount.GetValueOrDefault(1);
+            int spRate = spiritRecycleInput.PhantasmPowerUpRate;
+            int enemyCount = (spiritRecycleInput.BulletRange == 1) ? 1 : request.EnemyCount.GetValueOrDefault(1);
             int hitRank = request.HitRank.GetValueOrDefault(0);
             if (hitRank < -10 || hitRank > 10)
                 throw new NotImplementedException();
@@ -134,13 +134,13 @@ namespace THLWToolBox.Controllers
             using (Py.GIL())
             {
                 var accumulatedSP = np.zeros(MONTE_CARLO);
-                foreach (List<MagazineInfo> boost in spiritRecycleInput.boosts_info)
+                foreach (List<MagazineInfo> boost in spiritRecycleInput.BoostsInfo)
                 {
                     foreach (MagazineInfo magazineInfo in boost)
                     {
-                        int bulletCount = magazineInfo.bullet_value * enemyCount;
-                        bool isSureHit = magazineInfo.is_sure_hit;
-                        double actualHit = GetActualHitRate(magazineInfo.hit, hitRank, sourceSmoke, targetCharge);
+                        int bulletCount = magazineInfo.BulletValue * enemyCount;
+                        bool isSureHit = magazineInfo.IsSureHit;
+                        double actualHit = GetActualHitRate(magazineInfo.Hit, hitRank, sourceSmoke, targetCharge);
                         var spiritRecycleMatrix = np.floor(spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04) * 0.01;
                         if (!isSureHit)
                         {
@@ -165,30 +165,30 @@ namespace THLWToolBox.Controllers
         // used for calculation inside this helper only
         private class MagazineInfo
         {
-            public int bullet_value { get; set; }
-            public int hit { get; set; }
-            public bool is_sure_hit { get; set; }
-            public MagazineInfo(int bullet_value, int hit, bool is_sure_hit)
+            public int BulletValue { get; set; }
+            public int Hit { get; set; }
+            public bool IsSureHit { get; set; }
+            public MagazineInfo(int bulletValue, int hit, bool isSureHit)
             {
-                this.bullet_value = bullet_value;
-                this.hit = hit;
-                this.is_sure_hit = is_sure_hit;
+                this.BulletValue = bulletValue;
+                this.Hit = hit;
+                this.IsSureHit = isSureHit;
             }
         }
 
         // used for calculation inside this helper only
         private class SpiritRecycleModel
         {
-            public int phantasm_power_up_rate { get; set; }
-            public int bullet_range { get; set; }
+            public int PhantasmPowerUpRate { get; set; }
+            public int BulletRange { get; set; }
 
             // 4 boosts, each boosts contains a list of bullet information, including value/hit/isSureHit
-            public List<List<MagazineInfo>> boosts_info { get; set; }
-            public SpiritRecycleModel(int phantasm_power_up_rate, int bullet_range, List<List<MagazineInfo>> boosts_info)
+            public List<List<MagazineInfo>> BoostsInfo { get; set; }
+            public SpiritRecycleModel(int phantasmPowerUpRate, int bulletRange, List<List<MagazineInfo>> boostsInfo)
             {
-                this.phantasm_power_up_rate = phantasm_power_up_rate;
-                this.bullet_range = bullet_range;
-                this.boosts_info = boosts_info;
+                this.PhantasmPowerUpRate = phantasmPowerUpRate;
+                this.BulletRange = bulletRange;
+                this.BoostsInfo = boostsInfo;
             }
         }
     }

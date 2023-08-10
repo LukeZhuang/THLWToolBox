@@ -5,12 +5,12 @@ namespace THLWToolBox.Models.ViewModels
     // Display model definition
     public class UnitRaceDisplayModel
     {
-        public PlayerUnitData unit { get; set; }
-        public string races { get; set; }
+        public PlayerUnitData Unit { get; set; }
+        public string Races { get; set; }
         public UnitRaceDisplayModel(PlayerUnitData unit, string races)
         {
-            this.unit = unit;
-            this.races = races;
+            this.Unit = unit;
+            this.Races = races;
         }
     }
 

@@ -152,28 +152,28 @@
         @foreach (var item in Model.PowerUpDatas!) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.attack_data.attack_type_name)
+                    @Html.DisplayFor(modelItem => item.AttackData.AttackTypeName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.attack_data.name)
+                    @Html.DisplayFor(modelItem => item.AttackData.Name)
                 </td>
                 <td>
-                    @Html.Raw(CreatePowerUpRateString(item.attack_data.power_up_rates[0]))
+                    @Html.Raw(CreatePowerUpRateString(item.AttackData.PowerUpRates[0]))
                 </td>
                 <td>
-                    @Html.Raw(CreatePowerUpRateString(item.attack_data.power_up_rates[1]))
+                    @Html.Raw(CreatePowerUpRateString(item.AttackData.PowerUpRates[1]))
                 </td>
                 <td>
-                    @Html.Raw(CreatePowerUpRateString(item.attack_data.power_up_rates[2]))
+                    @Html.Raw(CreatePowerUpRateString(item.AttackData.PowerUpRates[2]))
                 </td>
                 <td>
-                    @Html.Raw(CreatePowerUpRateString(item.attack_data.power_up_rates[3]))
+                    @Html.Raw(CreatePowerUpRateString(item.AttackData.PowerUpRates[3]))
                 </td>
                 <td>
-                    @Html.Raw(CreatePowerUpRateString(item.attack_data.power_up_rates[4]))
+                    @Html.Raw(CreatePowerUpRateString(item.AttackData.PowerUpRates[4]))
                 </td>
                 <td>
-                    @Html.Raw(CreatePowerUpRateString(item.attack_data.power_up_rates[5]))
+                    @Html.Raw(CreatePowerUpRateString(item.AttackData.PowerUpRates[5]))
                 </td>
             </tr>
         }

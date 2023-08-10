@@ -3,18 +3,18 @@
 namespace THLWToolBox.Models.ViewModels
 {
     // Display model definition
-    public class UnitShotSpiritRecycleHelperDisplayModel
+    public class UnitShotSpiritRecycleDisplayModel
     {
-        public string type_name { get; set; }
-        public string shot_name { get; set; }
-        public int range { get; set; }
-        public List<double> boost_recycles { get; set; }
-        public UnitShotSpiritRecycleHelperDisplayModel(string type_name, string shot_name, int range, List<double> boost_recycles)
+        public string TypeName { get; set; }
+        public string ShotName { get; set; }
+        public int Range { get; set; }
+        public List<double> BoostRecycles { get; set; }
+        public UnitShotSpiritRecycleDisplayModel(string typeName, string shotName, int range, List<double> boostRecycles)
         {
-            this.type_name = type_name;
-            this.shot_name = shot_name;
-            this.range = range;
-            this.boost_recycles = boost_recycles;
+            this.TypeName = typeName;
+            this.ShotName = shotName;
+            this.Range = range;
+            this.BoostRecycles = boostRecycles;
         }
     }
 
@@ -22,7 +22,7 @@ namespace THLWToolBox.Models.ViewModels
     {
         // Display models
         public List<PlayerUnitData>? QueryUnits { get; set; }
-        public List<UnitShotSpiritRecycleHelperDisplayModel>? SpiritRecycleDatas { get; set; }
+        public List<UnitShotSpiritRecycleDisplayModel>? SpiritRecycleDatas { get; set; }
 
         // Webpage query Parameters
         public string? UnitSymbolName { get; set; }
