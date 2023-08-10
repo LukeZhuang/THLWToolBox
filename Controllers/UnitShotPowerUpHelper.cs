@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
-using static THLWToolBox.Models.ViewModels.UnitShotPowerUpHelperViewModel;
 
 namespace THLWToolBox.Controllers
 {

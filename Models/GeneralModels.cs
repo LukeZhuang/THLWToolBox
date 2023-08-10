@@ -1,6 +1,4 @@
-﻿using static THLWToolBox.Helpers.TypeHelper;
-
-namespace THLWToolBox.Models
+﻿namespace THLWToolBox.Models
 {
     public class GeneralModels
     {

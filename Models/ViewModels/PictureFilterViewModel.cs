@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using THLWToolBox.Helpers;
 using THLWToolBox.Models.DataTypes;
-using static THLWToolBox.Helpers.GeneralHelper;
 using static THLWToolBox.Helpers.SimplifyEffectsHelper;
 
 namespace THLWToolBox.Models.ViewModels

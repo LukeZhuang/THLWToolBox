@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
 using THLWToolBox.Models.DataTypes;
 
 namespace THLWToolBox.Models.ViewModels

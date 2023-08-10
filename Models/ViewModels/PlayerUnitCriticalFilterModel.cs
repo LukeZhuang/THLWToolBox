@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Client;
-using THLWToolBox.Models.DataTypes;
+﻿using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 
 namespace THLWToolBox.Models

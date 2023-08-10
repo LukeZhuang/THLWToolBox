@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using THLWToolBox.Models.DataTypes;
+﻿using THLWToolBox.Models.DataTypes;
 
 namespace THLWToolBox.Models.ViewModels
 {

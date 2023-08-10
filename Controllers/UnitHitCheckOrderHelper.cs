@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 using THLWToolBox.Data;
-using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.GeneralModels;
 using static THLWToolBox.Helpers.TypeHelper;
 using static THLWToolBox.Helpers.GeneralHelper;
-using Azure.Core;
 
 namespace THLWToolBox.Controllers
 {
