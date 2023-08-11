@@ -70,6 +70,12 @@ namespace THLWToolBox.Helpers
             return text;
         }
 
+        public static string GetWikiURL(string itemName)
+        {
+            string wikiURL = "https://wiki.biligame.com/touhoulostword/" + itemName;
+            return "<a href=" + wikiURL + ">" + itemName + "</a>";
+        }
+
         public static List<AttackWithWeightModel> GetUnitAttacksWithWeight(PlayerUnitData unitRecord, AttackSelectionModel attackSelection,
                                                                            Dictionary<int, PlayerUnitShotData> shotDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDict)
         {

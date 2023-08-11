@@ -233,7 +233,7 @@
     {
         <tr>
             <td>
-                <a href=@Html.Raw("https://wiki.biligame.com/touhoulostword/" + item.name)>@Html.DisplayFor(modelItem => item.name)</a>
+                @Html.Raw(GetWikiURL(item.name))
             </td>
             <td>
                 @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/pictures_img/" + item.id + ".png")))

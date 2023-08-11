@@ -23,7 +23,6 @@
         position: relative;
         width: 100%;
         padding: 2px 2px;
-        /*border: 1px solid rgba(0, 0, 0, 0.1);*/
     }
 
     .bullet-wrapper {
@@ -139,7 +138,7 @@
                         @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.name + item.symbol_name)
+                        @Html.Raw(GetWikiURL(item.name + item.symbol_name))
                     </td>
                 </tr>
             }

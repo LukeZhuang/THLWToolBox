@@ -151,10 +151,10 @@
                         @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.Unit.name + item.Unit.symbol_name)
+                        @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
                     </td>
                     <td>
-                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.Races))
+                        @Html.Raw(StringFromDatabaseForDisplay(item.Races))
                     </td>
                 </tr>
             }
@@ -183,10 +183,10 @@
                         @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.Unit.name + item.Unit.symbol_name)
+                        @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
                     </td>
                     <td>
-                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.Races))
+                        @Html.Raw(StringFromDatabaseForDisplay(item.Races))
                     </td>
                 </tr>
             }

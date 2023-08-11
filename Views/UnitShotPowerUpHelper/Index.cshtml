@@ -109,7 +109,7 @@
                     @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.id + ".png")))
                 </td>
                 <td>
-                    @Html.Raw(item.name + item.symbol_name)
+                    @Html.Raw(GetWikiURL(item.name + item.symbol_name))
                 </td>
             </tr>
         }
