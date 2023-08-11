@@ -1,6 +1,8 @@
-﻿@model PlayerUnitCriticalFilterModel
+﻿@model UnitCriticalHitFilterViewModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitCriticalHitFilterViewModel;
 
 @{
     ViewData["Title"] = "Index";
@@ -12,37 +14,32 @@
 </head>
 
 <style>
-    .shot-element-display-grid {
-        border: none;
-        width: 100%;
-        background: white;
-        padding: 7px 7px;
-        text-align: left;
-        text-decoration: none;
-        display: inline-block;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .shot-row {
+    .attacks-grid {
+        display: inline-grid;
+        grid-template-columns: 20% auto;
+        grid-auto-flow: row;
         text-align: center;
         position: relative;
         width: 100%;
+        padding: 2px 2px;
+    }
+
+    .attack-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .magazines-grid {
         display: inline-grid;
-        grid-template-columns: 10% auto;
-        padding: 2px 2px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        grid-template-columns: 20% auto;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
     }
 
-    .shot-name-grid {
+    .magazine-wrapper {
         padding: 2px 2px;
-        position: relative;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .critical-bullet-rows {
-        text-align: left;
-        padding: 2px 2px;
-        position: relative;
         border: 1px solid rgba(0, 0, 0, 0.1);
     }
 </style>
@@ -52,12 +49,12 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script type="text/javascript">
-        $('#nameinput1').autocomplete({
+        $('#UnitSymbolNameInput').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/InputAutoCompleteHelper/SearchUser',
                     dataType: 'json',
-                    data: { term: $('#nameinput1').val() },
+                    data: { term: $('#UnitSymbolNameInput').val() },
                     success: function (data) {
                         var result = $.map(data, function (item) {
                             return {
@@ -70,7 +67,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
-                $('#nameinput1').val(ui.item.label);
+                $('#UnitSymbolNameInput').val(ui.item.label);
             },
             create: function () {
                 $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -81,12 +78,12 @@
                 };
             }
         });
-        $('#nameinput2').autocomplete({
+        $('#RaceNameInput').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/InputAutoCompleteHelper/SearchRace',
                     dataType: 'json',
-                    data: { term: $('#nameinput2').val() },
+                    data: { term: $('#RaceNameInput').val() },
                     success: function (data) {
                         var result = $.map(data, function (item) {
                             return {
@@ -99,7 +96,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
-                $('#nameinput2').val(ui.item.label);
+                $('#RaceNameInput').val(ui.item.label);
             },
             create: function () {
                 $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -120,11 +117,11 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="unitCriticalHitFilterHelperModal" tabindex="-1" aria-labelledby="unitCriticalHitFilterHelper" aria-hidden="true">
+<div class="modal fade" id="UnitCriticalHitFilterModal" tabindex="-1" aria-labelledby="UnitCriticalHitFilter" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitCriticalHitFilterHelper">帮助：角色筛选器（按特攻）</h4>
+                <h4 class="modal-title" id="UnitCriticalHitFilter">帮助：角色筛选器（按特攻）</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -132,7 +129,7 @@
                 <p>2. 排序法则： 按每个角色对选定范围的弹幕总得分从大到小排序 </p>
                 <p>3. 得分计算法则：角色对应攻击力x倍率x子弹数x命中率x(1+会心率)x5级弹幕补正x权重，若特攻则会心率为1，词条仅考虑必中/硬质/斩裂，<b>由于不计算其他任何补正以及技能组等因素，因此<font color=#FF0000>排名和得分仅供参考，不反映角色的实际强度</font></b>。角色面板取满级、满强化（满普通香木、满升格、满觉醒）、转生前且未装备任何绘卷的数据 </p>
                 <p>4. 权重计算法则（暂定）：扩散射击1倍，集中射击1.2倍，小符卡3倍，终符5倍，对群射击/符卡再乘以1.5。相同的小符卡仅参与一次计算 </p>
-                <p>5. 目前已实装种族列表：@Html.Raw(Model.RaceList)</p>
+                <p>5. 目前已实装种族列表：@Html.Raw(Model.AllRacesStr)</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
@@ -143,12 +140,12 @@
 
 
 <div class="home-box">
-    <form asp-controller="PlayerUnitCriticalHitFilter" asp-action="Index" method="post">
+    <form asp-controller="UnitCriticalHitFilter" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">射击类型</div>
             <div class="buttons-grid">
-                <div class="btn-checkbox">@Html.CheckBox("Shot1", false) 扩散射击</div>
-                <div class="btn-checkbox">@Html.CheckBox("Shot2", false) 集中射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("SpreadShot", false) 扩散射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("FocusShot", false) 集中射击</div>
                 <div class="btn-checkbox">@Html.CheckBox("NormalSpellcard", true) 小符卡</div>
                 <div class="btn-checkbox">@Html.CheckBox("LastWord", true) 终符</div>
             </div>
@@ -159,7 +156,7 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput1" asp-for="UnitSymbolName" class="selector">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
                 </div>
             </div>
         </div>
@@ -168,13 +165,13 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">种族名（带补全建议）:</div>
                 <div class="selects-box">
-                    <input type="text" id="nameinput2" asp-for="RaceName" class="selector">
+                    <input type="text" id="RaceNameInput" asp-for="RaceName" class="selector">
                 </div>
             </div>
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitCriticalHitFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitCriticalHitFilterModal">帮助</button>
     </form>
 </div>
 
@@ -195,17 +192,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.QueryUnit!)
+            @foreach (var item in Model.QueryUnits!)
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.unit.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.unit.name + item.unit.symbol_name)
+                        @Html.Raw(item.Unit.name + item.Unit.symbol_name)
                     </td>
                     <td>
-                        @Html.Raw(GeneralHelper.StringFromDatabaseForDisplay(item.races))
+                        @Html.Raw(StringFromDatabaseForDisplay(item.Races))
                     </td>
                 </tr>
             }
@@ -222,9 +219,6 @@
                     角色名
                 </th>
                 <th>
-                    阳攻/阴攻
-                </th>
-                <th>
                     射击
                 </th>
                 <th>
@@ -233,23 +227,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.CriticalMatchUnitResults!)
+            @foreach (var item in Model.CriticalMatchUnits!)
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.PlayerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.PlayerUnitData.name + item.PlayerUnitData.symbol_name)
+                        @Html.Raw(item.Unit.name + item.Unit.symbol_name)
                     </td>
                     <td>
-                        @Html.Raw(item.PlayerUnitData.yang_attack + "/" + item.PlayerUnitData.yin_attack)
-                    </td>
-                    <td>
-                        @*@Html.DisplayFor(modelItem => item.unitBulletList)*@
-                        <div class="shot-element-display-grid">
-                            @Html.Raw(PlayerUnitCriticalFilterModel.DisplayShotCriticals(item.unitBulletList))
-                        </div>
+                        @Html.Raw(DisplayUnitCriticalHit(item.UnitAttackCriticalHitList))
                     </td>
                     <td>
                         @Html.Raw((item.TotalScore).ToString("0.00"))

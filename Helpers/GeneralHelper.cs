@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Web;
 using THLWToolBox.Models.DataTypes;
 using static THLWToolBox.Helpers.TypeHelper;
@@ -27,7 +28,7 @@ namespace THLWToolBox.Helpers
             double totalPower = (bulletMagazine.BulletPowerRate / 100.0) * bulletMagazine.BulletValue;
             double hit = (bulletRecord.hit / 100.0);
             double critic = (1 + (isCriticalRace ? 100.0 : bulletRecord.critical) / 100.0);
-            double rangeWeight = (bulletMagazine.BulletRange == 2 ? 1.5 : 1.0);
+            double rangeWeight = (bulletMagazine.BulletRange == 2 ? AttackScoreWeights.RangeAll : AttackScoreWeights.RangeSolo);
             double powerUpRate = powerRate / 100.0;
 
             List<BulletAddonModel> bulletAddons = GetBulletAddons(bulletRecord);
@@ -67,6 +68,24 @@ namespace THLWToolBox.Helpers
             text = text.Replace("@BOLDSTART@", "<b>");
             text = text.Replace("@BOLDEND@", "</b>");
             return text;
+        }
+
+        public static List<AttackWithWeightModel> GetUnitAttacksWithWeight(PlayerUnitData unitRecord, AttackSelectionModel attackSelection,
+                                                                           Dictionary<int, PlayerUnitShotData> shotDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDict)
+        {
+            List<AttackWithWeightModel> attacks = new();
+            if (attackSelection.SpreadShot)
+                attacks.Add(new AttackWithWeightModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id]), AttackScoreWeights.TypeSpreadShot));
+            if (attackSelection.FocusShot)
+                attacks.Add(new AttackWithWeightModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id]), AttackScoreWeights.TypeFocusShot));
+            if (attackSelection.NormalSpellcard)
+            {
+                attacks.Add(new AttackWithWeightModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id]), AttackScoreWeights.TypeNormalSpellcard));
+                attacks.Add(new AttackWithWeightModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id]), AttackScoreWeights.TypeNormalSpellcard));
+            }
+            if (attackSelection.LastWord)
+                attacks.Add(new AttackWithWeightModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), AttackScoreWeights.TypeLastWord));
+            return attacks;
         }
     }
 }

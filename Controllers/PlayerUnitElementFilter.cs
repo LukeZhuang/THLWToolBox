@@ -121,12 +121,12 @@ namespace THLWToolBox.Controllers
             int level5PowerRate = pusd.shot_level5_power_rate;
             List<BulletMagazineModel> bulletMagazineList = new()
             {
-                new BulletMagazineModel(pusd.magazine0_bullet_id, pusd.magazine0_bullet_range, pusd.magazine0_bullet_value, pusd.magazine0_bullet_power_rate),
-                new BulletMagazineModel(pusd.magazine1_bullet_id, pusd.magazine1_bullet_range, pusd.magazine1_bullet_value, pusd.magazine1_bullet_power_rate),
-                new BulletMagazineModel(pusd.magazine2_bullet_id, pusd.magazine2_bullet_range, pusd.magazine2_bullet_value, pusd.magazine2_bullet_power_rate),
-                new BulletMagazineModel(pusd.magazine3_bullet_id, pusd.magazine3_bullet_range, pusd.magazine3_bullet_value, pusd.magazine3_bullet_power_rate),
-                new BulletMagazineModel(pusd.magazine4_bullet_id, pusd.magazine4_bullet_range, pusd.magazine4_bullet_value, pusd.magazine4_bullet_power_rate),
-                new BulletMagazineModel(pusd.magazine5_bullet_id, pusd.magazine5_bullet_range, pusd.magazine5_bullet_value, pusd.magazine5_bullet_power_rate)
+                new BulletMagazineModel(1, pusd.magazine0_bullet_id, pusd.magazine0_bullet_range, pusd.magazine0_bullet_value, pusd.magazine0_bullet_power_rate, 0),
+                new BulletMagazineModel(2, pusd.magazine1_bullet_id, pusd.magazine1_bullet_range, pusd.magazine1_bullet_value, pusd.magazine1_bullet_power_rate, pusd.magazine1_boost_count),
+                new BulletMagazineModel(3, pusd.magazine2_bullet_id, pusd.magazine2_bullet_range, pusd.magazine2_bullet_value, pusd.magazine2_bullet_power_rate, pusd.magazine2_boost_count),
+                new BulletMagazineModel(4, pusd.magazine3_bullet_id, pusd.magazine3_bullet_range, pusd.magazine3_bullet_value, pusd.magazine3_bullet_power_rate, pusd.magazine3_boost_count),
+                new BulletMagazineModel(5, pusd.magazine4_bullet_id, pusd.magazine4_bullet_range, pusd.magazine4_bullet_value, pusd.magazine4_bullet_power_rate, pusd.magazine4_boost_count),
+                new BulletMagazineModel(6, pusd.magazine5_bullet_id, pusd.magazine5_bullet_range, pusd.magazine5_bullet_value, pusd.magazine5_bullet_power_rate, pusd.magazine5_boost_count)
             };
 
             List<Tuple<PlayerUnitBulletData?, int>> searchResult;
@@ -150,12 +150,12 @@ namespace THLWToolBox.Controllers
             int level5PowerRate = puscd.shot_level5_power_rate;
             List<BulletMagazineModel> bulletMagazineList = new()
             {
-                new BulletMagazineModel(puscd.magazine0_bullet_id, puscd.magazine0_bullet_range, puscd.magazine0_bullet_value, puscd.magazine0_bullet_power_rate),
-                new BulletMagazineModel(puscd.magazine1_bullet_id, puscd.magazine1_bullet_range, puscd.magazine1_bullet_value, puscd.magazine1_bullet_power_rate),
-                new BulletMagazineModel(puscd.magazine2_bullet_id, puscd.magazine2_bullet_range, puscd.magazine2_bullet_value, puscd.magazine2_bullet_power_rate),
-                new BulletMagazineModel(puscd.magazine3_bullet_id, puscd.magazine3_bullet_range, puscd.magazine3_bullet_value, puscd.magazine3_bullet_power_rate),
-                new BulletMagazineModel(puscd.magazine4_bullet_id, puscd.magazine4_bullet_range, puscd.magazine4_bullet_value, puscd.magazine4_bullet_power_rate),
-                new BulletMagazineModel(puscd.magazine5_bullet_id, puscd.magazine5_bullet_range, puscd.magazine5_bullet_value, puscd.magazine5_bullet_power_rate)
+                new BulletMagazineModel(1, puscd.magazine0_bullet_id, puscd.magazine0_bullet_range, puscd.magazine0_bullet_value, puscd.magazine0_bullet_power_rate, 0),
+                new BulletMagazineModel(2, puscd.magazine1_bullet_id, puscd.magazine1_bullet_range, puscd.magazine1_bullet_value, puscd.magazine1_bullet_power_rate, puscd.magazine1_boost_count),
+                new BulletMagazineModel(3, puscd.magazine2_bullet_id, puscd.magazine2_bullet_range, puscd.magazine2_bullet_value, puscd.magazine2_bullet_power_rate, puscd.magazine2_boost_count),
+                new BulletMagazineModel(4, puscd.magazine3_bullet_id, puscd.magazine3_bullet_range, puscd.magazine3_bullet_value, puscd.magazine3_bullet_power_rate, puscd.magazine3_boost_count),
+                new BulletMagazineModel(5, puscd.magazine4_bullet_id, puscd.magazine4_bullet_range, puscd.magazine4_bullet_value, puscd.magazine4_bullet_power_rate, puscd.magazine4_boost_count),
+                new BulletMagazineModel(6, puscd.magazine5_bullet_id, puscd.magazine5_bullet_range, puscd.magazine5_bullet_value, puscd.magazine5_bullet_power_rate, puscd.magazine5_boost_count)
             };
             
             List<Tuple<PlayerUnitBulletData?, int>> searchResult;

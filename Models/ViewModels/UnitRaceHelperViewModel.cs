@@ -25,7 +25,7 @@ namespace THLWToolBox.Models.ViewModels
         public string? RaceName { get; set; }
 
         // Other Helper Data
-        public string? AllRacesStr { get; set; }
+        public string? AllRacesString { get; set; }
 
 
         // Methods

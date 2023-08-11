@@ -49,8 +49,9 @@ namespace THLWToolBox.Controllers
                     string curUnitSymbolName = unitRecord.name + unitRecord.symbol_name;
                     if (!request.UnitSymbolName.Equals(curUnitSymbolName))
                         continue;
-                    string racesStr = GetRacesStrOfUnit(unitRecord, unitRaceList, raceList);
-                    queryUnits.Add(new UnitRaceDisplayModel(unitRecord, racesStr));
+                    HashSet<int> targetRaceIds = GetRaceIdsOfUnit(unitRecord, unitRaceList);
+                    string racesString = CreateRacesStringOfUnit(targetRaceIds, raceList);
+                    queryUnits.Add(new UnitRaceDisplayModel(unitRecord, racesString));
                 }
             }
             
@@ -62,19 +63,19 @@ namespace THLWToolBox.Controllers
 
             request.QueryUnits = queryUnits;
             request.QueryRaces = queryRaces;
-            request.AllRacesStr = string.Join(", ", from rd in raceList select rd.name);
+            request.AllRacesString = string.Join(", ", from rd in raceList select rd.name);
 
             return View(request);
         }
 
-        static string GetRacesStrOfUnit(PlayerUnitData unitRecord, List<PlayerUnitRaceData> unitRaceList, List<RaceData> raceList, int highlightRaceId = -1)
+        public static HashSet<int> GetRaceIdsOfUnit(PlayerUnitData unitRecord, List<PlayerUnitRaceData> unitRaceList)
+        {
+            return new(from unitRaceRecord in unitRaceList where (unitRaceRecord.unit_id == unitRecord.id) select unitRaceRecord.race_id);
+        }
+
+        public static string CreateRacesStringOfUnit(HashSet<int> raceIdSet, List<RaceData> raceList, int highlightRaceId = -1)
         {
             List<string> races = new();
-            HashSet<int> raceIdSet = new();
-
-            foreach (var unitRaceRecord in unitRaceList)
-                if (unitRaceRecord.unit_id == unitRecord.id)
-                    raceIdSet.Add(unitRaceRecord.race_id);
 
             foreach (var raceRecord in raceList)
             {
@@ -108,19 +109,21 @@ namespace THLWToolBox.Controllers
             return raceId;
         }
 
+        static HashSet<int> GetUnitIdsOfRace(int raceId, List<PlayerUnitRaceData> unitRaceList)
+        {
+            return new(from unitRaceRecord in unitRaceList where (unitRaceRecord.race_id == raceId) select unitRaceRecord.id);
+        }
+
         static void GetUnitsOfRace(int raceId, List<PlayerUnitData> unitList, List<PlayerUnitRaceData> unitRaceList, List<RaceData> raceList, ref List<UnitRaceDisplayModel> queryRaces)
         {
-            HashSet<int> unitIds = new();
-
-            foreach (var unitRaceRecord in unitRaceList)
-                if (unitRaceRecord.race_id == raceId)
-                    unitIds.Add(unitRaceRecord.unit_id);
+            HashSet<int> unitIds = GetUnitIdsOfRace(raceId, unitRaceList);
 
             foreach (var unitRecord in unitList)
             {
                 if (!unitIds.Contains(unitRecord.id))
                     continue;
-                string racesStr = GetRacesStrOfUnit(unitRecord, unitRaceList, raceList, raceId);
+                HashSet<int> unitRaceIds = GetRaceIdsOfUnit(unitRecord, unitRaceList);
+                string racesStr = CreateRacesStringOfUnit(unitRaceIds, raceList, raceId);
                 queryRaces.Add(new UnitRaceDisplayModel(unitRecord, racesStr));
             }
         }

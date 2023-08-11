@@ -68,11 +68,11 @@ namespace THLWToolBox.Controllers
                     queryUnits.Add(unitRecord);
                     List<UnitShotSpiritRecycleDisplayModel> unitSpiritRecycleDatas = new()
                     {
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData("扩散", shotDict[unitRecord.shot1_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData("集中", shotDict[unitRecord.shot2_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData("一符", spellcardDict[unitRecord.spellcard1_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData("二符", spellcardDict[unitRecord.spellcard2_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData("终符", spellcardDict[unitRecord.spellcard5_id]), bulletDict, request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id]), bulletDict, request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id]), bulletDict, request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id]), bulletDict, request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id]), bulletDict, request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), bulletDict, request),
                     };
                     spiritRecycleDatas.AddRange(unitSpiritRecycleDatas);
                 }
