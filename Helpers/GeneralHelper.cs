@@ -138,14 +138,16 @@ namespace THLWToolBox.Helpers
 
 
         // Other helper functions
-        public static void RemoveNullElements<T>(ref List<T?> list)
+        public static List<T?> RemoveNullElements<T>(List<T?> list)
         {
-            list = list.Where(x => x != null).ToList();
+            return list.Where(x => x != null).ToList();
         }
 
         public static List<T> CastToNonNullList<T>(List<T?> list)
         {
             // make sure RemoveNullElements is called before this function is used
+            if (list.Where(x => x == null).Any())
+                throw new NullReferenceException("Must call \"RemoveNullElements\" before calling \"CastToNonNullList\"");
             return list.Cast<T>().ToList();
         }
     }

@@ -72,11 +72,7 @@ namespace THLWToolBox.Controllers
                         criticalMatchUnits.Add(unitCriticalHitData);
                 }
             }
-
-            criticalMatchUnits.Sort(delegate (UnitCriticalHitDisplayModel pd1, UnitCriticalHitDisplayModel pd2)
-            {
-                return (-pd1.TotalScore).CompareTo(-pd2.TotalScore);
-            });
+            criticalMatchUnits = criticalMatchUnits.OrderBy(x => -x.TotalScore).ToList();
 
             request.QueryUnits = queryUnits;
             request.CriticalMatchUnits = criticalMatchUnits;
@@ -89,9 +85,9 @@ namespace THLWToolBox.Controllers
         {
             double totalScore = 0;
             List<AttackCriticalHitInfo?> UnitAttackCriticalHitList =
-                new(attacks.Select(attack => SearchCriticalRaceInAttack(unitRecord, attack, targetRaceIds, ref totalScore)));
+                attacks.Select(attack => SearchCriticalRaceInAttack(unitRecord, attack, targetRaceIds, ref totalScore)).ToList();
 
-            RemoveNullElements(ref UnitAttackCriticalHitList);
+            UnitAttackCriticalHitList = RemoveNullElements(UnitAttackCriticalHitList);
             if (UnitAttackCriticalHitList.Count > 0)
                 return new UnitCriticalHitDisplayModel(unitRecord, CastToNonNullList(UnitAttackCriticalHitList), totalScore);
             
@@ -103,10 +99,10 @@ namespace THLWToolBox.Controllers
         {
             double currentScore = 0;
             List<MagazineCriticalHitInfo?> criticalHits =
-                new(attack.AttackData.Magazines.Select(magazine => SearchCriticalRaceInMagazine(unitRecord, attack, magazine, targetRaceIds, ref currentScore)));
+                attack.AttackData.Magazines.Select(magazine => SearchCriticalRaceInMagazine(unitRecord, attack, magazine, targetRaceIds, ref currentScore)).ToList();
             
             totalScore += currentScore;
-            RemoveNullElements(ref criticalHits);
+            criticalHits = RemoveNullElements(criticalHits);
 
             if (criticalHits.Count > 0)
                 return new AttackCriticalHitInfo(attack.AttackData, CastToNonNullList(criticalHits));
@@ -123,7 +119,7 @@ namespace THLWToolBox.Controllers
                 return null;
 
             List<int> bulletCriticalRaceIds = bulletToCriticalRaces.GetValueOrDefault(bulletId, new());
-            List<string> foundCriticalRaceList = foundCriticalRaceList = new(bulletCriticalRaceIds.Where(targetRaceIds.Contains).Select(x => raceDict[x]));
+            List<string> foundCriticalRaceList = bulletCriticalRaceIds.Where(targetRaceIds.Contains).Select(x => raceDict[x]).ToList();
 
             bool magazineIsCriticalHit = (foundCriticalRaceList.Count > 0);
             totalScore += CalcBulletPower(magazine, bulletDict[bulletId], unitRecord, attack.AttackData.PowerUpRates[5], attack.AttackWeight, magazineIsCriticalHit);

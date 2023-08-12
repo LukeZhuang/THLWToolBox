@@ -1,6 +1,8 @@
-﻿@model PlayerUnitElementFilterModel
+﻿@model UnitElementFilterModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitElementFilterModel;
 
 @{
     ViewData["Title"] = "Index";
@@ -12,47 +14,33 @@
 </head>
 
 <style>
-
-    .shot-element-display-grid {
-        border: none;
-        width: 100%;
-        background: white;
-        padding: 7px 7px;
-        text-align: left;
-        text-decoration: none;
-        display: inline-block;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .shot-row {
+    .attacks-grid {
+        display: inline-grid;
+        grid-template-columns: 20% auto;
+        grid-auto-flow: row;
         text-align: center;
         position: relative;
         width: 100%;
-        display: inline-grid;
-        grid-template-columns: 10% auto;
+        padding: 2px 2px;
+    }
+
+    .attack-wrapper {
         padding: 2px 2px;
         border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    .shot-name-grid {
-        padding: 2px 2px;
-        position: relative;
-        /*border: 1px solid rgba(0, 0, 0, 0.1);*/
-    }
-
-    .element-grids {
-        padding: 2px 2px;
-        position: relative;
+    .magazines-grid {
         display: inline-grid;
-        grid-template-columns: auto auto auto auto auto auto;
-        /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+        grid-template-columns: 16.6% 16.6% 16.6% 16.6% 16.8% 16.8%;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
     }
 
-    .element-grid {
-        margin-left: 2px;
+    .magazine-wrapper {
         padding: 2px 2px;
-        position: relative;
-        /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+        border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .yin-background {
@@ -72,11 +60,11 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="unitRaceFilterHelperModal" tabindex="-1" aria-labelledby="unitRaceFilterHelper" aria-hidden="true">
+<div class="modal fade" id="UnitElementFilterModal" tabindex="-1" aria-labelledby="UnitElementFilter" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="unitRaceFilterHelper">帮助：角色筛选器（按属性弹种）</h4>
+                <h4 class="modal-title" id="UnitElementFilter">帮助：角色筛选器（按属性弹种）</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -94,12 +82,12 @@
 </div>
 
 <div class="home-box">
-    <form asp-controller="PlayerUnitElementFilter" asp-action="Index" method="post">
+    <form asp-controller="UnitElementFilter" asp-action="Index" method="post">
         <div class="filter-box">
             <div class="title-box-1">射击类型</div>
             <div class="buttons-grid">
-                <div class="btn-checkbox">@Html.CheckBox("Shot1", false) 扩散射击</div>
-                <div class="btn-checkbox">@Html.CheckBox("Shot2", false) 集中射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("SpreadShot", false) 扩散射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("FocusShot", false) 集中射击</div>
                 <div class="btn-checkbox">@Html.CheckBox("NormalSpellcard", true) 小符卡</div>
                 <div class="btn-checkbox">@Html.CheckBox("LastWord", true) 终符</div>
             </div>
@@ -110,7 +98,7 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">属性：</div>
                 <div class="selects-box">
-                    <select asp-for="MainBulletElement" class="selector">
+                    <select asp-for="BulletElement1" class="selector">
                         <option value=null>{未选择}</option>
                         <option value=1>日属性</option>
                         <option value=2>月属性</option>
@@ -125,7 +113,7 @@
                 </div>
                 <div class="selects-box" style="text-align: right">弹种：</div>
                 <div class="selects-box">
-                    <select asp-for="MainBulletCategory" class="selector">
+                    <select asp-for="BulletCategory1" class="selector">
                         <option value=null>{未选择}</option>
                         <option value=1>通常弹</option>
                         <option value=2>镭射弹</option>
@@ -142,7 +130,7 @@
                 </div>
                 <div class="selects-box" style="text-align: right">性质：</div>
                 <div class="selects-box">
-                    <select asp-for="MainBulletType" class="selector">
+                    <select asp-for="BulletType1" class="selector">
                         <option value=0>阴阳均可</option>
                         <option value=1>仅阴气</option>
                         <option value=2>仅阳气</option>
@@ -156,7 +144,7 @@
             <div class="selects-grid">
                 <div class="selects-box" style="text-align: right">属性：</div>
                 <div class="selects-box">
-                    <select asp-for="SubBulletElement" class="selector">
+                    <select asp-for="BulletElement2" class="selector">
                         <option value=null>{未选择}</option>
                         <option value=1>日属性</option>
                         <option value=2>月属性</option>
@@ -171,7 +159,7 @@
                 </div>
                 <div class="selects-box" style="text-align: right">弹种：</div>
                 <div class="selects-box">
-                    <select asp-for="SubBulletCategory" class="selector">
+                    <select asp-for="BulletCategory2" class="selector">
                         <option value=null>{未选择}</option>
                         <option value=1>通常弹</option>
                         <option value=2>镭射弹</option>
@@ -188,7 +176,7 @@
                 </div>
                 <div class="selects-box" style="text-align: right">性质：</div>
                 <div class="selects-box">
-                    <select asp-for="SubBulletType" class="selector">
+                    <select asp-for="BulletType2" class="selector">
                         <option value=0>阴阳均可</option>
                         <option value=1>仅阴气</option>
                         <option value=2>仅阳气</option>
@@ -198,7 +186,7 @@
         </div>
         <div class="submit-title-box-1"></div>
         <input type="submit" value="确定" class="btn-submit" />
-        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#unitRaceFilterHelperModal">帮助</button>
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitElementFilterModal">帮助</button>
     </form>
 </div>
 
@@ -213,9 +201,6 @@
                     角色名
                 </th>
                 <th>
-                    阳攻/阴攻
-                </th>
-                <th>
                     射击属性
                 </th>
                 <th>
@@ -224,26 +209,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.QueryResults!)
+            @foreach (var item in Model.UnitElementInfos!)
             {
                 <tr>
                     <td>
-                        <div class="picture-unit-img-wrapper"><img src="@Url.Content("~/res/units_img/" + item.PlayerUnitData.id + ".png")" alt="暂无图片" onerror="this.src='@Url.Content("~/res/website/noimg.png")';" /></div>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
                     </td>
                     <td>
-                        @Html.Raw(item.PlayerUnitData.name + item.PlayerUnitData.symbol_name)
+                        @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
                     </td>
                     <td>
-                        @Html.Raw(item.PlayerUnitData.yang_attack + "/" + item.PlayerUnitData.yin_attack)
+                        @Html.Raw(DisplayUnitElement(item.UnitAttackElementInfos))
                     </td>
                     <td>
-                        <div class="shot-element-display-grid">
-                            @Html.Raw(PlayerUnitElementFilterModel.DisplayShotElements(item.UnitBulletList))
-                        </div>
-                    </td>
-                    <td>
-                        @*@Html.Raw(item.MainScore.ToString("0.00") + "/" + item.SubScore.ToString("0.00"))*@
-                        @Html.Raw((item.MainScore + item.SubScore).ToString("0.00"))
+                        @Html.Raw(CreateTotalScoreString(item))
                     </td>
                 </tr>
             }
