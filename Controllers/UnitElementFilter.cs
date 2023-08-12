@@ -72,6 +72,7 @@ namespace THLWToolBox.Controllers
         AttackElementInfo? SearchElementInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attacks, List<BulletSelectBox> bulletSelectBoxes, ref double unitTotalScore)
         {
             double attackTotalScore = 0;
+            // TODO: replace "x" with better naming in the whole project like here
             List<MagazineElementInfo?> magazineElementInfos =
                 attacks.AttackData.Magazines.Select(x => SearchElementInMagazine(unitRecord, attacks, x, bulletSelectBoxes, ref attackTotalScore)).ToList();
 
