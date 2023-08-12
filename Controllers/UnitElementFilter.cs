@@ -49,7 +49,7 @@ namespace THLWToolBox.Controllers
                 if (unitElementInfo != null)
                     unitElementInfos.Add(unitElementInfo);
             }
-            unitElementInfos = unitElementInfos.OrderBy(x => -x.TotalScore).ToList();
+            unitElementInfos = unitElementInfos.OrderByDescending(x => x.TotalScore).ToList();
 
             request.UnitElementInfos = unitElementInfos;
 

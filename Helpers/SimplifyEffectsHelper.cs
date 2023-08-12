@@ -1,13 +1,24 @@
-﻿using static THLWToolBox.Helpers.TypeHelper;
+﻿using THLWToolBox.Models;
+using static THLWToolBox.Helpers.TypeHelper;
 
 namespace THLWToolBox.Helpers
 {
     public class SimplifyEffectsHelper
     {
         private const string VALUE_COLOR = "#FC0377";
-        private static string RangeStr(int range)
+
+        public EffectModel EffectModel { get; set; }
+        Dictionary<int, string>? RaceDict {  get; set; }
+
+        public SimplifyEffectsHelper(EffectModel effectModel, Dictionary<int, string>? raceDict)
         {
-            return range switch
+            EffectModel = effectModel;
+            RaceDict = raceDict;
+        }
+
+        string CreateRangeString()
+        {
+            return EffectModel.Range switch
             {
                 0 or 1 => "自身",
                 2 => "己全",
@@ -17,17 +28,17 @@ namespace THLWToolBox.Helpers
             };
         }
 
-        private static bool IsUnitRoleSpecificBuff(int type)
+        static bool IsUnitRoleSpecificBuff(int type)
         {
             return type >= 21 && type <= 28;
         }
 
-        private static bool IsUnitRoleSpecificDebuff(int type)
+        static bool IsUnitRoleSpecificDebuff(int type)
         {
             return type >= 31 && type <= 38;
         }
 
-        private static int BuffDebuff(int type)
+        static int IsBuffOrDebuff(int type)
         {
             if (type == 1 || IsUnitRoleSpecificBuff(type))
                 return 1;
@@ -36,13 +47,13 @@ namespace THLWToolBox.Helpers
             return 0;
         }
 
-        private static string RolePrefix(int type)
+        string CreateRolePrefixString()
         {
-            int role;
-            if (IsUnitRoleSpecificBuff(type))
-                role = type - 20;
-            else if (IsUnitRoleSpecificDebuff(type))
-                role = type - 30;
+            int role, effectType = EffectModel.EffectType;
+            if (IsUnitRoleSpecificBuff(effectType))
+                role = effectType - 20;
+            else if (IsUnitRoleSpecificDebuff(effectType))
+                role = effectType - 30;
             else
                 return "";
             return GetUnitRoleString(role) + "用时";
@@ -57,23 +68,24 @@ namespace THLWToolBox.Helpers
             return "<b><color=" + VALUE_COLOR + ">" + string.Format("{0:N2}", value) + "</color></b>";
         }
 
-        public static string CreateSimplifiedEffectStr(int type, int subtype, int value, int turn, int range, IDictionary<int, string>? raceDict = null)
+        public string CreateSimplifiedEffectStr()
         {
-            if (BuffDebuff(type) != 0)
-                return RolePrefix(type) + RangeStr(range) + GetBuffDebuffTypeString(subtype) + (BuffDebuff(type) == 1 ? "加" : "减") + MarkValue(value) + "级(" + Convert.ToString(turn) + "t)";
+            if (IsBuffOrDebuff(EffectModel.EffectType) != 0)
+                return CreateRolePrefixString() + CreateRangeString() + GetBuffDebuffTypeString(EffectModel.SubEffectType) +
+                       (IsBuffOrDebuff(EffectModel.EffectType) == 1 ? "加" : "减") + MarkValue(EffectModel.Value) + "级(" + Convert.ToString(EffectModel.Turn) + "t)";
 
-            return type switch
+            return EffectModel.EffectType switch
             {
                 0 => "",
-                3 => RangeStr(range) + "回" + MarkValue(value) + "%血",
-                4 => RangeStr(range) + "回" + MarkValue(value) + "盾",
-                5 => RangeStr(range) + "加" + MarkValue(0.05 * value) + "P",
-                12 => RangeStr(range) + "受到" + GetBulletTypeString(subtype) + "弹减伤" + MarkValue(value) + "%",
-                13 => RangeStr(range) + "受到" + GetElementTypeString(subtype) + "属性减伤" + MarkValue(value) + "%",
-                14 => RangeStr(range) + "受到" + (raceDict == null ? "某种族" : "\"" + raceDict[subtype] + "\"") + "减伤" + MarkValue(value) + "%",
-                15 => GetBulletTypeString(subtype) + "弹加伤" + MarkValue(value) + "%",
-                16 => GetElementTypeString(subtype) + "属性加伤" + MarkValue(value) + "%",
-                17 => "灵力回收效率加" + MarkValue(value) + "%",
+                3 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "%血",
+                4 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "盾",
+                5 => CreateRangeString() + "加" + MarkValue(0.05 * EffectModel.Value) + "P",
+                12 => CreateRangeString() + "受到" + GetBulletTypeString(EffectModel.SubEffectType) + "弹减伤" + MarkValue(EffectModel.Value) + "%",
+                13 => CreateRangeString() + "受到" + GetElementTypeString(EffectModel.SubEffectType) + "属性减伤" + MarkValue(EffectModel.Value) + "%",
+                14 => CreateRangeString() + "受到" + (RaceDict == null ? "某种族" : "\"" + RaceDict[EffectModel.SubEffectType] + "\"") + "减伤" + MarkValue(EffectModel.Value) + "%",
+                15 => GetBulletTypeString(EffectModel.SubEffectType) + "弹加伤" + MarkValue(EffectModel.Value) + "%",
+                16 => GetElementTypeString(EffectModel.SubEffectType) + "属性加伤" + MarkValue(EffectModel.Value) + "%",
+                17 => "灵力回收效率加" + MarkValue(EffectModel.Value) + "%",
                 _ => throw new NotImplementedException(),
             };
         }

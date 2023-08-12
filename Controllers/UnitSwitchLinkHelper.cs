@@ -5,7 +5,6 @@ using THLWToolBox.Data;
 using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
-using static THLWToolBox.Models.GeneralModels;
 using static THLWToolBox.Helpers.GeneralHelper;
 
 namespace THLWToolBox.Controllers
@@ -68,7 +67,7 @@ namespace THLWToolBox.Controllers
         {
             PlayerUnitCharacteristicData unitCharacteristicRecord = unitCharacteristicDict[unitRecord.characteristic_id];
             return SelectItemModel.CreateSelectItemForEffect(new EffectModel(unitCharacteristicRecord.trust_characteristic_rear_effect_type,
-                                                                             unitCharacteristicRecord.trust_characteristic_rear_effect_subtype, 0, 0, 0),
+                                                                             unitCharacteristicRecord.trust_characteristic_rear_effect_subtype, 0, 0, 0, 0),
                                                              SelectItemTypes.SwitchLinkEffectType);
         }
     }

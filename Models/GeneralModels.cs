@@ -14,29 +14,12 @@ namespace THLWToolBox.Models
             public int BoostCount { get; set; }
             public BulletMagazineModel(int magazineId, int bulletId, int bulletRange, int bulletValue, int bulletPowerRate, int boostCount)
             {
-                this.MagazineId = magazineId;
-                this.BulletId = bulletId;
-                this.BulletRange = bulletRange;
-                this.BulletValue = bulletValue;
-                this.BulletPowerRate = bulletPowerRate;
-                this.BoostCount = boostCount;
-            }
-        }
-
-        public class EffectModel
-        {
-            public int EffectType { get; set; }
-            public int SubEffectType { get; set; }
-            public int Range { get; set; }
-            public int UnitRole { get; set; }
-            public int Turn { get; set; }
-            public EffectModel(int effectType, int subEffectType, int range, int unitRole, int turn)
-            {
-                this.EffectType = effectType;
-                this.SubEffectType = subEffectType;
-                this.Range = range;
-                this.UnitRole = unitRole;
-                this.Turn = turn;
+                MagazineId = magazineId;
+                BulletId = bulletId;
+                BulletRange = bulletRange;
+                BulletValue = bulletValue;
+                BulletPowerRate = bulletPowerRate;
+                BoostCount = boostCount;
             }
         }
 
@@ -46,8 +29,8 @@ namespace THLWToolBox.Models
             public int Value { get; set; }
             public BulletAddonModel(int id, int value)
             {
-                this.Id = id;
-                this.Value = value;
+                Id = id;
+                Value = value;
             }
         }
 

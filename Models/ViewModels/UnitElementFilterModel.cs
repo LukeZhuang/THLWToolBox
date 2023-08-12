@@ -69,7 +69,7 @@ namespace THLWToolBox.Models.ViewModels
         }
         public static string CreateMagazineElementString(MagazineElementInfo magazineElementInfo)
         {
-            string color = "";
+            string color;
             bool selected = true;
 
             if (magazineElementInfo.IsSelectedByBox1)

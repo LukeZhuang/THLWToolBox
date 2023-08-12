@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using THLWToolBox.Models.DataTypes;
-using static THLWToolBox.Helpers.SimplifyEffectsHelper;
+using THLWToolBox.Helpers;
+using static THLWToolBox.Helpers.TypeHelper;
+using static THLWToolBox.Models.EffectModel;
 
 namespace THLWToolBox.Models.ViewModels
 {
@@ -40,80 +42,40 @@ namespace THLWToolBox.Models.ViewModels
 
 
         // Methods
-        public static int CorrectionValueByLevel(int maxValue, int diff, int level)
-        {
-            return maxValue - diff * (10 - level);
-        }
 
         public string CreateCorrectionString(PictureData pictureRecord, int corrId)
         {
-            int corrType, corrValue, corrDiff;
+            int corrType, corrValue;
             if (corrId == 1)
             {
                 corrType = pictureRecord.correction1_type;
                 corrValue = pictureRecord.correction1_value;
-                corrDiff = pictureRecord.correction1_diff;
             }
             else if (corrId == 2)
             {
                 corrType = pictureRecord.correction2_type;
                 corrValue = pictureRecord.correction2_value;
-                corrDiff = pictureRecord.correction2_diff;
             }
             else
-                throw new NotImplementedException();
+                throw new InvalidDataException();
 
-            string correctionTypeStr = corrType switch
-            {
-                1 => "体力",
-                2 => "阳攻",
-                3 => "阳防",
-                4 => "阴攻",
-                5 => "阴防",
-                6 => "速度",
-                _ => throw new NotImplementedException(),
-            };
-
-            corrValue = CorrectionValueByLevel(corrValue, corrDiff, CorrLevel.GetValueOrDefault(0));
             string correctionValueStr = Convert.ToString(corrValue);
-            if (CorrTypeMain != null && CorrTypeMain.GetValueOrDefault() == corrType)
+            if (CorrTypeMain.GetValueOrDefault(0) == corrType)
                 correctionValueStr = "<b><color=#FF6600>" + correctionValueStr + "</color></b>";
-            else if (CorrTypeSub != null && CorrTypeSub.GetValueOrDefault() == corrType)
+            else if (CorrTypeSub.GetValueOrDefault(0) == corrType)
                 correctionValueStr = "<b><color=#4CAFFF>" + correctionValueStr + "</color></b>";
 
-            return correctionTypeStr + "+" + correctionValueStr;
+            return GetCorrectionTypeString(corrType) + "+" + correctionValueStr;
         }
 
-        public string CreateSimplifiedPictureEffectString(PictureData pictureRecord, bool maxEffect)
+        public string CreateSimplifiedPictureEffectString(PictureData pictureRecord, bool useMaxValue)
         {
             if (RaceDict == null)
-                throw new NotImplementedException();
+                throw new NullReferenceException();
             if (SimplifiedEffect.GetValueOrDefault(true))
-            {
-                List<string> simplifiedEffects = new()
-                {
-                    CreateSimplifiedEffectStr(pictureRecord.picture_characteristic1_effect_type,
-                                              pictureRecord.picture_characteristic1_effect_subtype,
-                                              maxEffect ? pictureRecord.picture_characteristic1_effect_value_max : pictureRecord.picture_characteristic1_effect_value,
-                                              pictureRecord.picture_characteristic1_effect_turn,
-                                              pictureRecord.picture_characteristic1_effect_range,
-                                              RaceDict),
-                    CreateSimplifiedEffectStr(pictureRecord.picture_characteristic2_effect_type,
-                                              pictureRecord.picture_characteristic2_effect_subtype,
-                                              maxEffect ? pictureRecord.picture_characteristic2_effect_value_max : pictureRecord.picture_characteristic2_effect_value,
-                                              pictureRecord.picture_characteristic2_effect_turn,
-                                              pictureRecord.picture_characteristic2_effect_range,
-                                              RaceDict),
-                    CreateSimplifiedEffectStr(pictureRecord.picture_characteristic3_effect_type,
-                                              pictureRecord.picture_characteristic3_effect_subtype,
-                                              maxEffect ? pictureRecord.picture_characteristic3_effect_value_max : pictureRecord.picture_characteristic3_effect_value,
-                                              pictureRecord.picture_characteristic3_effect_turn,
-                                              pictureRecord.picture_characteristic3_effect_range,
-                                              RaceDict),
-                };
-                return string.Join("<ret>", simplifiedEffects);
-            }
-            return maxEffect ? pictureRecord.picture_characteristic_text_max : pictureRecord.picture_characteristic_text;
+                return string.Join("<ret>", GetEffectModels(pictureRecord, useMaxValue).Select(effect => new SimplifyEffectsHelper(effect, RaceDict).CreateSimplifiedEffectStr()));
+
+            return useMaxValue ? pictureRecord.picture_characteristic_text_max : pictureRecord.picture_characteristic_text;
         }
     }
 }

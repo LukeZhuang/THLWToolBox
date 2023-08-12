@@ -72,7 +72,7 @@ namespace THLWToolBox.Controllers
                         criticalMatchUnits.Add(unitCriticalHitData);
                 }
             }
-            criticalMatchUnits = criticalMatchUnits.OrderBy(x => -x.TotalScore).ToList();
+            criticalMatchUnits = criticalMatchUnits.OrderByDescending(x => x.TotalScore).ToList();
 
             request.QueryUnits = queryUnits;
             request.CriticalMatchUnits = criticalMatchUnits;

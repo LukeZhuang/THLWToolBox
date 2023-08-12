@@ -192,5 +192,19 @@
                 _ => throw new NotImplementedException(),
             };
         }
+
+        public static string GetCorrectionTypeString(int corrType)
+        {
+            return corrType switch
+            {
+                1 => "体力",
+                2 => "阳攻",
+                3 => "阳防",
+                4 => "阴攻",
+                5 => "阴防",
+                6 => "速度",
+                _ => throw new InvalidDataException(),
+            };
+        }
     }
 }
