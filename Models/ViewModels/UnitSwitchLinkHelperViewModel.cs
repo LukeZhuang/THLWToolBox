@@ -10,8 +10,8 @@ namespace THLWToolBox.Models.ViewModels
         public string SwitchLinkTypeStr { get; set; }
         public UnitSwitchLinkDisplayModel(PlayerUnitData unit, string switchLinkTypeStr)
         {
-            this.Unit = unit;
-            this.SwitchLinkTypeStr = switchLinkTypeStr;
+            Unit = unit;
+            SwitchLinkTypeStr = switchLinkTypeStr;
         }
     }
 

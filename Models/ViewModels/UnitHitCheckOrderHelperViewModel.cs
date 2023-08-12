@@ -10,10 +10,10 @@ namespace THLWToolBox.Models.ViewModels
         public string BreakAbnormalInfo { get; set; }
         public MagazineHitCheckInfo(int magazineId, int firstBulletId, string elementInfo, string breakAbnormalInfo)
         {
-            this.MagazineId = magazineId;
-            this.FirstBulletId = firstBulletId;
-            this.ElementInfo = elementInfo;
-            this.BreakAbnormalInfo = breakAbnormalInfo;
+            MagazineId = magazineId;
+            FirstBulletId = firstBulletId;
+            ElementInfo = elementInfo;
+            BreakAbnormalInfo = breakAbnormalInfo;
         }
     }
 
@@ -24,14 +24,14 @@ namespace THLWToolBox.Models.ViewModels
         public string ShotName { get; set; }
         public int BoostId { get; set; }
         public int TotalBulletCount { get; set; }
-        public List<MagazineHitCheckInfo> HitCheckOrderInfo { get; set; }
-        public UnitHitCheckOrderHelperDisplayModel(string typeName, string shotName, int boostId, int totalBulletCount, List<MagazineHitCheckInfo> hitCheckOrderInfo)
+        public List<MagazineHitCheckInfo> HitCheckOrderInfos { get; set; }
+        public UnitHitCheckOrderHelperDisplayModel(string typeName, string shotName, int boostId, int totalBulletCount, List<MagazineHitCheckInfo> hitCheckOrderInfos)
         {
-            this.TypeName = typeName;
-            this.ShotName = shotName;
-            this.BoostId = boostId;
-            this.TotalBulletCount = totalBulletCount;
-            this.HitCheckOrderInfo = hitCheckOrderInfo;
+            TypeName = typeName;
+            ShotName = shotName;
+            BoostId = boostId;
+            TotalBulletCount = totalBulletCount;
+            HitCheckOrderInfos = hitCheckOrderInfos;
         }
     }
     public class UnitHitCheckOrderHelperViewModel

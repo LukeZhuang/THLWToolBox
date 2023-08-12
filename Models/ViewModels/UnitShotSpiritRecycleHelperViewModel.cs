@@ -11,10 +11,10 @@ namespace THLWToolBox.Models.ViewModels
         public List<double> BoostRecycles { get; set; }
         public UnitShotSpiritRecycleDisplayModel(string typeName, string shotName, int range, List<double> boostRecycles)
         {
-            this.TypeName = typeName;
-            this.ShotName = shotName;
-            this.Range = range;
-            this.BoostRecycles = boostRecycles;
+            TypeName = typeName;
+            ShotName = shotName;
+            Range = range;
+            BoostRecycles = boostRecycles;
         }
     }
 

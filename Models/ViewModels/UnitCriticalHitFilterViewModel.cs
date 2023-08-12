@@ -1,6 +1,4 @@
 ﻿using THLWToolBox.Models.DataTypes;
-using THLWToolBox.Models.ViewModels;
-using static Python.Runtime.TypeSpec;
 using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Models.ViewModels
@@ -11,18 +9,18 @@ namespace THLWToolBox.Models.ViewModels
         public string CriticalHits { get; set; }
         public MagazineCriticalHitInfo(int id, string criticalHits)
         {
-            this.Id = id;
-            this.CriticalHits = criticalHits;
+            Id = id;
+            CriticalHits = criticalHits;
         }
     }
     public class AttackCriticalHitInfo
     {
         public AttackData AttackData { get; set; }
-        public List<MagazineCriticalHitInfo> MagazineCriticalHits { get; set; }
-        public AttackCriticalHitInfo(AttackData attackData, List<MagazineCriticalHitInfo> magazineCriticalHits)
+        public List<MagazineCriticalHitInfo> MagazineCriticalHitInfos { get; set; }
+        public AttackCriticalHitInfo(AttackData attackData, List<MagazineCriticalHitInfo> magazineCriticalHitInfos)
         {
-            this.AttackData = attackData;
-            this.MagazineCriticalHits = magazineCriticalHits;
+            AttackData = attackData;
+            MagazineCriticalHitInfos = magazineCriticalHitInfos;
         }
     }
 
@@ -30,13 +28,13 @@ namespace THLWToolBox.Models.ViewModels
     public class UnitCriticalHitDisplayModel
     {
         public PlayerUnitData Unit { get; set; }
-        public List<AttackCriticalHitInfo> UnitAttackCriticalHitList { get; set; }
+        public List<AttackCriticalHitInfo> UnitAttackCriticalHitInfos { get; set; }
         public double TotalScore { get; set; }
-        public UnitCriticalHitDisplayModel(PlayerUnitData unit, List<AttackCriticalHitInfo> unitAttackCriticalHitList, double totalScore)
+        public UnitCriticalHitDisplayModel(PlayerUnitData unit, List<AttackCriticalHitInfo> unitAttackCriticalHitInfos, double totalScore)
         {
-            this.Unit = unit;
-            this.UnitAttackCriticalHitList = unitAttackCriticalHitList;
-            this.TotalScore = totalScore;
+            Unit = unit;
+            UnitAttackCriticalHitInfos = unitAttackCriticalHitInfos;
+            TotalScore = totalScore;
         }
     }
     public class UnitCriticalHitFilterViewModel
@@ -65,7 +63,7 @@ namespace THLWToolBox.Models.ViewModels
                                             NormalSpellcard.GetValueOrDefault(true),
                                             LastWord.GetValueOrDefault(true));
         }
-        public static string DisplayUnitCriticalHit(List<AttackCriticalHitInfo> unitAttackCriticalHitList)
+        public static string DisplayUnitCriticalHit(List<AttackCriticalHitInfo> unitAttackCriticalHitInfos)
         {
             string attackWrapper = "<div class=\"attack-wrapper\">";
             string magazineWrapper = "<div class=\"magazine-wrapper\">";
@@ -76,11 +74,11 @@ namespace THLWToolBox.Models.ViewModels
             text += magazineWrapper + "段落" + "</div>";
             text += magazineWrapper + "匹配的特攻" + "</div>";
             text += "</div>";
-            foreach (var unitAttackCriticalHit in unitAttackCriticalHitList)
+            foreach (var unitAttackCriticalHitInfo in unitAttackCriticalHitInfos)
             {
-                text += attackWrapper + unitAttackCriticalHit.AttackData.AttackTypeName + "</div>";
+                text += attackWrapper + unitAttackCriticalHitInfo.AttackData.AttackTypeName + "</div>";
                 text += "<div class=\"magazines-grid\">";
-                foreach (var magazineCriticalHit in unitAttackCriticalHit.MagazineCriticalHits) {
+                foreach (var magazineCriticalHit in unitAttackCriticalHitInfo.MagazineCriticalHitInfos) {
                     text += magazineWrapper + magazineCriticalHit.Id + "</div>";
                     text += magazineWrapper + "<b><font color=#FF6600>" + magazineCriticalHit.CriticalHits + "</font></b>" + "</div>";
                 }

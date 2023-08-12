@@ -8,7 +8,7 @@ namespace THLWToolBox.Models.ViewModels
         public AttackData AttackData { get; set; }
         public UnitShotPowerUpDisplayModel(AttackData attackData)
         {
-            this.AttackData = attackData;
+            AttackData = attackData;
         }
     }
 

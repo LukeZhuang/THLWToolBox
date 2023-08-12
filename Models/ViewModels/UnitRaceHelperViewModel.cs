@@ -9,8 +9,8 @@ namespace THLWToolBox.Models.ViewModels
         public string Races { get; set; }
         public UnitRaceDisplayModel(PlayerUnitData unit, string races)
         {
-            this.Unit = unit;
-            this.Races = races;
+            Unit = unit;
+            Races = races;
         }
     }
 
