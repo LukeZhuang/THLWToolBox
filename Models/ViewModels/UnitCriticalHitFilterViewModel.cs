@@ -54,7 +54,7 @@ namespace THLWToolBox.Models.ViewModels
         public bool? LastWord { get; set; }
 
         // Other Helper Data
-        public string? AllRacesStr { get; set; }
+        public string? AllRacesString { get; set; }
 
 
         // Methods

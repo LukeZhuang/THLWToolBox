@@ -15,21 +15,18 @@ namespace THLWToolBox.Controllers
         [Produces("application/json")]
         public IActionResult SearchUser(string? term)
         {
-            var matchedUnitNames = from pud in _context.PlayerUnitData
-                                   where (pud.name + pud.symbol_name).Contains(term)
-                                   select (pud.name + pud.symbol_name);
-            var matchedUnitNameList = matchedUnitNames.Distinct().ToList();
-
+            var matchedUnitNameList = _context.PlayerUnitData.Select(x => x.name + x.symbol_name)
+                                                             .Where(x => x.Contains(term))
+                                                             .Distinct().ToList();
             return Json(matchedUnitNameList);
         }
 
         [Produces("application/json")]
         public IActionResult SearchRace(string? term)
         {
-            var matchedRaceNames = from rd in _context.RaceData
-                                   where rd.name.Contains(term)
-                                   select rd.name;
-            var matchedRaceNameList = matchedRaceNames.Distinct().ToList();
+            var matchedRaceNameList = _context.RaceData.Select(x => x.name)
+                                                       .Where(x => x.Contains(term))
+                                                       .Distinct().ToList();
             return Json(matchedRaceNameList);
         }
     }

@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
-using THLWToolBox.Helpers;
-using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.GeneralModels;
 using static THLWToolBox.Helpers.GeneralHelper;
-using Azure.Core;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using System.Collections.Immutable;
 
 namespace THLWToolBox.Controllers
 {
@@ -17,54 +13,39 @@ namespace THLWToolBox.Controllers
     {
         private readonly THLWToolBoxContext _context;
 
+        // Data structures used across this controller
+        Dictionary<int, PlayerUnitBulletData> bulletDict;
+        Dictionary<int, string> raceDict;
+        Dictionary<int, List<int>> bulletToCriticalRaces;
+
         public UnitCriticalHitFilter(THLWToolBoxContext context)
         {
             _context = context;
+            bulletDict = new();
+            raceDict = new();
+            bulletToCriticalRaces = new();
         }
 
         // POST: UnitCriticalHitFilter
         public async Task<IActionResult> Index(UnitCriticalHitFilterViewModel request)
         {
             if (_context.PlayerUnitData == null)
-            {
                 return Problem("Entity set 'THLWToolBoxContext.PlayerUnitData' is null.");
-            }
 
-            // --- query data tables ---
-            // TODO: try "var unitList = await _context.PlayerUnitData.Distinct().ToListAsync();" and replace other controllers
-            var unitList = await (from pud in _context.PlayerUnitData select pud).Distinct().ToListAsync();
-            var raceList = await (from rd in _context.RaceData select rd).Distinct().ToListAsync();
-            var unitRaceList = await (from purd in _context.PlayerUnitRaceData select purd).Distinct().ToListAsync();
-            var shotList = await (from pusd in _context.PlayerUnitShotData select pusd).Distinct().ToListAsync();
-            var spellcardList = await (from puscd in _context.PlayerUnitSpellcardData select puscd).Distinct().ToListAsync();
-            var bulletList = await (from pubd in _context.PlayerUnitBulletData select pubd).Distinct().ToListAsync();
-            var bulletCriticalRaceList = await (from pubcrd in _context.PlayerUnitBulletCriticalRaceData select pubcrd).Distinct().ToListAsync();
+            // ------ query data ------
+            List<PlayerUnitData> unitList = await _context.PlayerUnitData.Distinct().ToListAsync();
+            List<RaceData> raceList = await _context.RaceData.Distinct().ToListAsync();
+            Dictionary<int, PlayerUnitShotData> shotDict = (await _context.PlayerUnitShotData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
+            Dictionary<int, PlayerUnitSpellcardData> spellcardDict = (await _context.PlayerUnitSpellcardData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
+            Dictionary<int, HashSet<int>> unitToRaceIds =
+                (await _context.PlayerUnitRaceData.Distinct().ToListAsync()).GroupBy(x => x.unit_id)
+                                                                            .ToDictionary(y => y.Key, y => new HashSet<int>(y.Select(z => z.race_id)));
 
-            // TODO: try "Dictionary<int, PlayerUnitShotData> shotDict = shotList.ToDictionary(x => x.id, x => x);" and replace other controllers
-            Dictionary<int, PlayerUnitShotData> shotDict = new();
-            foreach (var shotRecord in shotList)
-                shotDict[shotRecord.id] = shotRecord;
-
-            Dictionary<int, PlayerUnitSpellcardData> spellcardDict = new();
-            foreach (var spellcardRecord in spellcardList)
-                spellcardDict[spellcardRecord.id] = spellcardRecord;
-
-            Dictionary<int, PlayerUnitBulletData> bulletDict = new();
-            foreach (var bulletRecord in bulletList)
-                bulletDict[bulletRecord.id] = bulletRecord;
-
-            Dictionary<int, string> raceDict = new();
-            foreach (var raceRecord in raceList)
-                raceDict[raceRecord.id] = raceRecord.name;
-
-            Dictionary<int, List<int>> bulletCriticalRacesDict = new();
-            foreach (var bulletCriticalRaceRecord in bulletCriticalRaceList)
-            {
-                // TODO: search for simplier statements
-                if (!bulletCriticalRacesDict.ContainsKey(bulletCriticalRaceRecord.bullet_id))
-                    bulletCriticalRacesDict[bulletCriticalRaceRecord.bullet_id] = new List<int>();
-                bulletCriticalRacesDict[bulletCriticalRaceRecord.bullet_id].Add(bulletCriticalRaceRecord.race_id);
-            }
+            bulletDict = (await _context.PlayerUnitBulletData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
+            raceDict = (await _context.RaceData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x.name);
+            bulletToCriticalRaces =
+                (await _context.PlayerUnitBulletCriticalRaceData.Distinct().ToListAsync()).GroupBy(x => x.bullet_id)
+                                                                                          .ToDictionary(y => y.Key, y => new List<int>(y.Select(z => z.race_id)));
             // ------ query end ------
 
 
@@ -74,26 +55,19 @@ namespace THLWToolBox.Controllers
             HashSet<int> targetRaceIds = new();
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                foreach (var unitRecord in unitList)
-                {
-                    string curUnitSymbolName = unitRecord.name + unitRecord.symbol_name;
-                    if (!request.UnitSymbolName.Equals(curUnitSymbolName))
-                        continue;
-                    targetRaceIds = UnitRaceHelper.GetRaceIdsOfUnit(unitRecord, unitRaceList);
-                    string racesStr = UnitRaceHelper.CreateRacesStringOfUnit(targetRaceIds, raceList);
-                    queryUnits.Add(new UnitRaceDisplayModel(unitRecord, racesStr));
-                }
+                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                targetRaceIds = unitToRaceIds.GetValueOrDefault(unitRecord.id, new());
+                queryUnits = CreateUnitRaceDisplayModelByUnit(unitRecord, targetRaceIds, raceList, null);
             }
             else if (request.RaceName != null && request.RaceName.Length > 0)
-                targetRaceIds = new(from raceRecord in raceList where raceRecord.name.Equals(request.RaceName) select raceRecord.id);
+                targetRaceIds = new() { GetRaceIdByName(raceList, request.RaceName) };
 
             if (targetRaceIds.Count > 0)
             {
                 foreach (var unitRecord in unitList)
                 {
-                    UnitCriticalHitDisplayModel? unitCriticalHitData = CreateUnitCriticalHitDisplayModel(unitRecord, request.CreateAttackSelectionModel(),
-                                                                                                         targetRaceIds, shotDict, spellcardDict, bulletDict,
-                                                                                                         bulletCriticalRacesDict, raceDict);
+                    List<AttackWithWeightModel> attacks = GetUnitAttacksWithWeight(unitRecord, request.CreateAttackSelectionModel(), shotDict, spellcardDict);
+                    UnitCriticalHitDisplayModel? unitCriticalHitData = CreateUnitCriticalHitDisplayModel(unitRecord, attacks, targetRaceIds);
                     if (unitCriticalHitData != null)
                         criticalMatchUnits.Add(unitCriticalHitData);
                 }
@@ -106,69 +80,57 @@ namespace THLWToolBox.Controllers
 
             request.QueryUnits = queryUnits;
             request.CriticalMatchUnits = criticalMatchUnits;
-            request.AllRacesStr = string.Join(", ", from rd in raceList select rd.name);
+            request.AllRacesString = string.Join(", ", raceList.Select(x => x.name));
 
             return View(request);
         }
 
-        static UnitCriticalHitDisplayModel? CreateUnitCriticalHitDisplayModel(PlayerUnitData unitRecord, AttackSelectionModel attackSelection,
-                                                                              HashSet<int> targetRaceIds,
-                                                                              Dictionary<int, PlayerUnitShotData> shotDict,
-                                                                              Dictionary<int, PlayerUnitSpellcardData> spellcardDict,
-                                                                              Dictionary<int, PlayerUnitBulletData> bulletDict,
-                                                                              Dictionary<int, List<int>> bulletCriticalRacesDict,
-                                                                              Dictionary<int, string> raceDict)
+        UnitCriticalHitDisplayModel? CreateUnitCriticalHitDisplayModel(PlayerUnitData unitRecord, List<AttackWithWeightModel> attacks, HashSet<int> targetRaceIds)
         {
-            List<AttackWithWeightModel> attacks = GetUnitAttacksWithWeight(unitRecord, attackSelection, shotDict, spellcardDict);
             double totalScore = 0;
-            List<AttackCriticalHitInfo> UnitAttackCriticalHitList = new();
-            foreach (var attack in attacks)
-            {
-                AttackCriticalHitInfo? unitAttackCriticalHit = SearchCriticalRaceInAttack(unitRecord, attack, targetRaceIds, bulletDict, bulletCriticalRacesDict, raceDict, ref totalScore);
-                if (unitAttackCriticalHit != null)
-                    UnitAttackCriticalHitList.Add(unitAttackCriticalHit);
-            }
+            List<AttackCriticalHitInfo?> UnitAttackCriticalHitList =
+                new(attacks.Select(attack => SearchCriticalRaceInAttack(unitRecord, attack, targetRaceIds, ref totalScore)));
+
+            RemoveNullElements(ref UnitAttackCriticalHitList);
             if (UnitAttackCriticalHitList.Count > 0)
-                return new UnitCriticalHitDisplayModel(unitRecord, UnitAttackCriticalHitList, totalScore);
+                return new UnitCriticalHitDisplayModel(unitRecord, CastToNonNullList(UnitAttackCriticalHitList), totalScore);
+            
+            // null means this unit does not have critial hit
             return null;
         }
 
-        static AttackCriticalHitInfo? SearchCriticalRaceInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attack, HashSet<int> targetRaceIds,
-                                                                 Dictionary<int, PlayerUnitBulletData> bulletDict, Dictionary<int, List<int>> bulletCriticalRacesDict,
-                                                                 Dictionary<int, string> raceDict, ref double totalScore)
+        AttackCriticalHitInfo? SearchCriticalRaceInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attack, HashSet<int> targetRaceIds, ref double totalScore)
         {
-            List<MagazineCriticalHitInfo> criticalHits = new();
-            foreach (var magazine in attack.AttackData.Magazines)
-            {
-                MagazineCriticalHitInfo? criticalHit = SearchCriticalRaceInMagazine(unitRecord, attack, magazine, targetRaceIds, bulletDict,
-                                                                                    bulletCriticalRacesDict, raceDict, ref totalScore);
-                if (criticalHit != null)
-                    criticalHits.Add(criticalHit);
-            }
+            double currentScore = 0;
+            List<MagazineCriticalHitInfo?> criticalHits =
+                new(attack.AttackData.Magazines.Select(magazine => SearchCriticalRaceInMagazine(unitRecord, attack, magazine, targetRaceIds, ref currentScore)));
+            
+            totalScore += currentScore;
+            RemoveNullElements(ref criticalHits);
+
             if (criticalHits.Count > 0)
-                return new AttackCriticalHitInfo(attack.AttackData, criticalHits);
+                return new AttackCriticalHitInfo(attack.AttackData, CastToNonNullList(criticalHits));
+
+            // null means this attack does not have critial hit
             return null;
         }
 
-        static MagazineCriticalHitInfo? SearchCriticalRaceInMagazine(PlayerUnitData unitRecord, AttackWithWeightModel attack, BulletMagazineModel magazine,
-                                                                     HashSet<int> targetRaceIds, Dictionary<int, PlayerUnitBulletData> bulletDict,
-                                                                     Dictionary<int, List<int>> bulletCriticalRacesDict, Dictionary<int, string> raceDict, ref double totalScore)
+        MagazineCriticalHitInfo? SearchCriticalRaceInMagazine(PlayerUnitData unitRecord, AttackWithWeightModel attack, BulletMagazineModel magazine,
+                                                              HashSet<int> targetRaceIds, ref double totalScore)
         {
             int bulletId = magazine.BulletId;
             if (!bulletDict.ContainsKey(bulletId))
                 return null;
 
-            List<string> foundCriticalRaceList = new();
-            if (bulletCriticalRacesDict.TryGetValue(bulletId, out List<int>? bulletCriticalRaceIds))
-            {
-                foreach (int raceId in bulletCriticalRaceIds)
-                    if (targetRaceIds.Contains(raceId))
-                        foundCriticalRaceList.Add(raceDict[raceId]);
-            }
+            List<int> bulletCriticalRaceIds = bulletToCriticalRaces.GetValueOrDefault(bulletId, new());
+            List<string> foundCriticalRaceList = foundCriticalRaceList = new(bulletCriticalRaceIds.Where(targetRaceIds.Contains).Select(x => raceDict[x]));
+
             bool magazineIsCriticalHit = (foundCriticalRaceList.Count > 0);
             totalScore += CalcBulletPower(magazine, bulletDict[bulletId], unitRecord, attack.AttackData.PowerUpRates[5], attack.AttackWeight, magazineIsCriticalHit);
             if (magazineIsCriticalHit)
                 return new MagazineCriticalHitInfo(magazine.MagazineId, string.Join(", ", foundCriticalRaceList));
+
+            // null means this magazine does not have critial hit
             return null;
         }
     }

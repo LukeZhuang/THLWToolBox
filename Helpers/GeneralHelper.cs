@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Azure.Core;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web;
 using THLWToolBox.Models.DataTypes;
+using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Helpers.TypeHelper;
 using static THLWToolBox.Models.GeneralModels;
 
@@ -11,6 +13,50 @@ namespace THLWToolBox.Helpers
     {
         public static string VERSION_STR = "v1.2 alpha";
         public static string DATA_UPDATE_DATE = "2023/06/12";
+
+        // For HTML
+        public static string GetImageHtmlRaw(string imgUrl)
+        {
+            return "<div class=\"picture-unit-img-wrapper\"><img src=\"" + imgUrl + "\" alt=\"暂无图片\" onerror=\"this.src='/res/website/noimg.png';\" /></div>";
+        }
+
+        public static string StringFromDatabaseForDisplay(string originalText)
+        {
+            string text = originalText;
+            text = text.Replace("<ret>", "@RETURNLINE@");
+            Regex reg1 = new Regex("<color=(#[A-F0-9]+)>");
+            text = reg1.Replace(text, "@COLORSTART$1COLORSTART@");
+            text = Regex.Replace(text, "</color>", "@COLOREND@");
+            text = text.Replace("<b>", "@BOLDSTART@");
+            text = text.Replace("</b>", "@BOLDEND@");
+            text = HttpUtility.HtmlEncode(text);
+            Regex reg2 = new Regex("@COLORSTART(#[A-F0-9]+)COLORSTART@");
+            text = reg2.Replace(text, "<font color=\"$1\">");
+            text = text.Replace("@COLOREND@", "</font>");
+            text = text.Replace("\\n", "<br/>");
+            text = text.Replace("@RETURNLINE@", "<br/>");
+            text = text.Replace("@BOLDSTART@", "<b>");
+            text = text.Replace("@BOLDEND@", "</b>");
+            return text;
+        }
+
+        public static string GetWikiURL(string itemName)
+        {
+            string wikiURL = "https://wiki.biligame.com/touhoulostword/" + itemName;
+            return "<a href=" + wikiURL + ">" + itemName + "</a>";
+        }
+
+
+        // Common functions which are used in mutliple controllers
+        public static PlayerUnitData GetUnitByNameSymbol(List<PlayerUnitData> unitList, string unitSymbolName)
+        {
+            return unitList.Where(x => (x.name + x.symbol_name).Equals(unitSymbolName)).First();
+        }
+
+        public static int GetRaceIdByName(List<RaceData> raceList, string raceName)
+        {
+            return raceList.Where(x => x.name.Equals(raceName)).Select(x => x.id).First();
+        }
 
         public static List<BulletAddonModel> GetBulletAddons(PlayerUnitBulletData bulletRecord)
         {
@@ -45,37 +91,6 @@ namespace THLWToolBox.Helpers
             return atk * totalPower * hit * critic * powerUpRate * rangeWeight * shotTypeWeight;
         }
 
-        public static string GetImageHtmlRaw(string imgUrl)
-        {
-            return "<div class=\"picture-unit-img-wrapper\"><img src=\"" + imgUrl + "\" alt=\"暂无图片\" onerror=\"this.src='/res/website/noimg.png';\" /></div>";
-        }
-
-        public static string StringFromDatabaseForDisplay(string originalText)
-        {
-            string text = originalText;
-            text = text.Replace("<ret>", "@RETURNLINE@");
-            Regex reg1 = new Regex("<color=(#[A-F0-9]+)>");
-            text = reg1.Replace(text, "@COLORSTART$1COLORSTART@");
-            text = Regex.Replace(text, "</color>", "@COLOREND@");
-            text = text.Replace("<b>", "@BOLDSTART@");
-            text = text.Replace("</b>", "@BOLDEND@");
-            text = HttpUtility.HtmlEncode(text);
-            Regex reg2 = new Regex("@COLORSTART(#[A-F0-9]+)COLORSTART@");
-            text = reg2.Replace(text, "<font color=\"$1\">");
-            text = text.Replace("@COLOREND@", "</font>");
-            text = text.Replace("\\n", "<br/>");
-            text = text.Replace("@RETURNLINE@", "<br/>");
-            text = text.Replace("@BOLDSTART@", "<b>");
-            text = text.Replace("@BOLDEND@", "</b>");
-            return text;
-        }
-
-        public static string GetWikiURL(string itemName)
-        {
-            string wikiURL = "https://wiki.biligame.com/touhoulostword/" + itemName;
-            return "<a href=" + wikiURL + ">" + itemName + "</a>";
-        }
-
         public static List<AttackWithWeightModel> GetUnitAttacksWithWeight(PlayerUnitData unitRecord, AttackSelectionModel attackSelection,
                                                                            Dictionary<int, PlayerUnitShotData> shotDict, Dictionary<int, PlayerUnitSpellcardData> spellcardDict)
         {
@@ -92,6 +107,46 @@ namespace THLWToolBox.Helpers
             if (attackSelection.LastWord)
                 attacks.Add(new AttackWithWeightModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), AttackScoreWeights.TypeLastWord));
             return attacks;
+        }
+
+        public static string CreateRacesStringOfUnit(HashSet<int> raceIdSet, List<RaceData> raceList, int? highlightRaceId)
+        {
+            List<string> races = new();
+
+            foreach (var raceRecord in raceList)
+            {
+                if (raceIdSet.Contains(raceRecord.id))
+                {
+                    string raceName = raceRecord.name;
+                    if (highlightRaceId != null && raceRecord.id == highlightRaceId)
+                        raceName = "<b><color=#FF6600>" + raceName + "</color></b>";
+                    races.Add(raceName);
+                }
+            }
+
+            return string.Join(", ", races);
+        }
+
+        public static List<UnitRaceDisplayModel> CreateUnitRaceDisplayModelByUnit(PlayerUnitData unitRecord, HashSet<int> raceIds,
+                                                                                  List<RaceData> raceList, int? highlightRaceId)
+        {
+            if (raceIds.Count == 0)
+                return new();
+            string racesString = CreateRacesStringOfUnit(raceIds, raceList, highlightRaceId);
+            return new() { new UnitRaceDisplayModel(unitRecord, racesString) };
+        }
+
+
+        // Other helper functions
+        public static void RemoveNullElements<T>(ref List<T?> list)
+        {
+            list = list.Where(x => x != null).ToList();
+        }
+
+        public static List<T> CastToNonNullList<T>(List<T?> list)
+        {
+            // make sure RemoveNullElements is called before this function is used
+            return list.Cast<T>().ToList();
         }
     }
 }

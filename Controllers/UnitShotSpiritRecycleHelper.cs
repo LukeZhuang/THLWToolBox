@@ -6,6 +6,7 @@ using THLWToolBox.Data;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.GeneralModels;
+using static THLWToolBox.Helpers.GeneralHelper;
 
 namespace THLWToolBox.Controllers
 {
@@ -15,43 +16,27 @@ namespace THLWToolBox.Controllers
 
         private readonly THLWToolBoxContext _context;
 
+        // Data structures used across this controller
+        Dictionary<int, PlayerUnitBulletData> bulletDict;
+
         public UnitShotSpiritRecycleHelper(THLWToolBoxContext context)
         {
             _context = context;
+            bulletDict = new();
         }
 
         // POST: UnitShotSpiritRecycleHelper
         public async Task<IActionResult> Index(UnitShotSpiritRecycleHelperViewModel request)
         {
             if (_context.PictureData == null)
-            {
                 return Problem("Entity set 'THLWToolBoxContext.PlayerUnitData' is null.");
-            }
 
             // --- query data tables ---
-            var unitTable = from pud in _context.PlayerUnitData select pud;
-            var unitList = await unitTable.Distinct().ToListAsync();
+            List<PlayerUnitData> unitList = await _context.PlayerUnitData.Distinct().ToListAsync();
+            Dictionary<int, PlayerUnitShotData> shotDict = (await _context.PlayerUnitShotData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
+            Dictionary<int, PlayerUnitSpellcardData> spellcardDict = (await _context.PlayerUnitSpellcardData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
 
-            var shotTable = from pusd in _context.PlayerUnitShotData select pusd;
-            var shotList = await shotTable.Distinct().ToListAsync();
-
-            var spellcardTable = from puscd in _context.PlayerUnitSpellcardData select puscd;
-            var spellcardList = await spellcardTable.Distinct().ToListAsync();
-
-            var bulletTable = from pubd in _context.PlayerUnitBulletData select pubd;
-            var bulletList = await bulletTable.Distinct().ToListAsync();
-
-            Dictionary<int, PlayerUnitShotData> shotDict = new();
-            foreach (var shotRecord in shotList)
-                shotDict[shotRecord.id] = shotRecord;
-
-            Dictionary<int, PlayerUnitSpellcardData> spellcardDict = new();
-            foreach (var spellcardRecord in spellcardList)
-                spellcardDict[spellcardRecord.id] = spellcardRecord;
-
-            Dictionary<int, PlayerUnitBulletData> bulletDict = new();
-            foreach (var bulletRecord in bulletList)
-                bulletDict[bulletRecord.id] = bulletRecord;
+            bulletDict = (await _context.PlayerUnitBulletData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
             // ------ query end ------
 
 
@@ -60,22 +45,17 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                foreach (var unitRecord in unitList)
+                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                queryUnits.Add(unitRecord);
+                List<UnitShotSpiritRecycleDisplayModel> unitSpiritRecycleDatas = new()
                 {
-                    string curUnitSymbolName = unitRecord.name + unitRecord.symbol_name;
-                    if (!request.UnitSymbolName.Equals(curUnitSymbolName))
-                        continue;
-                    queryUnits.Add(unitRecord);
-                    List<UnitShotSpiritRecycleDisplayModel> unitSpiritRecycleDatas = new()
-                    {
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id]), bulletDict, request),
-                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), bulletDict, request),
-                    };
-                    spiritRecycleDatas.AddRange(unitSpiritRecycleDatas);
-                }
+                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id]), request),
+                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id]), request),
+                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id]), request),
+                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id]), request),
+                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), request),
+                };
+                spiritRecycleDatas.AddRange(unitSpiritRecycleDatas);
             }
 
             request.QueryUnits = queryUnits;
@@ -84,7 +64,7 @@ namespace THLWToolBox.Controllers
             return View(request);
         }
 
-        static void AddBulletToBoost(BulletMagazineModel magazine, Dictionary<int, PlayerUnitBulletData> bulletDict, ref List<List<MagazineInfo>> boosts_info)
+        void AddBulletToBoost(BulletMagazineModel magazine, ref List<List<MagazineInfo>> boosts_info)
         {
             if (!bulletDict.ContainsKey(magazine.BulletId))
                 return;
@@ -96,13 +76,13 @@ namespace THLWToolBox.Controllers
             boosts_info[magazine.BoostCount].Add(new MagazineInfo(magazine.BulletValue, hit, isSureHit));
         }
 
-        static UnitShotSpiritRecycleDisplayModel CreateSpiritPowerRecycleDisplayModel(AttackData attack, Dictionary<int, PlayerUnitBulletData> bulletDict, UnitShotSpiritRecycleHelperViewModel request)
+        UnitShotSpiritRecycleDisplayModel CreateSpiritPowerRecycleDisplayModel(AttackData attack, UnitShotSpiritRecycleHelperViewModel request)
         {
             List<List<MagazineInfo>> boosts_info = new();
             for (int boostId = 0; boostId < 4; boostId++)
                 boosts_info.Add(new List<MagazineInfo>());
             for (int magazineId = 0; magazineId < 6; magazineId++)
-                AddBulletToBoost(attack.Magazines[magazineId], bulletDict, ref boosts_info);
+                AddBulletToBoost(attack.Magazines[magazineId], ref boosts_info);
             SpiritRecycleModel spiritRecycleInput = new(attack.PhantasmPowerUpRate, attack.Magazines[0].BulletRange, boosts_info);
             List<double> spiritRecycles = CalcShotModel(spiritRecycleInput, request);
             return new UnitShotSpiritRecycleDisplayModel(attack.AttackTypeName, attack.Name, attack.Magazines[0].BulletRange, spiritRecycles);

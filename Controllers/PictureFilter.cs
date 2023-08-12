@@ -14,36 +14,30 @@ namespace THLWToolBox.Controllers
     {
         private readonly THLWToolBoxContext _context;
 
+        // Data structures used across this controller
+        List<PictureData> pictureList;
+
         public PictureFilter(THLWToolBoxContext context)
         {
             _context = context;
+            pictureList = new();
         }
 
         // POST: PictureFilter
         public async Task<IActionResult> Index(PictureFilterViewModel request)
         {
             if (_context.PictureData == null)
-            {
                 return Problem("Entity set 'THLWToolBoxContext.PictureData' is null.");
-            }
 
+            // ------ query data ------
+            Dictionary<int, string> raceDict = (await _context.RaceData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x.name);
 
-            // --- query data tables ---
-            var pictureTable = from pd in _context.PictureData select pd;
-            var pictureList = await pictureTable.Distinct().ToListAsync();
-
-            var raceTable = from rd in _context.RaceData select rd;
-            var raceList = await raceTable.Distinct().ToListAsync();
-
-            Dictionary<int, string> raceDict = new();
-            foreach (var raceRecord in raceList)
-                raceDict[raceRecord.id] = raceRecord.name;
+            pictureList = await _context.PictureData.Distinct().ToListAsync();
             // ------ query end ------
 
+            List<PictureData> displayPictureList = GetSelectedPictureDatas(request);
 
-            var displayPictureList = GetSelectedPictureDatas(pictureList, request);
-
-            CreateSelectLists(ref request, pictureList);
+            CreateSelectLists(ref request);
             request.DisplayPictureList = displayPictureList;
             request.RaceDict = raceDict;
 
@@ -51,7 +45,7 @@ namespace THLWToolBox.Controllers
         }
 
         // It's too complex for LINQ, so just use naive list operation
-        static List<PictureData> GetSelectedPictureDatas(List<PictureData> pictureList, PictureFilterViewModel request)
+        List<PictureData> GetSelectedPictureDatas(PictureFilterViewModel request)
         {
             List <PictureData> queryResult = new();
 
@@ -158,16 +152,16 @@ namespace THLWToolBox.Controllers
             return false;
         }
 
-        static void CreateSelectLists(ref PictureFilterViewModel request, List<PictureData> pictureList)
+        void CreateSelectLists(ref PictureFilterViewModel request)
         {
-            request.EffectTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.EffectType), "id", "name", null);
-            request.SubeffectTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.SubEffectType), "id", "name", null);
-            request.RangeTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.RangeType), "id", "name", null);
-            request.UnitRoleTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.UnitRoleType), "id", "name", null);
-            request.TurnTypes = new SelectList(GetSelectListItems(pictureList, SelectItemTypes.TurnType), "id", "name", null);
+            request.EffectTypes = new SelectList(GetSelectListItems(SelectItemTypes.EffectType), "id", "name", null);
+            request.SubeffectTypes = new SelectList(GetSelectListItems(SelectItemTypes.SubEffectType), "id", "name", null);
+            request.RangeTypes = new SelectList(GetSelectListItems(SelectItemTypes.RangeType), "id", "name", null);
+            request.UnitRoleTypes = new SelectList(GetSelectListItems(SelectItemTypes.UnitRoleType), "id", "name", null);
+            request.TurnTypes = new SelectList(GetSelectListItems(SelectItemTypes.TurnType), "id", "name", null);
         }
 
-        static List<SelectItemModel> GetSelectListItems(List<PictureData> pictureList, SelectItemTypes selectItemTypes)
+        List<SelectItemModel> GetSelectListItems(SelectItemTypes selectItemTypes)
         {
             List<SelectItemModel> selectList = new();
             HashSet<int> visited = new();
