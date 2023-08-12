@@ -8,8 +8,8 @@ using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Helpers.GeneralHelper;
 using static THLWToolBox.Models.EffectModel;
+using static THLWToolBox.Models.GeneralModels;
 using static THLWToolBox.Models.SelectItemModel;
-using static THLWToolBox.Models.ViewModels.PictureFilterViewModel;
 
 namespace THLWToolBox.Controllers
 {
@@ -52,6 +52,7 @@ namespace THLWToolBox.Controllers
         {
             List <PictureData> queryResult = new();
 
+            List<EffectSelectBox> effectSelectBoxes = request.CreateEffectSelectBoxes();
             ApplyCorrectionLevel(request.CorrLevel.GetValueOrDefault(0));
 
             // Filter pictureList by chosen rules
@@ -73,9 +74,8 @@ namespace THLWToolBox.Controllers
                 List<int> selectedCorrTypes = RemoveNullElements(new List<int?>() { request.CorrTypeMain, request.CorrTypeSub }).Cast<int>().ToList();
                 isSelected &= selectedCorrTypes.Except(currentCorrTypes).IsNullOrEmpty();
 
-                // --- check effect ---
-                isSelected &= FilterByEffect(pictureRecord, request.EffectId1, request.SubeffectId1, request.Range1, request.UnitRoleTypeId1, request.TurnTypeId1);
-                isSelected &= FilterByEffect(pictureRecord, request.EffectId2, request.SubeffectId2, request.Range2, request.UnitRoleTypeId2, request.TurnTypeId2);
+                // --- check effect (match if all SelectBoxes matches current pictureRecord) ---
+                isSelected &= effectSelectBoxes.Select(effectSelectBox => effectSelectBox.EffectListMatchesSelectBox(GetEffectModels(pictureRecord, false))).All(x => x);
 
                 if (isSelected)
                     queryResult.Add(pictureRecord);
@@ -87,31 +87,6 @@ namespace THLWToolBox.Controllers
                               .ThenByDescending(x => x.rare)
                               .ThenByDescending(x => x.id)
                               .ToList();
-        }
-
-        static bool FilterByEffect(PictureData pictureRecord, int? EffectId, int? SubeffectId, int? Range, int? UnitRoleTypeId, int? TurnTypeId)
-        {
-            // EffectId is the main filter, if it's null then it's meaningless to do the filtering
-            if (EffectId == null)
-                return true;
-
-            List<EffectModel> effects = GetEffectModels(pictureRecord, false);
-            foreach (var effect in effects)
-            {
-                bool currentMatch = true;
-                currentMatch &= CreateSelectItemForEffect(effect, SelectItemTypes.EffectType).id == EffectId.GetValueOrDefault();
-                if (SubeffectId != null)
-                    currentMatch &= CreateSelectItemForEffect(effect, SelectItemTypes.SubEffectType).id == SubeffectId.GetValueOrDefault();
-                if (Range != null)
-                    currentMatch &= CreateSelectItemForEffect(effect, SelectItemTypes.RangeType).id == Range.GetValueOrDefault();
-                if (UnitRoleTypeId != null)
-                    currentMatch &= CreateSelectItemForEffect(effect, SelectItemTypes.UnitRoleType).id == UnitRoleTypeId.GetValueOrDefault();
-                if (TurnTypeId != null)
-                    currentMatch &= CreateSelectItemForEffect(effect, SelectItemTypes.TurnType).id == TurnTypeId.GetValueOrDefault();
-                if (currentMatch)
-                    return true;
-            }
-            return false;
         }
 
         void CreateSelectLists(ref PictureFilterViewModel request)

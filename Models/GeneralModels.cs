@@ -1,4 +1,5 @@
 ﻿using THLWToolBox.Models.DataTypes;
+using static THLWToolBox.Models.SelectItemModel;
 
 namespace THLWToolBox.Models
 {
@@ -67,6 +68,56 @@ namespace THLWToolBox.Models
                 FocusShot = focusShot;
                 NormalSpellcard = normalSpellcard;
                 LastWord = lastWord;
+            }
+        }
+
+        public class EffectSelectBox
+        {
+            public int BoxId { get; set; }
+            public int? EffectId { get; set; }
+            public int? SubeffectId { get; set; }
+            public int? Range { get; set; }
+            public int? UnitRoleTypeId { get; set; }
+            public int? TurnTypeId { get; set; }
+            public EffectSelectBox(int boxId, int? effectId, int? subeffectId, int? range, int? unitRoleTypeId, int? turnTypeId)
+            {
+                BoxId = boxId;
+                EffectId = effectId;
+                SubeffectId = subeffectId;
+                Range = range;
+                UnitRoleTypeId = unitRoleTypeId;
+                TurnTypeId = turnTypeId;
+            }
+            public bool IsEffectiveSelectBox()
+            {
+                return EffectId != null;
+            }
+
+            bool EffectMatchesSelectBox(EffectModel effect)
+            {
+                if (!IsEffectiveSelectBox())
+                    return true;
+
+                if (EffectId != null && EffectId.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.EffectType).id)
+                    return false;
+                if (SubeffectId != null && SubeffectId.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.SubEffectType).id)
+                    return false;
+                if (Range != null && Range.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.RangeType).id)
+                    return false;
+                if (UnitRoleTypeId != null && UnitRoleTypeId.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.UnitRoleType).id)
+                    return false;
+                if (TurnTypeId != null && TurnTypeId.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.TurnType).id)
+                    return false;
+
+                return true;
+            }
+
+            public bool EffectListMatchesSelectBox(List<EffectModel> effects)
+            {
+                if (!IsEffectiveSelectBox())
+                    return true;
+                // return true if any effect in the list matches this SelectBox
+                return effects.Select(EffectMatchesSelectBox).Any(x => x);
             }
         }
     }

@@ -3,6 +3,7 @@ using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Helpers;
 using static THLWToolBox.Helpers.TypeHelper;
 using static THLWToolBox.Models.EffectModel;
+using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Models.ViewModels
 {
@@ -42,6 +43,14 @@ namespace THLWToolBox.Models.ViewModels
 
 
         // Methods
+        public List<EffectSelectBox> CreateEffectSelectBoxes()
+        {
+            return new()
+            {
+                new EffectSelectBox(1, EffectId1, SubeffectId1, Range1, UnitRoleTypeId1, TurnTypeId1),
+                new EffectSelectBox(2, EffectId2, SubeffectId2, Range2, UnitRoleTypeId2, TurnTypeId2),
+            };
+        }
 
         public string CreateCorrectionString(PictureData pictureRecord, int corrId)
         {
