@@ -58,36 +58,37 @@ namespace THLWToolBox.Controllers
 
         UnitElementDisplayModel? CreateUnitElementDisplayModel(PlayerUnitData unitRecord, List<AttackWithWeightModel> attacks, List<BulletSelectBox> bulletSelectBoxes)
         {
-            double totalScore = 0;
-            List<AttackElementInfo?> unitAttackElementInfo = attacks.Select(x => SearchElementInAttack(unitRecord, x, bulletSelectBoxes, ref totalScore)).ToList();
+            double unitTotalScore = 0;
+            List<AttackElementInfo?> unitAttackElementInfo = attacks.Select(x => SearchElementInAttack(unitRecord, x, bulletSelectBoxes, ref unitTotalScore)).ToList();
             
             unitAttackElementInfo = RemoveNullElements(unitAttackElementInfo);
             if (unitAttackElementInfo.Count > 0)
-                return new(unitRecord, CastToNonNullList(unitAttackElementInfo), totalScore);
+                return new(unitRecord, CastToNonNullList(unitAttackElementInfo), unitTotalScore);
 
             // null means this unit does not have corresponding element/category
             return null;
         }
 
-        AttackElementInfo? SearchElementInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attacks, List<BulletSelectBox> bulletSelectBoxes, ref double totalScore)
+        AttackElementInfo? SearchElementInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attacks, List<BulletSelectBox> bulletSelectBoxes, ref double unitTotalScore)
         {
-            double currentScore = 0;
+            double attackTotalScore = 0;
             List<MagazineElementInfo?> magazineElementInfos =
-                attacks.AttackData.Magazines.Select(x => SearchElementInMagazine(unitRecord, attacks, x, bulletSelectBoxes, ref currentScore)).ToList();
-            totalScore += currentScore;
+                attacks.AttackData.Magazines.Select(x => SearchElementInMagazine(unitRecord, attacks, x, bulletSelectBoxes, ref attackTotalScore)).ToList();
 
             // It's special here, we do not actually remove null magazines. We only remove the whole attack if all magazines returns null
             if (magazineElementInfos.Where(x => x != null && (x.IsSelectedByBox1 || x.IsSelectedByBox2)).Any())
+            {
+                unitTotalScore += attackTotalScore;
                 return new(attacks.AttackData, CastToNonNullList(magazineElementInfos));
+            }
 
             // null means this attack does not have corresponding element/category
             return null;
         }
 
         MagazineElementInfo? SearchElementInMagazine(PlayerUnitData unitRecord, AttackWithWeightModel attack, BulletMagazineModel magazine,
-                                                     List<BulletSelectBox> selectBoxes, ref double totalScore)
+                                                     List<BulletSelectBox> selectBoxes, ref double attackTotalScore)
         {
-
             int bulletId = magazine.BulletId;
             if (!bulletDict.ContainsKey(bulletId))
                 return null;
@@ -98,8 +99,7 @@ namespace THLWToolBox.Controllers
             bool isSelectedByBox2 = selectBoxes[1].IsEffectiveSelectBox() && BulletMatchSelectBox(bulletRecord, selectBoxes[1]);
             string bulletElementTypeString = GetElementTypeString(bulletRecord.element) + "-" + GetBulletTypeString(bulletRecord.category);
 
-            if (isSelectedByBox1 || isSelectedByBox2)
-                totalScore += CalcBulletPower(magazine, bulletRecord, unitRecord, attack.AttackData.PowerUpRates[5], attack.AttackWeight, false);
+            attackTotalScore += CalcBulletPower(magazine, bulletRecord, unitRecord, attack.AttackData.PowerUpRates[5], attack.AttackWeight, isSelectedByBox1 || isSelectedByBox2, false);
 
             return new(bulletRecord.type == 1, isSelectedByBox1, isSelectedByBox2, bulletElementTypeString);
         }

@@ -83,36 +83,38 @@ namespace THLWToolBox.Controllers
 
         UnitCriticalHitDisplayModel? CreateUnitCriticalHitDisplayModel(PlayerUnitData unitRecord, List<AttackWithWeightModel> attacks, HashSet<int> targetRaceIds)
         {
-            double totalScore = 0;
+            double unitTotalScore = 0;
             List<AttackCriticalHitInfo?> UnitAttackCriticalHitList =
-                attacks.Select(attack => SearchCriticalRaceInAttack(unitRecord, attack, targetRaceIds, ref totalScore)).ToList();
+                attacks.Select(attack => SearchCriticalRaceInAttack(unitRecord, attack, targetRaceIds, ref unitTotalScore)).ToList();
 
             UnitAttackCriticalHitList = RemoveNullElements(UnitAttackCriticalHitList);
             if (UnitAttackCriticalHitList.Count > 0)
-                return new UnitCriticalHitDisplayModel(unitRecord, CastToNonNullList(UnitAttackCriticalHitList), totalScore);
+                return new UnitCriticalHitDisplayModel(unitRecord, CastToNonNullList(UnitAttackCriticalHitList), unitTotalScore);
             
             // null means this unit does not have critial hit
             return null;
         }
 
-        AttackCriticalHitInfo? SearchCriticalRaceInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attack, HashSet<int> targetRaceIds, ref double totalScore)
+        AttackCriticalHitInfo? SearchCriticalRaceInAttack(PlayerUnitData unitRecord, AttackWithWeightModel attack, HashSet<int> targetRaceIds, ref double unitTotalScore)
         {
-            double currentScore = 0;
+            double attackTotalScore = 0;
             List<MagazineCriticalHitInfo?> criticalHits =
-                attack.AttackData.Magazines.Select(magazine => SearchCriticalRaceInMagazine(unitRecord, attack, magazine, targetRaceIds, ref currentScore)).ToList();
+                attack.AttackData.Magazines.Select(magazine => SearchCriticalRaceInMagazine(unitRecord, attack, magazine, targetRaceIds, ref attackTotalScore)).ToList();
             
-            totalScore += currentScore;
             criticalHits = RemoveNullElements(criticalHits);
 
             if (criticalHits.Count > 0)
+            {
+                unitTotalScore += attackTotalScore;
                 return new AttackCriticalHitInfo(attack.AttackData, CastToNonNullList(criticalHits));
+            }
 
             // null means this attack does not have critial hit
             return null;
         }
 
         MagazineCriticalHitInfo? SearchCriticalRaceInMagazine(PlayerUnitData unitRecord, AttackWithWeightModel attack, BulletMagazineModel magazine,
-                                                              HashSet<int> targetRaceIds, ref double totalScore)
+                                                              HashSet<int> targetRaceIds, ref double attackTotalScore)
         {
             int bulletId = magazine.BulletId;
             if (!bulletDict.ContainsKey(bulletId))
@@ -122,7 +124,7 @@ namespace THLWToolBox.Controllers
             List<string> foundCriticalRaceList = bulletCriticalRaceIds.Where(targetRaceIds.Contains).Select(x => raceDict[x]).ToList();
 
             bool magazineIsCriticalHit = (foundCriticalRaceList.Count > 0);
-            totalScore += CalcBulletPower(magazine, bulletDict[bulletId], unitRecord, attack.AttackData.PowerUpRates[5], attack.AttackWeight, magazineIsCriticalHit);
+            attackTotalScore += CalcBulletPower(magazine, bulletDict[bulletId], unitRecord, attack.AttackData.PowerUpRates[5], attack.AttackWeight, magazineIsCriticalHit, magazineIsCriticalHit);
             if (magazineIsCriticalHit)
                 return new MagazineCriticalHitInfo(magazine.MagazineId, string.Join(", ", foundCriticalRaceList));
 

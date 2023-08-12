@@ -68,7 +68,7 @@ namespace THLWToolBox.Helpers
         }
 
         public static double CalcBulletPower(BulletMagazineModel bulletMagazine, PlayerUnitBulletData bulletRecord, PlayerUnitData unitRecord,
-                                             int powerRate, double shotTypeWeight, bool isCriticalRace)
+                                             int powerRate, double shotTypeWeight, bool isMatchedMagazine, bool isCriticalRace)
         {
             double atk = ((bulletRecord.type == 1) ? unitRecord.yang_attack : unitRecord.yin_attack) / 1000.0;
             double totalPower = (bulletMagazine.BulletPowerRate / 100.0) * bulletMagazine.BulletValue;
@@ -76,6 +76,7 @@ namespace THLWToolBox.Helpers
             double critic = (1 + (isCriticalRace ? 100.0 : bulletRecord.critical) / 100.0);
             double rangeWeight = (bulletMagazine.BulletRange == 2 ? AttackScoreWeights.RangeAll : AttackScoreWeights.RangeSolo);
             double powerUpRate = powerRate / 100.0;
+            double matchedMagazineWeight = isMatchedMagazine ? 1.5 : 1.0;
 
             List<BulletAddonModel> bulletAddons = GetBulletAddons(bulletRecord);
             foreach (var bulletAddon in bulletAddons)
@@ -88,7 +89,7 @@ namespace THLWToolBox.Helpers
                     atk += unitRecord.speed * (bulletAddon.Value / 100.0) / 1000.0;
             }
 
-            return atk * totalPower * hit * critic * powerUpRate * rangeWeight * shotTypeWeight;
+            return atk * totalPower * hit * critic * powerUpRate * matchedMagazineWeight * rangeWeight * shotTypeWeight;
         }
 
         public static List<AttackWithWeightModel> GetUnitAttacksWithWeight(PlayerUnitData unitRecord, AttackSelectionModel attackSelection,
