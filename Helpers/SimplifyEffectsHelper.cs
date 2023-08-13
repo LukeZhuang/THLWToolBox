@@ -38,13 +38,20 @@ namespace THLWToolBox.Helpers
             return type >= 31 && type <= 38;
         }
 
-        static int IsBuffOrDebuff(int type)
+        int IsBuffOrDebuff()
         {
-            if (type == 1 || IsUnitRoleSpecificBuff(type))
+            if (EffectModel.EffectType == 1 || IsUnitRoleSpecificBuff(EffectModel.EffectType) || EffectModel.EffectType == 41)
                 return 1;
-            else if (type == 2 || IsUnitRoleSpecificDebuff(type))
+            else if (EffectModel.EffectType == 2 || IsUnitRoleSpecificDebuff(EffectModel.EffectType) || EffectModel.EffectType == 42)
                 return -1;
             return 0;
+        }
+
+        string Create2ndRankString()
+        {
+            if (EffectModel.EffectType == 41 || EffectModel.EffectType == 42)
+                return "2阶";
+            return "";
         }
 
         string CreateRolePrefixString()
@@ -59,35 +66,62 @@ namespace THLWToolBox.Helpers
             return GetUnitRoleString(role) + "用时";
         }
 
-        private static string MarkValue(int value)
+        static string MarkValue(int value)
         {
             return "<b><color=" + VALUE_COLOR + ">" + Convert.ToString(value) + "</color></b>";
         }
-        private static string MarkValue(double value)
+        static string MarkValue(double value)
         {
             return "<b><color=" + VALUE_COLOR + ">" + string.Format("{0:N2}", value) + "</color></b>";
         }
 
+        string CreateAddValueSuffix()
+        {
+            if (EffectModel.SuccessRate != 0)
+            {
+                if (EffectModel.AddValue == 0)
+                    return "[发生率" + EffectModel.SuccessRate + "%]";
+                else
+                {
+                    if (EffectModel.SuccessRate == 100)
+                    {
+                        Console.WriteLine(EffectModel.Name + " " + EffectModel.EffectType + " " + EffectModel.SubEffectType + " " + EffectModel.SuccessRate);
+                        throw new InvalidDataException();
+                    }
+                    return "[" + EffectModel.SuccessRate + "%概率+" + (EffectModel.EffectType == 5 ? 0.05 * EffectModel.AddValue : EffectModel.AddValue) + "]";
+                }
+            }
+            return "";
+        }
+
         public string CreateSimplifiedEffectStr()
         {
-            if (IsBuffOrDebuff(EffectModel.EffectType) != 0)
-                return CreateRolePrefixString() + CreateRangeString() + GetBuffDebuffTypeString(EffectModel.SubEffectType) +
-                       (IsBuffOrDebuff(EffectModel.EffectType) == 1 ? "加" : "减") + MarkValue(EffectModel.Value) + "级(" + Convert.ToString(EffectModel.Turn) + "t)";
-
-            return EffectModel.EffectType switch
-            {
-                0 => "",
-                3 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "%血",
-                4 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "盾",
-                5 => CreateRangeString() + "加" + MarkValue(0.05 * EffectModel.Value) + "P",
-                12 => CreateRangeString() + "受到" + GetBulletTypeString(EffectModel.SubEffectType) + "弹减伤" + MarkValue(EffectModel.Value) + "%",
-                13 => CreateRangeString() + "受到" + GetElementTypeString(EffectModel.SubEffectType) + "属性减伤" + MarkValue(EffectModel.Value) + "%",
-                14 => CreateRangeString() + "受到" + (RaceDict == null ? "某种族" : "\"" + RaceDict[EffectModel.SubEffectType] + "\"") + "减伤" + MarkValue(EffectModel.Value) + "%",
-                15 => GetBulletTypeString(EffectModel.SubEffectType) + "弹加伤" + MarkValue(EffectModel.Value) + "%",
-                16 => GetElementTypeString(EffectModel.SubEffectType) + "属性加伤" + MarkValue(EffectModel.Value) + "%",
-                17 => "灵力回收效率加" + MarkValue(EffectModel.Value) + "%",
-                _ => throw new NotImplementedException(),
-            };
+            string simplifiedEffectStr;
+            if (EffectModel.EffectType == 0)
+                return "";
+            else if (IsBuffOrDebuff() != 0)
+                simplifiedEffectStr = CreateRolePrefixString() + CreateRangeString() + Create2ndRankString() + GetBuffDebuffTypeString(EffectModel.SubEffectType) +
+                                      (IsBuffOrDebuff() == 1 ? "加" : "减") + MarkValue(EffectModel.Value) + "级(" + Convert.ToString(EffectModel.Turn) + "t)";
+            else
+                simplifiedEffectStr = EffectModel.EffectType switch
+                {
+                    3 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "%血",
+                    4 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "盾",
+                    5 => CreateRangeString() + "加" + MarkValue(0.05 * EffectModel.Value) + "P",
+                    6 => CreateRangeString() + "加" + MarkValue(EffectModel.Value) + "枚" + "异常[" + GetBarrierTypeString(EffectModel.SubEffectType) + "](" + Convert.ToString(EffectModel.Turn) + "t)",
+                    8 => GetActOrderChangeTypeString(EffectModel.SubEffectType),
+                    9 => CreateRangeString() + "清" + MarkValue(EffectModel.Value) + "枚异常",
+                    10 => CreateRangeString() + "解除禁止状态/强度下降",
+                    11 => GetDamageReduceTypeString(EffectModel.SubEffectType) + MarkValue(EffectModel.Value) + "%",
+                    12 => CreateRangeString() + "受到" + GetBulletTypeString(EffectModel.SubEffectType) + "弹减伤" + MarkValue(EffectModel.Value) + "%",
+                    13 => CreateRangeString() + "受到" + GetElementTypeString(EffectModel.SubEffectType) + "属性减伤" + MarkValue(EffectModel.Value) + "%",
+                    14 => CreateRangeString() + "受到" + (RaceDict == null ? "某种族" : "\"" + RaceDict[EffectModel.SubEffectType] + "\"") + "减伤" + MarkValue(EffectModel.Value) + "%",
+                    15 => GetBulletTypeString(EffectModel.SubEffectType) + "弹加伤" + MarkValue(EffectModel.Value) + "%",
+                    16 => GetElementTypeString(EffectModel.SubEffectType) + "属性加伤" + MarkValue(EffectModel.Value) + "%",
+                    17 => "灵力回收效率加" + MarkValue(EffectModel.Value) + "%",
+                    _ => throw new NotImplementedException(),
+                };
+            return EffectModel.TimingString + simplifiedEffectStr + CreateAddValueSuffix();
         }
     }
 }

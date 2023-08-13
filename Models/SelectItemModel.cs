@@ -41,21 +41,31 @@ namespace THLWToolBox.Models
             }
         }
 
-        public static string GetBuffDebuffTypeStringForSelect(int effectType, bool isBuff)
+        static string GetBuffDebuffTypeStringForSelect(int effectType, bool isBuff)
         {
             string prefix = isBuff ? "Buff-" : "Debuff-";
             string suffix = isBuff ? "上升" : "下降";
             return prefix + GetBuffDebuffTypeString(effectType) + suffix;
         }
 
-        public static string GetBulletTypeStringForSelect(int elementType)
+        static string GetBulletTypeStringForSelect(int elementType)
         {
             return "弹种-" + GetBulletTypeString(elementType) + "弹";
         }
 
-        public static string GetElementTypeStringForSelect(int elementType)
+        static string GetElementTypeStringForSelect(int elementType)
         {
             return "属性-" + GetElementTypeString(elementType);
+        }
+
+        static string GetBarrierTypeStringForSelect(int barrierType)
+        {
+            return "结界异常-" + GetBarrierTypeString(barrierType);
+        }
+
+        static string GetActOrderChangeTypeStringForSelect(int actOrderChangeType)
+        {
+            return "顺序改变-" + GetActOrderChangeTypeString(actOrderChangeType);
         }
 
 
@@ -83,17 +93,15 @@ namespace THLWToolBox.Models
                 case 3:   // "体力回复"
                 case 4:   // "结界增加"
                 case 5:   // "灵力上升"
+                case 9:   // "恢复结界异常"
+                case 10:  // "解除禁止状态/强度下降"
+                case 11:  // "被攻击时减伤"
                 case 14:  // "受来自X种族攻击时伤害下降"
                 case 17:  // "灵力回收效率上升"
                     return new SelectItemModel(0, "空");
 
                 // Has subtype but not implemented
-                case 6:   // "施加结界异常"
                 case 7:   // "敌方回合顺序改变"
-                case 8:   // "己方回合顺序改变"
-                case 9:   // "恢复结界异常"
-                case 10:  // "解除禁止状态/强度下降"
-                case 11:  // "被攻击时减伤"
                 case 18:  // "换位连携"
                 case 19:  // "对方禁止状态（敌人的）"
                     throw new NotImplementedException();
@@ -107,6 +115,7 @@ namespace THLWToolBox.Models
                 case 26:  // "技巧式使用时施加Buff"
                 case 27:  // "速攻式使用时施加Buff"
                 case 28:  // "破坏式使用时施加Buff"
+                case 41:  // "二阶Buff"
                     return new SelectItemModel(1000 + subEffectType, GetBuffDebuffTypeStringForSelect(subEffectType, true));
 
                 case 2:   // "Debuff"
@@ -118,6 +127,7 @@ namespace THLWToolBox.Models
                 case 36:  // "技巧式使用时施加Debuff"
                 case 37:  // "速攻式使用时施加Debuff"
                 case 38:  // "破坏式使用时施加Debuff"
+                case 42:  // "二阶Debuff"
                     return new SelectItemModel(2000 + subEffectType, GetBuffDebuffTypeStringForSelect(subEffectType, false));
 
                 case 12:  // "受X弹种攻击时伤害下降"
@@ -127,6 +137,12 @@ namespace THLWToolBox.Models
                 case 13:  // "受X属性攻击时伤害下降"
                 case 16:  // "X属性威力上升"
                     return new SelectItemModel(4000 + subEffectType, GetElementTypeStringForSelect(subEffectType));
+
+                case 6:   // "施加结界异常"
+                    return new SelectItemModel(5000 + subEffectType, GetBarrierTypeStringForSelect(subEffectType));
+
+                case 8:   // "己方回合顺序改变"
+                    return new SelectItemModel(6000 + subEffectType, GetActOrderChangeTypeStringForSelect(subEffectType));
 
                 default:
                     throw new NotImplementedException();

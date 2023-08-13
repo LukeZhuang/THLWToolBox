@@ -156,6 +156,8 @@
                 36 => "技巧式使用时施加Debuff",
                 37 => "速攻式使用时施加Debuff",
                 38 => "破坏式使用时施加Debuff",
+                41 => "二阶Buff",
+                42 => "二阶Debuff",
                 _ => throw new NotImplementedException(),
             };
         }
@@ -170,7 +172,7 @@
                 14 => "电",
                 15 => "毒",
                 16 => "暗",
-                _ => throw new NotImplementedException(),
+                _ => throw new InvalidDataException(),
             };
         }
 
@@ -203,6 +205,54 @@
                 4 => "阴攻",
                 5 => "阴防",
                 6 => "速度",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string GetTimingTypeString(int characteristicType)
+        {
+            return characteristicType switch
+            {
+                1 => "Wave开始时，",
+                2 => "回合开始时，",
+                3 => "被攻击时，",
+                4 => "被攻击后，",
+                _ => throw new NotImplementedException(),
+            };
+        }
+
+        public static string GetBarrierTypeString(int barrierType)
+        {
+            return barrierType switch
+            {
+                1 => "燃烧",
+                2 => "冻结",
+                3 => "感电",
+                4 => "毒雾",
+                5 => "黑暗",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string GetActOrderChangeTypeString(int actOrderChangeType)
+        {
+            return actOrderChangeType switch
+            {
+                1 => "加速",
+                2 => "蓄力",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string GetDamageReduceTypeString(int damageReduceType)
+        {
+            return damageReduceType switch
+            {
+                1 => "减伤",
+                2 => "受阳气攻击减伤",
+                3 => "受阴气攻击减伤",
+                4 => "若满血则减伤",
+                5 => "若少于25%血则减伤",
                 _ => throw new InvalidDataException(),
             };
         }

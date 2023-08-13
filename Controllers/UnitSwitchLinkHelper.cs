@@ -66,8 +66,8 @@ namespace THLWToolBox.Controllers
         SelectItemModel GetUnitTrustCharacteristicSIM(PlayerUnitData unitRecord)
         {
             PlayerUnitCharacteristicData unitCharacteristicRecord = unitCharacteristicDict[unitRecord.characteristic_id];
-            return SelectItemModel.CreateSelectItemForEffect(new EffectModel(unitCharacteristicRecord.trust_characteristic_rear_effect_type,
-                                                                             unitCharacteristicRecord.trust_characteristic_rear_effect_subtype, 0, 0, 0, 0),
+            return SelectItemModel.CreateSelectItemForEffect(new EffectModel("", unitCharacteristicRecord.trust_characteristic_rear_effect_type,
+                                                                             unitCharacteristicRecord.trust_characteristic_rear_effect_subtype, 0, 0, 0, 0, 0, 0, "", ""),
                                                              SelectItemTypes.SwitchLinkEffectType);
         }
     }

@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Web;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
