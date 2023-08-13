@@ -29,5 +29,14 @@ namespace THLWToolBox.Controllers
                                                        .Distinct().ToList();
             return Json(matchedRaceNameList);
         }
+
+        [Produces("application/json")]
+        public IActionResult SearchPicture(string? term)
+        {
+            var matchedPictureNameList = _context.PictureData.Select(x => x.name)
+                                                             .Where(x => x.Contains(term))
+                                                             .Distinct().ToList();
+            return Json(matchedPictureNameList);
+        }
     }
 }

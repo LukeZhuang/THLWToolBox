@@ -7,8 +7,6 @@ using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.SelectItemModel;
 using static THLWToolBox.Models.EffectModel;
-using System.Collections.Generic;
-using NuGet.Packaging;
 using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Controllers

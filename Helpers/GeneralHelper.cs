@@ -56,6 +56,11 @@ namespace THLWToolBox.Helpers
             return raceList.Where(x => x.name.Equals(raceName)).Select(x => x.id).First();
         }
 
+        public static PictureData GetPictureByName(List<PictureData> pictureList, string pictureName)
+        {
+            return pictureList.Where(x => x.name.Equals(pictureName)).First();
+        }
+
         public static List<BulletAddonModel> GetBulletAddons(PlayerUnitBulletData bulletRecord)
         {
             return new List<BulletAddonModel>() {
