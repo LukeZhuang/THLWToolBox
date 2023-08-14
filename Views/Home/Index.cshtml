@@ -139,9 +139,9 @@
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_skill.png")" /></div>
                 按技能找
             </button>
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitBarrierStatusFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" /></div>
-                <div class="btn-feature-inprogess">按异常找</div>
+                按异常找
             </button>
             <button type="button" onclick="location.href='@Url.Action("Index", "UnitElementFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_element.png")" /></div>
@@ -154,7 +154,7 @@
         <div class="buttons-grid">
             <button type="button" onclick="location.href='@Url.Action("Index", "IdHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_empty.png")" /></div>
-                查id
+                查编号
             </button>
         </div>
     </div>

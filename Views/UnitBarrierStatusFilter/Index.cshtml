@@ -1,0 +1,200 @@
+﻿@model UnitBarrierStatusFilterViewModel
+@using THLWToolBox.Helpers;
+@using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitBarrierStatusFilterViewModel;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<style>
+    .barrier-status-display-grid {
+        display: inline-grid;
+        grid-template-columns: auto auto;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 2px 2px;
+    }
+
+
+    .barrier-status-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .barrier-breaking-grid {
+        display: inline-grid;
+        grid-template-columns: auto auto auto;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    .barrier-breaking-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" width="60" height="60" />角色筛选器（按结界异常）</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="UnitBarrierStatusFilterModal" tabindex="-1" aria-labelledby="UnitBarrierStatusFilter" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="UnitBarrierStatusFilter">帮助：角色筛选器（按属性弹种）</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>aaa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="home-box">
+    <form asp-controller="UnitBarrierStatusFilter" asp-action="Index" method="post">
+        <div class="filter-box">
+            <div class="title-box-1">通用</div>
+            <div class="buttons-grid">
+                <div class="btn-checkbox" style="width:250px">@Html.CheckBox("SimplifiedEffect", true) 显示简略版效果描述</div>
+            </div>
+        </div>
+
+        <div class="filter-box">
+            <div class="title-box-1">按异常相关能力</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">结界异常类型：</div>
+                <div class="selects-box">
+                    <select asp-for="AbilityBarrierStatusType" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>燃烧</option>
+                        <option value=2>冻结</option>
+                        <option value=3>感电</option>
+                        <option value=4>毒雾</option>
+                        <option value=5>黑暗</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">异常相关能力：</div>
+                <div class="selects-box">
+                    <select asp-for="BarrierAbility" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>免疫该异常</option>
+                        <option value=2>免疫负面效果</option>
+                        <option value=3>异常反射</option>
+                        <option value=4>体力回复</option>
+                        <option value=5>灵力上升</option>
+                        <option value=6>攻击性提升</option>
+                        <option value=7>防御性提升</option>
+                        <option value=8>速度性提升</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-box">
+            <div class="title-box-1">按上异常的技能</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">上异常类型：</div>
+                <div class="selects-box">
+                    <select asp-for="SkillBarrierStatusType" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>燃烧</option>
+                        <option value=2>冻结</option>
+                        <option value=3>感电</option>
+                        <option value=4>毒雾</option>
+                        <option value=5>黑暗</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">范围：</div>
+                <div class="buttons-grid">
+                    <div class="btn-checkbox">@Html.CheckBox("Self", false) 自身</div>
+                    <div class="btn-checkbox">@Html.CheckBox("SelfAll", false) 己方全体</div>
+                    <div class="btn-checkbox">@Html.CheckBox("Enemy", false) 敌方单体</div>
+                    <div class="btn-checkbox">@Html.CheckBox("EnemyAll", false) 敌方全体</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-box">
+            <div class="title-box-1">按破异常的射击</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">破异常类型：</div>
+                <div class="selects-box">
+                    <select asp-for="BreakingBarrierStatusType" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>燃烧</option>
+                        <option value=2>冻结</option>
+                        <option value=3>感电</option>
+                        <option value=4>毒雾</option>
+                        <option value=5>黑暗</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">射击类型：</div>
+                <div class="buttons-grid">
+                    <div class="btn-checkbox">@Html.CheckBox("SpreadShot", true) 扩散射击</div>
+                    <div class="btn-checkbox">@Html.CheckBox("FocusShot", true) 集中射击</div>
+                    <div class="btn-checkbox">@Html.CheckBox("NormalSpellcard", true) 小符卡</div>
+                    <div class="btn-checkbox">@Html.CheckBox("LastWord", true) 终符</div>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitBarrierStatusFilterModal">帮助</button>
+    </form>
+</div>
+
+<div class="home-box">
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    射击属性
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.UnitBarrierStatusInfos!)
+            {
+                <tr>
+                    <td>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
+                    </td>
+                    <td>
+                        @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
+                    </td>
+                    <td>
+                        @Html.Raw(DisplayUnitBarrierStatus(item))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -221,6 +221,19 @@
             };
         }
 
+        public static int GetBarrierTypeBreakingAddonId(int barrierType)
+        {
+            return barrierType switch
+            {
+                1 => 12,
+                2 => 13,
+                3 => 14,
+                4 => 15,
+                5 => 16,
+                _ => throw new InvalidDataException(),
+            };
+        }
+
         public static string GetBarrierTypeString(int barrierType)
         {
             return barrierType switch
