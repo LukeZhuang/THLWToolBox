@@ -42,6 +42,7 @@ delete from [TouhouLostWordRawData].[dbo].[HitCheckOrderTable];
 delete from [TouhouLostWordRawData].[dbo].[SkillTable];
 delete from [TouhouLostWordRawData].[dbo].[SkillEffectTable];
 delete from [TouhouLostWordRawData].[dbo].[AbilityTable];
+delete from [TouhouLostWordRawData].[dbo].[BulletExtraEffectData];
 
 
 /* step 3: copy new data */
@@ -59,6 +60,7 @@ insert into [TouhouLostWordRawData].[dbo].[HitCheckOrderTable] select * from [To
 insert into [TouhouLostWordRawData].[dbo].[SkillTable] select * from [TouhouLostWordRawData].[dbo].[SkillTableNew];
 insert into [TouhouLostWordRawData].[dbo].[SkillEffectTable] select * from [TouhouLostWordRawData].[dbo].[SkillEffectTableNew];
 insert into [TouhouLostWordRawData].[dbo].[AbilityTable] select * from [TouhouLostWordRawData].[dbo].[AbilityTableNew];
+insert into [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable] select * from [TouhouLostWordRawData].[dbo].[BulletExtraEffectTableNew];
 
 
 /* step 4: drop new data table */
@@ -76,6 +78,7 @@ drop table [TouhouLostWordRawData].[dbo].[HitCheckOrderTableNew];
 drop table [TouhouLostWordRawData].[dbo].[SkillTableNew];
 drop table [TouhouLostWordRawData].[dbo].[SkillEffectTableNew];
 drop table [TouhouLostWordRawData].[dbo].[AbilityTableNew];
+drop table [TouhouLostWordRawData].[dbo].[BulletExtraEffectTableNew];
 
 
 /* step 5: prepare data for website */
@@ -93,6 +96,7 @@ delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[Pla
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitSkillData];
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitSkillEffectData];
 delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitAbilityData];
+delete from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[BulletExtraEffectData];
 
 SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] ON;
 insert into [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] (
@@ -218,3 +222,10 @@ select
 B.[id],B.[name],B.[resist_ability_description],B.[good_element_take_damage_rate],B.[weak_element_take_damage_rate],B.[element_ability_description],B.[good_element_give_damage_rate],B.[weak_element_give_damage_rate],B.[barrier_ability_description],B.[burning_barrier_type],B.[frozen_barrier_type],B.[electrified_barrier_type],B.[poisoning_barrier_type],B.[blackout_barrier_type],B.[boost_ability_description],B.[boost_power_divergence_type],B.[boost_power_divergence_range],B.[purge_ability_description],B.[purge_barrier_diffusion_type],B.[purge_barrier_diffusion_range]
 from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] as A inner join [TouhouLostWordRawData].[dbo].[AbilityTable] as B on A.ability_id = B.id
 SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitAbilityData] OFF;
+
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[BulletExtraEffectData] ON;
+INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[BulletExtraEffectData] (
+[id],[name],[description],[target],[turn],[type],[subtype],[value]
+)
+select * from [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable]
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[BulletExtraEffectData] OFF;

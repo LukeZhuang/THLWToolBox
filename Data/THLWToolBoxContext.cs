@@ -29,5 +29,6 @@ namespace THLWToolBox.Data
         public DbSet<PlayerUnitSkillData> PlayerUnitSkillData { get; set; } = default!;
         public DbSet<PlayerUnitSkillEffectData> PlayerUnitSkillEffectData { get; set; } = default!;
         public DbSet<PlayerUnitAbilityData> PlayerUnitAbilityData { get; set; } = default!;
+        public DbSet<BulletExtraEffectData> BulletExtraEffectData { get; set; } = default!;
     }
 }
