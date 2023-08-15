@@ -127,12 +127,12 @@ namespace THLWToolBox.Controllers
                     var magazineSP = np.sum(spiritRecycleMatrix, 0);
                     accumulatedSP += magazineSP;
                 }
-                var tmpSP = np.copy(accumulatedSP).argsort<double>();
+                var tmpSP = accumulatedSP.copy().argsort<double>();
                 double spiritRecycle;
                 if (confidenceLevel == 0)
-                    spiritRecycle = double.Parse(tmpSP.mean()[0].repr);
+                    spiritRecycle = tmpSP.mean()[0];
                 else
-                    spiritRecycle = double.Parse(tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)].repr);
+                    spiritRecycle = tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
                 spiritRecycles.Add(spiritRecycle);
             }
             return spiritRecycles;
