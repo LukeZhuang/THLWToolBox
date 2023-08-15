@@ -42,8 +42,6 @@ namespace THLWToolBox.Controllers
             List<PlayerUnitData> queryUnits = new();
             List<UnitShotSpiritRecycleDisplayModel> spiritRecycleDatas = new();
 
-            throw new NotImplementedException();
-
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
                 PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
@@ -132,9 +130,11 @@ namespace THLWToolBox.Controllers
                 var tmpSP = accumulatedSP.copy().argsort<double>();
                 double spiritRecycle;
                 if (confidenceLevel == 0)
-                    spiritRecycle = tmpSP.mean()[0];
+                    spiritRecycle = 1;
+                    // spiritRecycle = tmpSP.mean()[0];
                 else
-                    spiritRecycle = tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
+                    spiritRecycle = 2;
+                    // spiritRecycle = tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
                 spiritRecycles.Add(spiritRecycle);
             }
             return spiritRecycles;
