@@ -27,7 +27,7 @@ namespace THLWToolBox.Controllers
         // POST: UnitShotSpiritRecycleHelper
         public async Task<IActionResult> Index(UnitShotSpiritRecycleHelperViewModel request)
         {
-            if (_context.PictureData == null)
+            if (_context.PlayerUnitData == null)
                 return Problem("Entity set 'THLWToolBoxContext.PlayerUnitData' is null.");
 
             // --- query data tables ---
@@ -101,6 +101,7 @@ namespace THLWToolBox.Controllers
         static List<double> CalcShotModel(SpiritRecycleModel spiritRecycleInput, UnitShotSpiritRecycleHelperViewModel request)
         {
             List<double> spiritRecycles = new();
+            return spiritRecycles;
             int spRate = spiritRecycleInput.PhantasmPowerUpRate;
             int enemyCount = (spiritRecycleInput.BulletRange == 1) ? 1 : request.EnemyCount.GetValueOrDefault(1);
             int hitRank = request.HitRank.GetValueOrDefault(0);
