@@ -105,12 +105,12 @@ namespace THLWToolBox.Controllers
             int enemyCount = (spiritRecycleInput.BulletRange == 1) ? 1 : request.EnemyCount.GetValueOrDefault(1);
             int hitRank = request.HitRank.GetValueOrDefault(0);
             if (hitRank < -10 || hitRank > 10)
-                throw new NotImplementedException();
+                throw new InvalidDataException();
             int sourceSmoke = request.SourceSmoke.GetValueOrDefault(0);
             int targetCharge = request.TargetCharge.GetValueOrDefault(0);
             int confidenceLevel = request.ConfidenceLevel.GetValueOrDefault(0);
 
-            var accumulatedSP = np.zeros(MONTE_CARLO);
+            var accumulatedSP = np.zeros(MONTE_CARLO).astype(typeof(double));
             foreach (List<MagazineInfo> boost in spiritRecycleInput.BoostsInfo)
             {
                 foreach (MagazineInfo magazineInfo in boost)
@@ -118,23 +118,29 @@ namespace THLWToolBox.Controllers
                     int bulletCount = magazineInfo.BulletValue * enemyCount;
                     bool isSureHit = magazineInfo.IsSureHit;
                     double actualHit = GetActualHitRate(magazineInfo.Hit, hitRank, sourceSmoke, targetCharge);
+                    var aaa = spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04;
                     var spiritRecycleMatrix = np.floor(spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04) * 0.01;
                     if (!isSureHit)
                     {
                         var hitMask = np.random.rand(bulletCount, MONTE_CARLO) < actualHit;
                         spiritRecycleMatrix *= hitMask.astype(typeof(double));
                     }
-                    var magazineSP = np.sum(spiritRecycleMatrix, 0);
+                    spiritRecycleMatrix = spiritRecycleMatrix.astype(typeof(float));  // workaround for numsharp 0.30.0
+                    var magazineSP = np.sum(spiritRecycleMatrix, 0).astype(typeof(double));
                     accumulatedSP += magazineSP;
                 }
-                var tmpSP = accumulatedSP.copy().argsort<double>();
                 double spiritRecycle;
                 if (confidenceLevel == 0)
-                    spiritRecycle = tmpSP.mean()[0];
+                    spiritRecycle = accumulatedSP.mean();
                 else
-                    spiritRecycle = tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
+                {
+                    var sortIndex = accumulatedSP.copy().argsort<double>();
+                    int confidenceIndex = sortIndex[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
+                    spiritRecycle = accumulatedSP[confidenceIndex];
+                }
                 spiritRecycles.Add(spiritRecycle);
             }
+
             return spiritRecycles;
         }
 

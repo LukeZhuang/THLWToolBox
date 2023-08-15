@@ -90,7 +90,7 @@ namespace THLWToolBox.Controllers
                 if (request.BarrierAbility != unitBarrierAbility)
                     return null;
                 unitBarrierStatusInfo.AbilityBarrierStatusType = GetBarrierTypeString(request.AbilityBarrierStatusType.GetValueOrDefault());
-                unitBarrierStatusInfo.BarrierAbility = request.SimplifiedEffect.GetValueOrDefault(true) ? Convert.ToString(unitBarrierAbility)
+                unitBarrierStatusInfo.BarrierAbility = request.SimplifiedEffect.GetValueOrDefault(true) ? GetBarrierAbilityTypeString(unitBarrierAbility, request.AbilityBarrierStatusType.GetValueOrDefault())
                                                                                                          : abilityDict[unitRecord.ability_id].barrier_ability_description;
             }
 
