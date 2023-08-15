@@ -1,0 +1,232 @@
+﻿@model UnitElementFilterModel
+@using THLWToolBox.Helpers;
+@using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitElementFilterModel;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<style>
+    .attacks-grid {
+        display: inline-grid;
+        grid-template-columns: 20% auto;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    .attack-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .magazines-grid {
+        display: inline-grid;
+        grid-template-columns: 16.6% 16.6% 16.6% 16.6% 16.8% 16.8%;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
+    }
+
+    .magazine-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .yin-background {
+        background: #E0E0E0;
+    }
+
+    .yang-background {
+        background: white;
+    }
+
+</style>
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_element.png")" width="60" height="60" />角色筛选器（按属性弹种）</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="UnitElementFilterModal" tabindex="-1" aria-labelledby="UnitElementFilter" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="UnitElementFilter">帮助：角色筛选器（按属性弹种）</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 属性弹种任选其一或都选，都选则会进行匹配筛选。两种子弹若都选择，则会筛选出有任意其中一种的角色 </p>
+                <p>2. 排序法则： 按每个角色每种属性/弹种/性质的总得分从大到小排序 </p>
+                <p>3. 得分计算法则：角色对应攻击力x倍率x子弹数x命中率x(1+会心率)x5级弹幕补正x权重，词条仅考虑必中/硬质/斩裂，<b>由于不计算其他任何补正特攻以及技能组等因素，因此<font color=#FF0000>排名和得分仅供参考，不反映角色的实际强度</font></b>。角色面板取满级、满强化（满普通香木、满升格、满觉醒）、转生前且未装备任何绘卷的数据 </p>
+                <p>4. 权重计算法则（暂定）：扩散射击1倍，集中射击1.2倍，小符卡3倍，终符5倍，对群射击/符卡再乘以1.5。匹配的子弹会再乘以1.5。相同的小符卡仅参与一次计算 </p>
+                <p>5. 阴影显示为阴气，白色背景为阳气 </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="home-box">
+    <form asp-controller="UnitElementFilter" asp-action="Index" method="post">
+        <div class="filter-box">
+            <div class="title-box-1">射击类型</div>
+            <div class="buttons-grid">
+                <div class="btn-checkbox">@Html.CheckBox("SpreadShot", false) 扩散射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("FocusShot", false) 集中射击</div>
+                <div class="btn-checkbox">@Html.CheckBox("NormalSpellcard", true) 小符卡</div>
+                <div class="btn-checkbox">@Html.CheckBox("LastWord", true) 终符</div>
+            </div>
+        </div>
+            
+        <div class="filter-box">
+            <div class="title-box-1">子弹类型一（红色标出）</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">属性：</div>
+                <div class="selects-box">
+                    <select asp-for="BulletElement1" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>日属性</option>
+                        <option value=2>月属性</option>
+                        <option value=3>火属性</option>
+                        <option value=4>水属性</option>
+                        <option value=5>木属性</option>
+                        <option value=6>金属性</option>
+                        <option value=7>土属性</option>
+                        <option value=8>星属性</option>
+                        <option value=9>无属性</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">弹种：</div>
+                <div class="selects-box">
+                    <select asp-for="BulletCategory1" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>通常弹</option>
+                        <option value=2>镭射弹</option>
+                        <option value=3>体术弹</option>
+                        <option value=4>斩击弹</option>
+                        <option value=5>动能弹</option>
+                        <option value=6>流体弹</option>
+                        <option value=7>能量弹</option>
+                        <option value=8>御符弹</option>
+                        <option value=9>光弹</option>
+                        <option value=10>尖头弹</option>
+                        <option value=11>追踪弹</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">性质：</div>
+                <div class="selects-box">
+                    <select asp-for="BulletType1" class="selector">
+                        <option value=0>阴阳均可</option>
+                        <option value=1>仅阴气</option>
+                        <option value=2>仅阳气</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-box">
+            <div class="title-box-1">子弹类型二（蓝色标出）</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">属性：</div>
+                <div class="selects-box">
+                    <select asp-for="BulletElement2" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>日属性</option>
+                        <option value=2>月属性</option>
+                        <option value=3>火属性</option>
+                        <option value=4>水属性</option>
+                        <option value=5>木属性</option>
+                        <option value=6>金属性</option>
+                        <option value=7>土属性</option>
+                        <option value=8>星属性</option>
+                        <option value=9>无属性</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">弹种：</div>
+                <div class="selects-box">
+                    <select asp-for="BulletCategory2" class="selector">
+                        <option value=null>{未选择}</option>
+                        <option value=1>通常弹</option>
+                        <option value=2>镭射弹</option>
+                        <option value=3>体术弹</option>
+                        <option value=4>斩击弹</option>
+                        <option value=5>动能弹</option>
+                        <option value=6>流体弹</option>
+                        <option value=7>能量弹</option>
+                        <option value=8>御符弹</option>
+                        <option value=9>光弹</option>
+                        <option value=10>尖头弹</option>
+                        <option value=11>追踪弹</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">性质：</div>
+                <div class="selects-box">
+                    <select asp-for="BulletType2" class="selector">
+                        <option value=0>阴阳均可</option>
+                        <option value=1>仅阴气</option>
+                        <option value=2>仅阳气</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitElementFilterModal">帮助</button>
+    </form>
+</div>
+
+<div class="home-box">
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    射击属性
+                </th>
+                <th>
+                    得分
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.UnitElementInfos!)
+            {
+                <tr>
+                    <td>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
+                    </td>
+                    <td>
+                        @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
+                    </td>
+                    <td>
+                        @Html.Raw(DisplayUnitElement(item.UnitAttackElementInfos))
+                    </td>
+                    <td>
+                        @Html.Raw(CreateTotalScoreString(item))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

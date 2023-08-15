@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Numpy;
+using Python.Runtime;
 using THLWToolBox.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<THLWToolBoxContext>(options =>
@@ -7,6 +9,9 @@ builder.Services.AddDbContext<THLWToolBoxContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+np.arange(1);
+PythonEngine.BeginAllowThreads();
 
 var app = builder.Build();
 

@@ -1,0 +1,201 @@
+﻿@model UnitSwitchLinkHelperViewModel
+@using THLWToolBox.Helpers;
+@using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<style>
+    .swith-link-units {
+        border: none;
+        background: white;
+        padding: 7px 7px;
+        text-align: left;
+        text-decoration: none;
+        display: inline-block;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .units-img-name-box {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        font-size: 12px;
+        padding: 2px 2px;
+        margin-top: 1px;
+    }
+
+    .units-img-name-box img {
+        width: 100%;
+        height: auto;
+        position: relative;
+        margin: 0;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="UnitSwitchLinkHelperModal" tabindex="-1" aria-labelledby="UnitSwitchLinkHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="UnitSwitchLinkHelper">帮助：亲密关系查询器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 若只填写角色，则会列举出与其有亲密关系的角色列表。</p>
+                <p>2. 若只选择连携类型，则会列举出所有是该连携类型的角色。</p>
+                <p>3. 若两个都选，<b><font color="red">则会筛选与该角色有亲密关系且连携类型为选定类型的角色</font></b>。</p>
+                <p>4. 有关亲密关系详情见我的文章：<a href="https://www.bilibili.com/read/cv22187818">换位连携机制详解</a>。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script type="text/javascript">
+        $('#UnitSymbolNameInput').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/InputAutoCompleteHelper/SearchUser',
+                    dataType: 'json',
+                    data: { term: $('#UnitSymbolNameInput').val() },
+                    success: function (data) {
+                        var result = $.map(data, function (item) {
+                            return {
+                                label: item
+                            };
+                        });
+                        return response(result);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                $('#UnitSymbolNameInput').val(ui.item.label);
+            },
+            create: function () {
+                $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+                    return $('<li>')
+                        .append('<div id="ui-id-6" tabindex="-1" class="ui-menu-item-wrapper">'
+                        + item.label + '<br></div>')
+                        .appendTo(ul);
+                };
+            }
+        });
+    </script>
+}
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_heart.png")" width="60" height="60" /> 亲密关系查询器</div>
+</div>
+
+<div class="home-box">
+    <form asp-controller="UnitSwitchLinkHelper" asp-action="Index" method="post">
+        <div class="filter-box">
+            <div class="title-box-1">按角色名查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
+                <div class="selects-box">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
+                </div>
+            </div>
+            <div class="title-box-1">按连携类型查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">连携类型:</div>
+                <div class="selects-box">
+                    <select asp-for="SwitchLinkType" asp-items="Model.SwitchLinkTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitSwitchLinkHelperModal">帮助</button>
+    </form>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">要查询的角色</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    连携类型
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.QueryUnits!)
+        {
+            <tr>
+                <td>
+                    @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
+                </td>
+                <td>
+                    @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
+                </td>
+                <td>
+                    @Html.Raw(item.SwitchLinkTypeStr)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">亲密关系角色列表</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    连携类型
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.RelatedUnits!)
+        {
+            <tr>
+                <td>
+                    @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
+                </td>
+                <td>
+                    @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
+                </td>
+                <td>
+                    <div class="swith-link-units">
+                        @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

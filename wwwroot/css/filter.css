@@ -49,7 +49,7 @@
     border: none;
     background: white;
     color: black;
-    padding: 5px 0px;
+    padding: 5px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -146,4 +146,17 @@
     height: 60px;
     position: relative;
     margin: 0;
+}
+
+.title-result-box-1 {
+    position: relative;
+    width: 100%;
+    padding: 7px 10px;
+    background: white;
+    text-align: center;
+    color: black;
+    font-size: 18px;
+    height: 40px;
+    line-height: 22px;
+    font-weight: bold
 }

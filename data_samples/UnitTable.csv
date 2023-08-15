@@ -1,0 +1,2 @@
+﻿id,name,short_name,person_id,role,symbol_name,life_point,yang_attack,yang_defense,yin_attack,yin_defense,speed,shot1_id,shot2_id,spellcard1_id,spellcard2_id,spellcard3_id,spellcard4_id,spellcard5_id,skill1_id,skill2_id,skill3_id,resist_id,characteristic_id,ability_id,limitbreak_item_id
+1001,博丽灵梦,灵梦,1,1,L1,6650,930,1235,855,1190,910,10011,10012,10011,10012,10011,10012,10015,10016,10017,10018,1001,1001,1001,501
