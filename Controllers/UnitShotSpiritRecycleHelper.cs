@@ -42,7 +42,7 @@ namespace THLWToolBox.Controllers
             List<PlayerUnitData> queryUnits = new();
             List<UnitShotSpiritRecycleDisplayModel> spiritRecycleDatas = new();
 
-            if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
+            if (0 && request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
                 PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
                 queryUnits.Add(unitRecord);
@@ -101,7 +101,6 @@ namespace THLWToolBox.Controllers
         static List<double> CalcShotModel(SpiritRecycleModel spiritRecycleInput, UnitShotSpiritRecycleHelperViewModel request)
         {
             List<double> spiritRecycles = new();
-            return spiritRecycles;
             int spRate = spiritRecycleInput.PhantasmPowerUpRate;
             int enemyCount = (spiritRecycleInput.BulletRange == 1) ? 1 : request.EnemyCount.GetValueOrDefault(1);
             int hitRank = request.HitRank.GetValueOrDefault(0);
