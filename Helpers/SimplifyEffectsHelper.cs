@@ -109,6 +109,7 @@ namespace THLWToolBox.Helpers
                     4 => CreateRangeString() + "回" + MarkValue(EffectModel.Value) + "盾",
                     5 => CreateRangeString() + "加" + MarkValue(0.05 * EffectModel.Value) + "P",
                     6 => CreateRangeString() + "加" + MarkValue(EffectModel.Value) + "枚" + "异常[" + GetBarrierTypeString(EffectModel.SubEffectType) + "](" + Convert.ToString(EffectModel.Turn) + "t)",
+                    7 => CreateRangeString() + GetEnemyOrderChangeTypeString(EffectModel.SubEffectType),
                     8 => GetActOrderChangeTypeString(EffectModel.SubEffectType),
                     9 => CreateRangeString() + "清" + MarkValue(EffectModel.Value) + "枚异常",
                     10 => CreateRangeString() + "解除禁止状态/强度下降",

@@ -1,9 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 using System.Web;
+using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Helpers.TypeHelper;
 using static THLWToolBox.Models.GeneralModels;
+using static THLWToolBox.Models.EffectModel;
 
 namespace THLWToolBox.Helpers
 {
@@ -140,6 +142,108 @@ namespace THLWToolBox.Helpers
             return new() { new UnitRaceDisplayModel(unitRecord, racesString) };
         }
 
+        public static List<SkillEffectInfo> GetUnitAbilitySkillEffectInfo(PlayerUnitData unitRecord, Dictionary<int, PlayerUnitAbilityData> abilityDict,
+                                                                          bool useBoost, bool purgeBarrier)
+        {
+            List<EffectModel> abilityEffects = GetEffectModels(abilityDict[unitRecord.ability_id]);
+            List<SkillEffectInfo> effectInfos = new();
+            if (useBoost)
+                effectInfos.Add(new SkillEffectInfo(1, "使用灵力的效果", new() { abilityEffects[0] }));
+            if (purgeBarrier)
+                effectInfos.Add(new SkillEffectInfo(1, "使用擦弹的效果", new() { abilityEffects[1] }));
+            return effectInfos;
+        }
+
+        public static List<SkillEffectInfo> GetUnitSkillSkillEffectInfo(PlayerUnitData unitRecord, Dictionary<int, PlayerUnitSkillData> skillDict,
+                                                                        Dictionary<int, PlayerUnitSkillEffectData> skillEffectDict)
+        {
+            return new()
+            {
+                new SkillEffectInfo(2, "技能一效果", GetEffectModels(skillDict[unitRecord.skill1_id], skillEffectDict)),
+                new SkillEffectInfo(2, "技能二效果", GetEffectModels(skillDict[unitRecord.skill2_id], skillEffectDict)),
+                new SkillEffectInfo(2, "技能三效果", GetEffectModels(skillDict[unitRecord.skill3_id], skillEffectDict)),
+            };
+        }
+
+        public static List<SkillEffectInfo> GetUnitSpellcardSkillEffectInfo(PlayerUnitData unitRecord, Dictionary<int, PlayerUnitSpellcardData> spellcardDict,
+                                                                            Dictionary<int, PlayerUnitSkillEffectData> skillEffectDict)
+        {
+            return new()
+            {
+                new SkillEffectInfo(3, "一符效果", GetEffectModels(spellcardDict[unitRecord.spellcard1_id], skillEffectDict)),
+                new SkillEffectInfo(3, "二符效果", GetEffectModels(spellcardDict[unitRecord.spellcard2_id], skillEffectDict)),
+                new SkillEffectInfo(3, "终符效果", GetEffectModels(spellcardDict[unitRecord.spellcard5_id], skillEffectDict)),
+            };
+        }
+
+        public static List<SkillEffectInfo> GetUnitCharacteristicSkillEffectInfo(PlayerUnitData unitRecord, Dictionary<int, PlayerUnitCharacteristicData> characteristicDict)
+        {
+            List<EffectModel> characteristicEffects = GetEffectModels(characteristicDict[unitRecord.characteristic_id]);
+            return new()
+            {
+                new SkillEffectInfo(4, "特性一效果", new() { characteristicEffects[0] }),
+                new SkillEffectInfo(4, "特性二效果", new() { characteristicEffects[1] }),
+                new SkillEffectInfo(4, "特性三效果", new() { characteristicEffects[2] }),
+            };
+        }
+
+        static List<SkillEffectInfo> GetAttackSkillEffectInfo(AttackWithWeightModel attack, Dictionary<int, PlayerUnitBulletData> bulletDict,
+                                                              Dictionary<int, BulletExtraEffectData> bulletExtraEffectDict)
+        {
+            return attack.AttackData.Magazines.Where(magazine => magazine.BulletId != 0)
+                                              .Select(magazine => new SkillEffectInfo(5, attack.AttackData.AttackTypeName + "第" + magazine.MagazineId + "段",
+                                                                                      GetEffectModels(bulletDict[magazine.BulletId], bulletExtraEffectDict, magazine.BulletRange)))
+                                              .ToList();
+        }
+
+        public static List<SkillEffectInfo> GetUnitAttacksSkillEffectInfo(List<AttackWithWeightModel> attacks, Dictionary<int, PlayerUnitBulletData> bulletDict,
+                                                                          Dictionary<int, BulletExtraEffectData> bulletExtraEffectDict)
+        {
+            return attacks.Select(attack => GetAttackSkillEffectInfo(attack, bulletDict, bulletExtraEffectDict)).SelectMany(x => x).ToList();
+        }
+
+
+        // select this unit if all effects from SelectBox are found in this unit's unitSkillEffectInfos
+        public static bool EffectModelListMatchesSelectBox(List<SkillEffectInfo> unitAllSkillEffectInfos, List<EffectSelectBox> effectSelectBoxes)
+        {
+            if (effectSelectBoxes.Select(effectSelectBox => effectSelectBox.IsEffectiveSelectBox()).All(x => x == false))
+                return false;
+            List<EffectModel> unitAllEffectModels = unitAllSkillEffectInfos.SelectMany(skillEffectInfo => skillEffectInfo.Effects).ToList();
+            return effectSelectBoxes.Select(effectSelectBox => effectSelectBox.EffectListMatchesSelectBox(unitAllEffectModels)).All(x => x);
+        }
+
+        // but only display this SkillEffectInfo if any of effect in it matches SelectBoxes
+        static bool EffectModelListMatchesSelectBox(SkillEffectInfo skillEffectInfo, List<EffectSelectBox> effectSelectBoxes)
+        {
+            // TODO: highlight matched effects
+            return effectSelectBoxes.Where(effectSelectBox => effectSelectBox.IsEffectiveSelectBox())
+                                    .Select(effectSelectBox => effectSelectBox.EffectListMatchesSelectBox(skillEffectInfo.Effects)).Any(x => x);
+        }
+
+        public static List<SkillEffectInfo> GetMatchedSkillEffects(List<SkillEffectInfo> unitAllSkillEffectInfos, List<EffectSelectBox> effectSelectBoxes)
+        {
+            return unitAllSkillEffectInfos.Where(skillEffectInfo => EffectModelListMatchesSelectBox(skillEffectInfo, effectSelectBoxes)).ToList();
+        }
+
+        public static string GetSkillEffectInfoString(int skillEffectType)
+        {
+            return skillEffectType switch
+            {
+                1 => "能力",
+                2 => "技能",
+                3 => "符卡",
+                4 => "特性",
+                5 => "子弹",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string DisplayEffectString(EffectModel effectModel, bool? SimplifiedEffect, Dictionary<int, string>? RaceDict)
+        {
+            if (SimplifiedEffect.GetValueOrDefault(true))
+                return new SimplifyEffectsHelper(effectModel, RaceDict).CreateSimplifiedEffectStr();
+            return effectModel.OfficialDescription;
+        }
 
         // Other helper functions
         public static List<T?> RemoveNullElements<T>(List<T?> list)

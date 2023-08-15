@@ -4,6 +4,7 @@ using THLWToolBox.Data;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
 using static THLWToolBox.Models.GeneralModels;
+using static THLWToolBox.Models.SelectItemModel;
 using static THLWToolBox.Helpers.GeneralHelper;
 using static THLWToolBox.Helpers.TypeHelper;
 
@@ -20,6 +21,7 @@ namespace THLWToolBox.Controllers
         Dictionary<int, PlayerUnitSkillEffectData> skillEffectDict;
         Dictionary<int, PlayerUnitSpellcardData> spellcardDict;
         Dictionary<int, PlayerUnitBulletData> bulletDict;
+        Dictionary<int, BulletExtraEffectData> bulletExtraEffectDict;
 
         public UnitBarrierStatusFilter(THLWToolBoxContext context)
         {
@@ -30,6 +32,7 @@ namespace THLWToolBox.Controllers
             skillEffectDict = new();
             spellcardDict = new();
             bulletDict = new();
+            bulletExtraEffectDict = new();
         }
 
         // POST: UnitBarrierStatusFilter
@@ -49,6 +52,7 @@ namespace THLWToolBox.Controllers
             skillEffectDict = (await _context.PlayerUnitSkillEffectData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
             spellcardDict = (await _context.PlayerUnitSpellcardData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
             bulletDict = (await _context.PlayerUnitBulletData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
+            bulletExtraEffectDict = (await _context.BulletExtraEffectData.Distinct().ToListAsync()).ToDictionary(x => x.id, x => x);
             // ------ query end ------
 
 
@@ -91,14 +95,21 @@ namespace THLWToolBox.Controllers
             }
 
             // if filter by barrier related skill (skill/spellcard effect/characteristic/bullet)
-            HashSet<int> rangeSelectors = request.GetBarrierSkillRangeSelector();
-            if (rangeSelectors.Count > 0)
+            List<int?> allowedRanges = request.GetBarrierSkillRangeSelector();
+            if (request.SkillBarrierStatusType != null && allowedRanges.Count > 0)
             {
-                
+                int skillBarrierStatusSubTypeId = GetSubEffectRemappedInfo(6, request.SkillBarrierStatusType.GetValueOrDefault()).id;
+                List<EffectSelectBox> effectSelectBoxes = new() { new EffectSelectBox(1, 6, skillBarrierStatusSubTypeId, allowedRanges, null, null) };
+                List<SkillEffectInfo> unitAllSkillEffectInfos = GetUnitAllSkillEffectInfo(unitRecord, attacks);
+                if (EffectModelListMatchesSelectBox(unitAllSkillEffectInfos, effectSelectBoxes))
+                {
+                    unitBarrierStatusInfo.SkillBarrierStatusType = GetBarrierTypeString(request.SkillBarrierStatusType.GetValueOrDefault());
+                    unitBarrierStatusInfo.BarrierSkillInfos = GetMatchedSkillEffects(unitAllSkillEffectInfos, effectSelectBoxes);
+                }
             }
 
             // if filter by barrier breaking bullets
-            if (request.BreakingBarrierStatusType != null)
+            if (request.BreakingBarrierStatusType != null && attacks.Count > 0)
             {
                 List<BarrierBreakingInfo>? unitBarrierBreakingInfos = GetUnitBarrierBreakingInfos(request.BreakingBarrierStatusType.GetValueOrDefault(), attacks);
                 if (unitBarrierBreakingInfos == null)
@@ -114,14 +125,28 @@ namespace THLWToolBox.Controllers
             return unitBarrierStatusInfo;
         }
 
+
+        // It's too complex to be inside EffectModel, so do it here
+        List<SkillEffectInfo> GetUnitAllSkillEffectInfo(PlayerUnitData unitRecord, List<AttackWithWeightModel> attacks)
+        {
+            List<SkillEffectInfo> effectInfos = new();
+            effectInfos.AddRange(GetUnitSkillSkillEffectInfo(unitRecord, skillDict, skillEffectDict));
+            effectInfos.AddRange(GetUnitSpellcardSkillEffectInfo(unitRecord, spellcardDict, skillEffectDict));
+            effectInfos.AddRange(GetUnitCharacteristicSkillEffectInfo(unitRecord, characteristicDict));
+            effectInfos.AddRange(GetUnitAttacksSkillEffectInfo(attacks, bulletDict, bulletExtraEffectDict));
+            return effectInfos;
+        }
+
         List<BarrierBreakingInfo>? GetUnitBarrierBreakingInfos(int barrierStatusType, List<AttackWithWeightModel> attacks)
         {
+            string styleWrapperSt = "<b><font color=#FC0377>";
+            string styleWrapperEd = "</font></b>";
             List<BarrierBreakingInfo> barrierBreakingInfo = new();
             foreach (AttackWithWeightModel attack in attacks)
             {
                 List<string> magazineBarrierBreaking = attack.AttackData.Magazines.Where(magazine => magazine.BulletId != 0)
                                                                                   .Where(magazine => GetBulletAddons(bulletDict[magazine.BulletId]).Select(x => x.Id).Contains(GetBarrierTypeBreakingAddonId(barrierStatusType)))
-                                                                                  .Select(magazine => "第" + magazine.MagazineId + "段破" + GetBarrierTypeString(barrierStatusType)).ToList();
+                                                                                  .Select(magazine => "第" + styleWrapperSt + magazine.MagazineId + styleWrapperEd + "段破" + styleWrapperSt + GetBarrierTypeString(barrierStatusType) + styleWrapperEd).ToList();
                 if (magazineBarrierBreaking.Count > 0)
                     barrierBreakingInfo.Add(new BarrierBreakingInfo(attack.AttackData, magazineBarrierBreaking));
             }

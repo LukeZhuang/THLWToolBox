@@ -68,6 +68,11 @@ namespace THLWToolBox.Models
             return "顺序改变-" + GetActOrderChangeTypeString(actOrderChangeType);
         }
 
+        static string GetEnemyOrderChangeTypeStringForSelect(int enemyOrderChangeType)
+        {
+            return "敌方顺序改变-" + GetEnemyOrderChangeTypeString(enemyOrderChangeType);
+        }
+
 
         // Some effects can be aggregated together, currently only UnitRole related effect types
         public static SelectItemModel GetEffectRemappedInfo(int effectType)
@@ -101,7 +106,6 @@ namespace THLWToolBox.Models
                     return new SelectItemModel(0, "空");
 
                 // Has subtype but not implemented
-                case 7:   // "敌方回合顺序改变"
                 case 18:  // "换位连携"
                 case 19:  // "对方禁止状态（敌人的）"
                     throw new NotImplementedException();
@@ -143,6 +147,9 @@ namespace THLWToolBox.Models
 
                 case 8:   // "己方回合顺序改变"
                     return new SelectItemModel(6000 + subEffectType, GetActOrderChangeTypeStringForSelect(subEffectType));
+
+                case 7:   // "敌方回合顺序改变"
+                    return new SelectItemModel(7000 + subEffectType, GetEnemyOrderChangeTypeStringForSelect(subEffectType));
 
                 default:
                     throw new NotImplementedException();

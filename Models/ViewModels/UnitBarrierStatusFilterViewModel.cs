@@ -1,5 +1,6 @@
 ﻿using THLWToolBox.Models.DataTypes;
 using static THLWToolBox.Models.GeneralModels;
+using static THLWToolBox.Helpers.GeneralHelper;
 
 namespace THLWToolBox.Models.ViewModels
 {
@@ -67,9 +68,9 @@ namespace THLWToolBox.Models.ViewModels
                                             LastWord.GetValueOrDefault(true));
         }
 
-        public HashSet<int> GetBarrierSkillRangeSelector()
+        public List<int?> GetBarrierSkillRangeSelector()
         {
-            HashSet<int> ranges = new();
+            List<int?> ranges = new();
             if (Self.GetValueOrDefault(false))
                 ranges.Add(1);
             if (SelfAll.GetValueOrDefault(false))
@@ -81,24 +82,40 @@ namespace THLWToolBox.Models.ViewModels
             return ranges;
         }
 
-        public static string DisplayUnitBarrierStatus(UnitBarrierStatusDisplayModel unitBarrierStatus)
+        public string DisplayUnitBarrierStatus(UnitBarrierStatusDisplayModel unitBarrierStatus)
         {
+            string barrierStatusWrapper = "<div class=\"barrier-status-wrapper\">";
+            string barrierSkillWrapper = "<div class=\"barrier-skill-wrapper\">";
+            string barrierBreakingWrapper = "<div class=\"barrier-breaking-wrapper\">";
             string text = "<div class=\"barrier-status-display-grid\">";
             if (unitBarrierStatus.BarrierAbility != null)
             {
-                text += "<div class=\"barrier-status-wrapper\">[" + unitBarrierStatus.AbilityBarrierStatusType + "]相关能力" + "</div>";
-                text += "<div class=\"barrier-status-wrapper\">" + unitBarrierStatus.BarrierAbility + "</div>";
+                text += barrierStatusWrapper + "<b><font color=#FF6600>" + "[" + unitBarrierStatus.AbilityBarrierStatusType + "]相关能力" + "</font></b></div>";
+                text += barrierStatusWrapper + unitBarrierStatus.BarrierAbility + "</div>";
+            }
+            if (unitBarrierStatus.BarrierSkillInfos != null)
+            {
+                text += barrierStatusWrapper + "<b><font color=#4CAFFF>" + "[" + unitBarrierStatus.SkillBarrierStatusType + "]赋予" + "</font></b></div>";
+                text += barrierStatusWrapper;
+                text += "<div class=\"barrier-skills-grid\">";
+                foreach (var skillEffectInfo in unitBarrierStatus.BarrierSkillInfos)
+                {
+                    text += barrierSkillWrapper + GetSkillEffectInfoString(skillEffectInfo.Type) + "</div>";
+                    text += barrierSkillWrapper + skillEffectInfo.SubType + "</div>";
+                    text += barrierSkillWrapper + string.Join("<br>", skillEffectInfo.Effects.Select(x => StringFromDatabaseForDisplay(DisplayEffectString(x, SimplifiedEffect, null)))) + "</div>";
+                }
+                text += "</div>";
+                text += "</div>";
             }
             if (unitBarrierStatus.BarrierBreakingInfos != null)
             {
-                text += "<div class=\"barrier-status-wrapper\">[" + unitBarrierStatus.BreakingBarrierStatusType + "]击破" + "</div>";
-                text += "<div class=\"barrier-status-wrapper\">";
+                text += barrierStatusWrapper + "<b><font color=#228B22>" + "[" + unitBarrierStatus.BreakingBarrierStatusType + "]击破" + "</font></b></div>";
+                text += barrierStatusWrapper;
                 text += "<div class=\"barrier-breaking-grid\">";
                 foreach (var barrierBreakingInfo in unitBarrierStatus.BarrierBreakingInfos)
                 {
-                    text += "<div class=\"barrier-breaking-wrapper\">" + barrierBreakingInfo.AttackData.AttackTypeName + "</div>";
-                    text += "<div class=\"barrier-breaking-wrapper\">" + barrierBreakingInfo.AttackData.Name + "</div>";
-                    text += "<div class=\"barrier-breaking-wrapper\">" + string.Join("<br>", barrierBreakingInfo.MagazineBarrierBreaking) + "</div>";
+                    text += barrierBreakingWrapper + barrierBreakingInfo.AttackData.AttackTypeName + "</div>";
+                    text += barrierBreakingWrapper + string.Join("<br>", barrierBreakingInfo.MagazineBarrierBreaking) + "</div>";
                 }
                 text += "</div>";
                 text += "</div>";

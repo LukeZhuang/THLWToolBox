@@ -5,8 +5,8 @@ using THLWToolBox.Data;
 using THLWToolBox.Models;
 using THLWToolBox.Models.DataTypes;
 using THLWToolBox.Models.ViewModels;
+using static THLWToolBox.Helpers.GeneralHelper;
 using static THLWToolBox.Models.SelectItemModel;
-using static THLWToolBox.Models.EffectModel;
 using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Controllers
@@ -72,83 +72,24 @@ namespace THLWToolBox.Controllers
             {
                 List<SkillEffectInfo> unitAllSkillEffectInfos = GetUnitAllSkillEffectInfo(unitRecord, request);
                 if (EffectModelListMatchesSelectBox(unitAllSkillEffectInfos, effectSelectBoxes))
-                    unitSkillInfos.Add(new UnitSkillDisplayModel(unitRecord, unitAllSkillEffectInfos.Where(skillEffectInfo => EffectModelListMatchesSelectBox(skillEffectInfo, effectSelectBoxes)).ToList()));
+                    unitSkillInfos.Add(new UnitSkillDisplayModel(unitRecord, GetMatchedSkillEffects(unitAllSkillEffectInfos, effectSelectBoxes)));
             }
             return unitSkillInfos;
         }
 
-        // select this unit if all effects from SelectBox are found in this unit's unitSkillEffectInfos
-        static bool EffectModelListMatchesSelectBox(List<SkillEffectInfo> unitAllSkillEffectInfos, List<EffectSelectBox> effectSelectBoxes)
-        {
-            if (effectSelectBoxes.Select(effectSelectBox => effectSelectBox.IsEffectiveSelectBox()).All(x => x == false))
-                return false;
-            List<EffectModel> unitAllEffectModels = unitAllSkillEffectInfos.SelectMany(skillEffectInfo => skillEffectInfo.Effects).ToList();
-            return effectSelectBoxes.Select(effectSelectBox => effectSelectBox.EffectListMatchesSelectBox(unitAllEffectModels)).All(x => x);
-        }
-
-        // but only display this SkillEffectInfo if any of effect in it matches SelectBoxes
-        static bool EffectModelListMatchesSelectBox(SkillEffectInfo skillEffectInfo, List<EffectSelectBox> effectSelectBoxes)
-        {
-            // TODO: highlight matched effects
-            return effectSelectBoxes.Where(effectSelectBox => effectSelectBox.IsEffectiveSelectBox())
-                                    .Select(effectSelectBox => effectSelectBox.EffectListMatchesSelectBox(skillEffectInfo.Effects)).Any(x => x);
-        }
-
         // It's too complex to be inside EffectModel, so do it here
-        List<SkillEffectInfo> GetUnitAbilitySkillEffectInfo(PlayerUnitData unitRecord, bool useBoost, bool purgeBarrier)
-        {
-            List<EffectModel> abilityEffects = GetEffectModels(abilityDict[unitRecord.ability_id]);
-            List<SkillEffectInfo> effectInfos = new();
-            if (useBoost)
-                effectInfos.Add(new SkillEffectInfo(1, "使用灵力的效果", new() { abilityEffects[0] }));
-            if (purgeBarrier)
-                effectInfos.Add(new SkillEffectInfo(1, "使用擦弹的效果", new() { abilityEffects[1] }));
-            return effectInfos;
-        }
-
-        List<SkillEffectInfo> GetUnitSkillSkillEffectInfo(PlayerUnitData unitRecord)
-        {
-            return new()
-            {
-                new SkillEffectInfo(2, "技能一效果", GetEffectModels(skillDict[unitRecord.skill1_id], skillEffectDict)),
-                new SkillEffectInfo(2, "技能二效果", GetEffectModels(skillDict[unitRecord.skill2_id], skillEffectDict)),
-                new SkillEffectInfo(2, "技能三效果", GetEffectModels(skillDict[unitRecord.skill3_id], skillEffectDict)),
-            };
-        }
-
-        List<SkillEffectInfo> GetUnitSpellcardSkillEffectInfo(PlayerUnitData unitRecord)
-        {
-            return new()
-            {
-                new SkillEffectInfo(3, "一符效果", GetEffectModels(spellcardDict[unitRecord.spellcard1_id], skillEffectDict)),
-                new SkillEffectInfo(3, "二符效果", GetEffectModels(spellcardDict[unitRecord.spellcard2_id], skillEffectDict)),
-                new SkillEffectInfo(3, "终符效果", GetEffectModels(spellcardDict[unitRecord.spellcard5_id], skillEffectDict)),
-            };
-        }
-
-        List<SkillEffectInfo> GetUnitCharacteristicSkillEffectInfo(PlayerUnitData unitRecord)
-        {
-            List<EffectModel> characteristicEffects = GetEffectModels(characteristicDict[unitRecord.characteristic_id]);
-            return new()
-            {
-                new SkillEffectInfo(4, "特性一效果", new() { characteristicEffects[0] }),
-                new SkillEffectInfo(4, "特性二效果", new() { characteristicEffects[1] }),
-                new SkillEffectInfo(4, "特性三效果", new() { characteristicEffects[2] }),
-            };
-        }
-
-
         List<SkillEffectInfo> GetUnitAllSkillEffectInfo(PlayerUnitData unitRecord, UnitSkillFilterViewModel? request)
         {
             List<SkillEffectInfo> effectInfos = new();
-            effectInfos.AddRange(GetUnitAbilitySkillEffectInfo(unitRecord, request == null || request.AbilityBoost.GetValueOrDefault(false),
-                                                                           request == null || request.AbilityPurgeBarrier.GetValueOrDefault(false)));
+            effectInfos.AddRange(GetUnitAbilitySkillEffectInfo(unitRecord, abilityDict,
+                                                               request == null || request.AbilityBoost.GetValueOrDefault(false),
+                                                               request == null || request.AbilityPurgeBarrier.GetValueOrDefault(false)));
             if (request == null || request.Skill.GetValueOrDefault(true))
-                effectInfos.AddRange(GetUnitSkillSkillEffectInfo(unitRecord));
+                effectInfos.AddRange(GetUnitSkillSkillEffectInfo(unitRecord, skillDict, skillEffectDict));
             if (request == null || request.Spellcard.GetValueOrDefault(true))
-                effectInfos.AddRange(GetUnitSpellcardSkillEffectInfo(unitRecord));
+                effectInfos.AddRange(GetUnitSpellcardSkillEffectInfo(unitRecord, spellcardDict, skillEffectDict));
             if (request == null || request.Characteristic.GetValueOrDefault(false))
-                effectInfos.AddRange(GetUnitCharacteristicSkillEffectInfo(unitRecord));
+                effectInfos.AddRange(GetUnitCharacteristicSkillEffectInfo(unitRecord, characteristicDict));
             return effectInfos;
         }
 

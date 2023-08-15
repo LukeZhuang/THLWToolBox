@@ -6,18 +6,6 @@ using THLWToolBox.Helpers;
 
 namespace THLWToolBox.Models.ViewModels
 {
-    public class SkillEffectInfo
-    {
-        public int Type { get; set; }
-        public string SubType { get; set; }
-        public List<EffectModel> Effects { get; set; }
-        public SkillEffectInfo(int type, string subType, List<EffectModel> effects)
-        {
-            Type = type;
-            SubType = subType;
-            Effects = effects;
-        }
-    }
     public class UnitSkillDisplayModel
     {
         public PlayerUnitData Unit { get; set; }
@@ -28,6 +16,7 @@ namespace THLWToolBox.Models.ViewModels
             SkillEffectInfos = skillEffectInfos;
         }
     }
+
     public class UnitSkillFilterViewModel
     {
         // Display models
@@ -68,29 +57,10 @@ namespace THLWToolBox.Models.ViewModels
         {
             return new()
             {
-                new EffectSelectBox(1, EffectId1, SubeffectId1, Range1, null, TurnTypeId1),
-                new EffectSelectBox(2, EffectId2, SubeffectId2, Range2, null, TurnTypeId2),
-                new EffectSelectBox(3, EffectId3, SubeffectId3, Range3, null, TurnTypeId3),
+                new EffectSelectBox(1, EffectId1, SubeffectId1, new() { Range1 }, null, TurnTypeId1),
+                new EffectSelectBox(2, EffectId2, SubeffectId2, new() { Range2 }, null, TurnTypeId2),
+                new EffectSelectBox(3, EffectId3, SubeffectId3, new() { Range3 }, null, TurnTypeId3),
             };
-        }
-
-        static string GetSkillEffectInfoString(int skillEffectType)
-        {
-            return skillEffectType switch
-            {
-                1 => "能力",
-                2 => "技能",
-                3 => "符卡",
-                4 => "特性",
-                _ => throw new InvalidDataException(),
-            };
-        }
-
-        string DisplayEffectString(EffectModel effectModel)
-        {
-            if (SimplifiedEffect.GetValueOrDefault(true))
-                return new SimplifyEffectsHelper(effectModel, RaceDict).CreateSimplifiedEffectStr();
-            return effectModel.OfficialDescription;
         }
 
         public string DisplayUnitSkills(List<SkillEffectInfo> SkillEffectInfos)
@@ -104,7 +74,7 @@ namespace THLWToolBox.Models.ViewModels
             {
                 text += skillGridWrapper + GetSkillEffectInfoString(skillEffectInfo.Type) + "</div>";
                 text += skillGridWrapper + skillEffectInfo.SubType + "</div>";
-                text += skillGridWrapper + string.Join("<br>", skillEffectInfo.Effects.Select(x => StringFromDatabaseForDisplay(DisplayEffectString(x)))) + "</div>";
+                text += skillGridWrapper + string.Join("<br>", skillEffectInfo.Effects.Select(x => StringFromDatabaseForDisplay(DisplayEffectString(x, SimplifiedEffect, RaceDict)))) + "</div>";
             }
             text += "</div>";
             return text;

@@ -1,6 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 using THLWToolBox.Models.DataTypes;
 using static THLWToolBox.Helpers.TypeHelper;
+using static THLWToolBox.Models.GeneralModels;
 
 namespace THLWToolBox.Models
 {
@@ -159,6 +161,35 @@ namespace THLWToolBox.Models
                                 GetTimingTypeString(characteristicRecord.characteristic3_type),
                                 characteristicRecord.characteristic3_description),
             };
+        }
+
+        public static List<EffectModel> GetEffectModels(PlayerUnitBulletData bulletRecord, Dictionary<int, BulletExtraEffectData> bulletExtraEffectDict, int attackRange)
+        {
+            List<EffectModel> effects = new();
+            List<BulletExtraEffectModel> bulletExtraEffectModels = new()
+            {
+                new BulletExtraEffectModel(bulletRecord.bullet1_extraeffect_id, bulletRecord.bullet1_extraeffect_success_rate),
+                new BulletExtraEffectModel(bulletRecord.bullet2_extraeffect_id, bulletRecord.bullet2_extraeffect_success_rate),
+                new BulletExtraEffectModel(bulletRecord.bullet3_extraeffect_id, bulletRecord.bullet3_extraeffect_success_rate),
+            };
+            foreach (var bulletExtraEffectModel in bulletExtraEffectModels)
+            {
+                if (bulletExtraEffectModel.Id == 0)
+                    continue;
+                BulletExtraEffectData bulletExtraEffect = bulletExtraEffectDict[bulletExtraEffectModel.Id];
+                effects.Add(new EffectModel(bulletExtraEffect.name,
+                                            bulletExtraEffect.type,
+                                            bulletExtraEffect.subtype,
+                                            attackRange == 1 ? (/* 单体 */ bulletExtraEffect.target == 1 ? (/* 己方 */ 1) : (/* 敌方 */ 3)) : (/* 全体 */ bulletExtraEffect.target == 1 ? (/* 己方 */ 2) : (/* 敌方 */ 4)),
+                                            0,
+                                            bulletExtraEffect.turn,
+                                            bulletExtraEffect.value,
+                                            bulletExtraEffectModel.SuccessRate,
+                                            0,
+                                            "",
+                                            bulletExtraEffect.description));
+            }
+            return effects;
         }
     }
 }

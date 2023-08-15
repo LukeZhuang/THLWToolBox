@@ -47,8 +47,8 @@ namespace THLWToolBox.Models.ViewModels
         {
             return new()
             {
-                new EffectSelectBox(1, EffectId1, SubeffectId1, Range1, UnitRoleTypeId1, TurnTypeId1),
-                new EffectSelectBox(2, EffectId2, SubeffectId2, Range2, UnitRoleTypeId2, TurnTypeId2),
+                new EffectSelectBox(1, EffectId1, SubeffectId1, new() { Range1 }, UnitRoleTypeId1, TurnTypeId1),
+                new EffectSelectBox(2, EffectId2, SubeffectId2, new() { Range2 }, UnitRoleTypeId2, TurnTypeId2),
             };
         }
 

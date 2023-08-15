@@ -257,6 +257,16 @@
             };
         }
 
+        public static string GetEnemyOrderChangeTypeString(int enemyOrderChangeType)
+        {
+            return enemyOrderChangeType switch
+            {
+                1 => "击晕",
+                2 => "迟缓",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
         public static string GetDamageReduceTypeString(int damageReduceType)
         {
             return damageReduceType switch

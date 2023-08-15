@@ -16,7 +16,7 @@
 <style>
     .barrier-status-display-grid {
         display: inline-grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: 20% auto;
         grid-auto-flow: row;
         text-align: center;
         position: relative;
@@ -31,9 +31,24 @@
         border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
+    .barrier-skills-grid {
+        display: inline-grid;
+        grid-template-columns: 10% 20% auto;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    .barrier-skill-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
     .barrier-breaking-grid {
         display: inline-grid;
-        grid-template-columns: auto auto auto;
+        grid-template-columns: 30% auto;
         grid-auto-flow: row;
         text-align: center;
         position: relative;
@@ -129,8 +144,8 @@
                 <div class="buttons-grid">
                     <div class="btn-checkbox">@Html.CheckBox("Self", false) 自身</div>
                     <div class="btn-checkbox">@Html.CheckBox("SelfAll", false) 己方全体</div>
-                    <div class="btn-checkbox">@Html.CheckBox("Enemy", false) 敌方单体</div>
-                    <div class="btn-checkbox">@Html.CheckBox("EnemyAll", false) 敌方全体</div>
+                    <div class="btn-checkbox">@Html.CheckBox("Enemy", true) 敌方单体</div>
+                    <div class="btn-checkbox">@Html.CheckBox("EnemyAll", true) 敌方全体</div>
                 </div>
             </div>
         </div>
@@ -190,7 +205,7 @@
                         @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
                     </td>
                     <td>
-                        @Html.Raw(DisplayUnitBarrierStatus(item))
+                        @Html.Raw(Model.DisplayUnitBarrierStatus(item))
                     </td>
                 </tr>
             }

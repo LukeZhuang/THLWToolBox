@@ -76,15 +76,15 @@ namespace THLWToolBox.Models
             public int BoxId { get; set; }
             public int? EffectId { get; set; }
             public int? SubeffectId { get; set; }
-            public int? Range { get; set; }
+            public List<int?> Ranges { get; set; }  // All allowed rangeIds
             public int? UnitRoleTypeId { get; set; }
             public int? TurnTypeId { get; set; }
-            public EffectSelectBox(int boxId, int? effectId, int? subeffectId, int? range, int? unitRoleTypeId, int? turnTypeId)
+            public EffectSelectBox(int boxId, int? effectId, int? subeffectId, List<int?> ranges, int? unitRoleTypeId, int? turnTypeId)
             {
                 BoxId = boxId;
                 EffectId = effectId;
                 SubeffectId = subeffectId;
-                Range = range;
+                Ranges = ranges;
                 UnitRoleTypeId = unitRoleTypeId;
                 TurnTypeId = turnTypeId;
             }
@@ -102,7 +102,7 @@ namespace THLWToolBox.Models
                     return false;
                 if (SubeffectId != null && SubeffectId.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.SubEffectType).id)
                     return false;
-                if (Range != null && Range.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.RangeType).id)
+                if (Ranges.Where(x => x != null).Any() && !Ranges.Where(x => x != null).Cast<int>().Contains(CreateSelectItemForEffect(effect, SelectItemTypes.RangeType).id))
                     return false;
                 if (UnitRoleTypeId != null && UnitRoleTypeId.GetValueOrDefault() != CreateSelectItemForEffect(effect, SelectItemTypes.UnitRoleType).id)
                     return false;
@@ -118,6 +118,30 @@ namespace THLWToolBox.Models
                     return true;
                 // return true if any effect in the list matches this SelectBox
                 return effects.Select(EffectMatchesSelectBox).Any(x => x);
+            }
+        }
+
+        public class SkillEffectInfo
+        {
+            public int Type { get; set; }
+            public string SubType { get; set; }
+            public List<EffectModel> Effects { get; set; }
+            public SkillEffectInfo(int type, string subType, List<EffectModel> effects)
+            {
+                Type = type;
+                SubType = subType;
+                Effects = effects;
+            }
+        }
+
+        public class BulletExtraEffectModel
+        {
+            public int Id { get; set; }
+            public int SuccessRate { get; set; }
+            public BulletExtraEffectModel(int id, int successRate)
+            {
+                Id = id;
+                SuccessRate = successRate;
             }
         }
     }
