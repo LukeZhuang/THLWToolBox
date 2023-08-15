@@ -279,5 +279,24 @@
                 _ => throw new InvalidDataException(),
             };
         }
+
+        public static string GetBarrierAbilityTypeString(int barrierAbilityType, int barrierStatusType)
+        {
+            string styleWrapperSt = "<b><font color=#FC0377>";
+            string styleWrapperEd = "</font></b>";
+            string barrierStatusString = styleWrapperSt + GetBarrierTypeString(barrierStatusType) + styleWrapperEd;
+            return barrierAbilityType switch
+            {
+                1 => "免疫异常[" + barrierStatusString + "]",
+                2 => "免疫异常[" + barrierStatusString + "]的负面效果",
+                3 => "受到异常[" + barrierStatusString + "]时，对目标施加同样的异常",
+                4 => "免疫异常[" + barrierStatusString + "]且体力回复5%",
+                5 => "免疫异常[" + barrierStatusString + "]且灵力上升0.2",
+                6 => "每有一枚异常[" + barrierStatusString + "]，阳攻/阴攻/会心攻击/会心命中加1级",
+                7 => "每有一枚异常[" + barrierStatusString + "]，阳防/阴防/会心防御/会心回避加1级",
+                8 => "每有一枚异常[" + barrierStatusString + "]，速度/命中/回避加1级",
+                _ => throw new InvalidDataException(),
+            };
+        }
     }
 }
