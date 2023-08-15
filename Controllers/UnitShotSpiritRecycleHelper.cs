@@ -122,12 +122,13 @@ namespace THLWToolBox.Controllers
                     if (!isSureHit)
                     {
                         var hitMask = np.random.rand(bulletCount, MONTE_CARLO) < actualHit;
-                        spiritRecycleMatrix *= hitMask.astype(typeof(double));
+                        // spiritRecycleMatrix *= hitMask.astype(typeof(double));
                     }
                     var magazineSP = np.sum(spiritRecycleMatrix, 0);
                     accumulatedSP += magazineSP;
                 }
-                var tmpSP = accumulatedSP.copy().argsort<double>();
+                var tmpSP = accumulatedSP.copy();
+                // var tmpSP = accumulatedSP.copy().argsort<double>();
                 double spiritRecycle;
                 if (confidenceLevel == 0)
                     spiritRecycle = 1;
