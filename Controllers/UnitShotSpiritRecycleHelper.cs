@@ -42,7 +42,7 @@ namespace THLWToolBox.Controllers
             List<PlayerUnitData> queryUnits = new();
             List<UnitShotSpiritRecycleDisplayModel> spiritRecycleDatas = new();
 
-            if (false && request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
+            if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
                 PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
                 queryUnits.Add(unitRecord);
@@ -122,20 +122,17 @@ namespace THLWToolBox.Controllers
                     if (!isSureHit)
                     {
                         var hitMask = np.random.rand(bulletCount, MONTE_CARLO) < actualHit;
-                        // spiritRecycleMatrix *= hitMask.astype(typeof(double));
+                        spiritRecycleMatrix *= hitMask.astype(typeof(double));
                     }
                     var magazineSP = np.sum(spiritRecycleMatrix, 0);
                     accumulatedSP += magazineSP;
                 }
-                var tmpSP = accumulatedSP.copy();
-                // var tmpSP = accumulatedSP.copy().argsort<double>();
+                var tmpSP = accumulatedSP.copy().argsort<double>();
                 double spiritRecycle;
                 if (confidenceLevel == 0)
-                    spiritRecycle = 1;
-                    // spiritRecycle = tmpSP.mean()[0];
+                    spiritRecycle = tmpSP.mean()[0];
                 else
-                    spiritRecycle = 2;
-                    // spiritRecycle = tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
+                    spiritRecycle = tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
                 spiritRecycles.Add(spiritRecycle);
             }
             return spiritRecycles;
