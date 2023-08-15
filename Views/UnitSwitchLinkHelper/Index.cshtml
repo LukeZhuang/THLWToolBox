@@ -1,4 +1,4 @@
-﻿@model UnitSwitchLinkHelperViewModel
+﻿﻿@model UnitSwitchLinkHelperViewModel
 @using THLWToolBox.Helpers;
 @using THLWToolBox.Models.ViewModels;
 @using static THLWToolBox.Helpers.GeneralHelper;
@@ -13,31 +13,6 @@
 </head>
 
 <style>
-    .swith-link-units {
-        border: none;
-        background: white;
-        padding: 7px 7px;
-        text-align: left;
-        text-decoration: none;
-        display: inline-block;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .units-img-name-box {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        font-size: 12px;
-        padding: 2px 2px;
-        margin-top: 1px;
-    }
-
-    .units-img-name-box img {
-        width: 100%;
-        height: auto;
-        position: relative;
-        margin: 0;
-    }
 </style>
 
 <!-- Modal -->
@@ -190,9 +165,7 @@
                     @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
                 </td>
                 <td>
-                    <div class="swith-link-units">
-                        @Html.Raw(GeneralHelper.DisplayUnitLists(item.relatedUnits, Url))
-                    </div>
+                    @Html.Raw(item.SwitchLinkTypeStr)
                 </td>
             </tr>
         }
