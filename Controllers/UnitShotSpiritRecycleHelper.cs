@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using NumSharp;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using THLWToolBox.Data;
 using THLWToolBox.Models.DataTypes;
@@ -109,36 +110,31 @@ namespace THLWToolBox.Controllers
             int targetCharge = request.TargetCharge.GetValueOrDefault(0);
             int confidenceLevel = request.ConfidenceLevel.GetValueOrDefault(0);
 
-            throw new NotImplementedException();
-
-            // using (Py.GIL())
-            // {
-            //     var accumulatedSP = np.zeros(MONTE_CARLO);
-            //     foreach (List<MagazineInfo> boost in spiritRecycleInput.BoostsInfo)
-            //     {
-            //         foreach (MagazineInfo magazineInfo in boost)
-            //         {
-            //             int bulletCount = magazineInfo.BulletValue * enemyCount;
-            //             bool isSureHit = magazineInfo.IsSureHit;
-            //             double actualHit = GetActualHitRate(magazineInfo.Hit, hitRank, sourceSmoke, targetCharge);
-            //             var spiritRecycleMatrix = np.floor(spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04) * 0.01;
-            //             if (!isSureHit)
-            //             {
-            //                 var hitMask = np.random.rand(bulletCount, MONTE_CARLO) < actualHit;
-            //                 spiritRecycleMatrix *= hitMask;
-            //             }
-            //             var magazineSP = np.sum(spiritRecycleMatrix, 0);
-            //             accumulatedSP += magazineSP;
-            //         }
-            //         var tmpSP = np.sort(np.copy(accumulatedSP));
-            //         double spiritRecycle;
-            //         if (confidenceLevel == 0)
-            //             spiritRecycle = np.average(tmpSP);
-            //         else
-            //             spiritRecycle = double.Parse(tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)].repr);
-            //         spiritRecycles.Add(spiritRecycle);
-            //     }
-            // }
+            var accumulatedSP = np.zeros(MONTE_CARLO);
+            foreach (List<MagazineInfo> boost in spiritRecycleInput.BoostsInfo)
+            {
+                foreach (MagazineInfo magazineInfo in boost)
+                {
+                    int bulletCount = magazineInfo.BulletValue * enemyCount;
+                    bool isSureHit = magazineInfo.IsSureHit;
+                    double actualHit = GetActualHitRate(magazineInfo.Hit, hitRank, sourceSmoke, targetCharge);
+                    var spiritRecycleMatrix = np.floor(spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04) * 0.01;
+                    if (!isSureHit)
+                    {
+                        var hitMask = np.random.rand(bulletCount, MONTE_CARLO) < actualHit;
+                        spiritRecycleMatrix *= hitMask;
+                    }
+                    var magazineSP = np.sum(spiritRecycleMatrix, 0);
+                    accumulatedSP += magazineSP;
+                }
+                var tmpSP = np.sort(np.copy(accumulatedSP));
+                double spiritRecycle;
+                if (confidenceLevel == 0)
+                    spiritRecycle = np.average(tmpSP);
+                else
+                    spiritRecycle = double.Parse(tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)].repr);
+                spiritRecycles.Add(spiritRecycle);
+            }
             return spiritRecycles;
         }
 
