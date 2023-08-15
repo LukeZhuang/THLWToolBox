@@ -14,12 +14,10 @@ namespace THLWToolBox.Controllers
     public class PictureDatasFilter : Controller
     {
         private readonly THLWToolBoxContext _context;
-        List<PictureData> pictureDatasList;
 
         public PictureDatasFilter(THLWToolBoxContext context)
         {
             _context = context;
-            pictureDatasList = new();
         }
 
         // POST: PictureDatasFilter
@@ -37,9 +35,9 @@ namespace THLWToolBox.Controllers
                 return Problem("Entity set 'THLWToolBoxContext.PictureData' is null.");
             }
 
-            //var pictureDatas = from pd in _context.PictureData
-            //                   select pd;
-            pictureDatasList = await _context.PictureData.Distinct().ToListAsync();
+            var pictureDatas = from pd in _context.PictureData
+                               select pd;
+            var pictureDatasList = await pictureDatas.Distinct().ToListAsync();
 
             var raceDatas = from rd in _context.RaceData
                             select rd;
