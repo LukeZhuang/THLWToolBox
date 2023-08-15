@@ -122,15 +122,15 @@ namespace THLWToolBox.Controllers
                     if (!isSureHit)
                     {
                         var hitMask = np.random.rand(bulletCount, MONTE_CARLO) < actualHit;
-                        spiritRecycleMatrix *= hitMask;
+                        spiritRecycleMatrix *= hitMask.astype(typeof(double));
                     }
                     var magazineSP = np.sum(spiritRecycleMatrix, 0);
                     accumulatedSP += magazineSP;
                 }
-                var tmpSP = np.sort(np.copy(accumulatedSP));
+                var tmpSP = np.copy(accumulatedSP).argsort<double>();
                 double spiritRecycle;
                 if (confidenceLevel == 0)
-                    spiritRecycle = np.average(tmpSP);
+                    spiritRecycle = double.Parse(tmpSP.mean()[0].repr);
                 else
                     spiritRecycle = double.Parse(tmpSP[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)].repr);
                 spiritRecycles.Add(spiritRecycle);
