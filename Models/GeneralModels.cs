@@ -144,5 +144,18 @@ namespace THLWToolBox.Models
                 SuccessRate = successRate;
             }
         }
+
+        public class SkillEffectModel
+        {
+            public int Value { get; set; }
+            public int SuccessRate { get; set; }
+            public int AddValue { get; set; }
+            public SkillEffectModel(int value, int successRate, int addValue)
+            {
+                Value = value;
+                SuccessRate = successRate;
+                AddValue = addValue;
+            }
+        }
     }
 }

@@ -81,14 +81,34 @@ namespace THLWToolBox.Models
             };
         }
 
+        static SkillEffectModel GetMaxLevelSkillEffect(PlayerUnitSkillEffectData skillEffectRecord)
+        {
+            List<SkillEffectModel> skillEffects = new()
+            {
+                new SkillEffectModel(skillEffectRecord.level1_value, skillEffectRecord.level1_success_rate, skillEffectRecord.level1_add_value),
+                new SkillEffectModel(skillEffectRecord.level2_value, skillEffectRecord.level2_success_rate, skillEffectRecord.level2_add_value),
+                new SkillEffectModel(skillEffectRecord.level3_value, skillEffectRecord.level3_success_rate, skillEffectRecord.level3_add_value),
+                new SkillEffectModel(skillEffectRecord.level4_value, skillEffectRecord.level4_success_rate, skillEffectRecord.level4_add_value),
+                new SkillEffectModel(skillEffectRecord.level5_value, skillEffectRecord.level5_success_rate, skillEffectRecord.level5_add_value),
+                new SkillEffectModel(skillEffectRecord.level6_value, skillEffectRecord.level6_success_rate, skillEffectRecord.level6_add_value),
+                new SkillEffectModel(skillEffectRecord.level7_value, skillEffectRecord.level7_success_rate, skillEffectRecord.level7_add_value),
+                new SkillEffectModel(skillEffectRecord.level8_value, skillEffectRecord.level8_success_rate, skillEffectRecord.level8_add_value),
+                new SkillEffectModel(skillEffectRecord.level9_value, skillEffectRecord.level9_success_rate, skillEffectRecord.level9_add_value),
+                new SkillEffectModel(skillEffectRecord.level10_value, skillEffectRecord.level10_success_rate, skillEffectRecord.level10_add_value),
+            };
+            // TODO: some skilleffect does not fit in this type, fix it later
+            return skillEffects.Last();
+        }
+
         public static EffectModel GetEffectModels(PlayerUnitSkillEffectData skillEffectRecord)
         {
+            SkillEffectModel maxLevelSkillEffect = GetMaxLevelSkillEffect(skillEffectRecord);
             return new EffectModel(skillEffectRecord.name, skillEffectRecord.type, skillEffectRecord.subtype, skillEffectRecord.range, 0, skillEffectRecord.turn,
-                                   skillEffectRecord.level10_value, skillEffectRecord.level10_success_rate, skillEffectRecord.level10_add_value,
+                                   maxLevelSkillEffect.Value, maxLevelSkillEffect.SuccessRate, maxLevelSkillEffect.AddValue,
                                    "",
                                    string.Format(skillEffectRecord.description,
-                                                 skillEffectRecord.type == 5 ? (skillEffectRecord.level10_value / 20.0).ToString("0.00") : skillEffectRecord.level10_value,
-                                                 skillEffectRecord.level10_success_rate, skillEffectRecord.level10_add_value));
+                                                 skillEffectRecord.type == 5 ? (maxLevelSkillEffect.Value / 20.0).ToString("0.00") : maxLevelSkillEffect.Value,
+                                                 maxLevelSkillEffect.SuccessRate, maxLevelSkillEffect.AddValue));
         }
 
         public static List<EffectModel> GetEffectModels(PlayerUnitAbilityData abilityRecord)
