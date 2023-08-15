@@ -42,6 +42,8 @@ namespace THLWToolBox.Controllers
             List<PlayerUnitData> queryUnits = new();
             List<UnitShotSpiritRecycleDisplayModel> spiritRecycleDatas = new();
 
+            throw new NotImplementedException();
+
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
                 PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
