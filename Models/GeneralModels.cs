@@ -157,5 +157,18 @@ namespace THLWToolBox.Models
                 AddValue = addValue;
             }
         }
+
+        public class SkillLevelTypeModel
+        {
+            public int EffectId { get; set; }
+            public int LevelType { get; set; }
+            public int LevelValue { get; set; }
+            public SkillLevelTypeModel(int effectId, int levelType, int levelValue)
+            {
+                EffectId = effectId;
+                LevelType = levelType;
+                LevelValue = levelValue;
+            }
+        }
     }
 }

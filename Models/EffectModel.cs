@@ -81,7 +81,7 @@ namespace THLWToolBox.Models
             };
         }
 
-        static SkillEffectModel GetMaxLevelSkillEffect(PlayerUnitSkillEffectData skillEffectRecord)
+        static SkillEffectModel GetMaxLevelSkillEffect(PlayerUnitSkillEffectData skillEffectRecord, SkillLevelTypeModel skillLevelType)
         {
             List<SkillEffectModel> skillEffects = new()
             {
@@ -96,13 +96,14 @@ namespace THLWToolBox.Models
                 new SkillEffectModel(skillEffectRecord.level9_value, skillEffectRecord.level9_success_rate, skillEffectRecord.level9_add_value),
                 new SkillEffectModel(skillEffectRecord.level10_value, skillEffectRecord.level10_success_rate, skillEffectRecord.level10_add_value),
             };
-            // TODO: some skilleffect does not fit in this type, fix it later
+            if (skillLevelType.LevelType == 1)
+                return skillEffects.First();
             return skillEffects.Last();
         }
 
-        public static EffectModel GetEffectModels(PlayerUnitSkillEffectData skillEffectRecord)
+        public static EffectModel GetEffectModels(PlayerUnitSkillEffectData skillEffectRecord, SkillLevelTypeModel skillLevelType)
         {
-            SkillEffectModel maxLevelSkillEffect = GetMaxLevelSkillEffect(skillEffectRecord);
+            SkillEffectModel maxLevelSkillEffect = GetMaxLevelSkillEffect(skillEffectRecord, skillLevelType);
             return new EffectModel(skillEffectRecord.name, skillEffectRecord.type, skillEffectRecord.subtype, skillEffectRecord.range, 0, skillEffectRecord.turn,
                                    maxLevelSkillEffect.Value, maxLevelSkillEffect.SuccessRate, maxLevelSkillEffect.AddValue,
                                    "",
@@ -124,21 +125,26 @@ namespace THLWToolBox.Models
 
         public static List<EffectModel> GetEffectModels(PlayerUnitSpellcardData spellcardRecord, Dictionary<int, PlayerUnitSkillEffectData> skillEffectDict)
         {
-            List<int> spellcardSkillEffectIds = new()
-            {
-                spellcardRecord.spellcard_skill1_effect_id,
-                spellcardRecord.spellcard_skill2_effect_id,
-                spellcardRecord.spellcard_skill3_effect_id,
-                spellcardRecord.spellcard_skill4_effect_id,
-                spellcardRecord.spellcard_skill5_effect_id,
+            List<SkillLevelTypeModel> spellcardSkillEffectIds = new() {
+                new SkillLevelTypeModel(spellcardRecord.spellcard_skill1_effect_id, spellcardRecord.spellcard_skill1_level_type, spellcardRecord.spellcard_skill1_level_value),
+                new SkillLevelTypeModel(spellcardRecord.spellcard_skill2_effect_id, spellcardRecord.spellcard_skill2_level_type, spellcardRecord.spellcard_skill2_level_value),
+                new SkillLevelTypeModel(spellcardRecord.spellcard_skill3_effect_id, spellcardRecord.spellcard_skill3_level_type, spellcardRecord.spellcard_skill3_level_value),
+                new SkillLevelTypeModel(spellcardRecord.spellcard_skill4_effect_id, spellcardRecord.spellcard_skill4_level_type, spellcardRecord.spellcard_skill4_level_value),
+                new SkillLevelTypeModel(spellcardRecord.spellcard_skill5_effect_id, spellcardRecord.spellcard_skill5_level_type, spellcardRecord.spellcard_skill5_level_value),
             };
-            return spellcardSkillEffectIds.Where(skillEffectId => skillEffectId != 0).Select(skillEffectId => GetEffectModels(skillEffectDict[skillEffectId])).ToList();
+            return spellcardSkillEffectIds.Where(skillEffectId => skillEffectId.EffectId != 0)
+                                          .Select(skillEffectId => GetEffectModels(skillEffectDict[skillEffectId.EffectId], skillEffectId)).ToList();
         }
 
         public static List<EffectModel> GetEffectModels(PlayerUnitSkillData skillRecord, Dictionary<int, PlayerUnitSkillEffectData> skillEffectDict)
         {
-            List<int> skillEffectIds = new() { skillRecord.effect1_id, skillRecord.effect2_id, skillRecord.effect3_id };
-            return skillEffectIds.Where(skillEffectId => skillEffectId != 0).Select(skillEffectId => GetEffectModels(skillEffectDict[skillEffectId])).ToList();
+            List<SkillLevelTypeModel> skillEffectIds = new() {
+                new SkillLevelTypeModel (skillRecord.effect1_id, skillRecord.effect1_level_type, skillRecord.effect1_level_value),
+                new SkillLevelTypeModel (skillRecord.effect2_id, skillRecord.effect2_level_type, skillRecord.effect2_level_value),
+                new SkillLevelTypeModel (skillRecord.effect3_id, skillRecord.effect3_level_type, skillRecord.effect3_level_value),
+            };
+            return skillEffectIds.Where(skillEffectId => skillEffectId.EffectId != 0)
+                                 .Select(skillEffectId => GetEffectModels(skillEffectDict[skillEffectId.EffectId], skillEffectId)).ToList();
         }
 
         public static List<EffectModel> GetEffectModels(PlayerUnitCharacteristicData characteristicRecord)
