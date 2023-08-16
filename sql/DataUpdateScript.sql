@@ -42,7 +42,7 @@ delete from [dbo].[RAW_HitCheckOrderTable];
 delete from [dbo].[RAW_SkillTable];
 delete from [dbo].[RAW_SkillEffectTable];
 delete from [dbo].[RAW_AbilityTable];
-delete from [dbo].[RAW_BulletExtraEffectData];
+delete from [dbo].[RAW_BulletExtraEffectTable];
 
 
 /* step 3: copy new data */
