@@ -1,0 +1,4 @@
+﻿id,name,type,exp_id,level1_turn,level2_turn,level3_turn,level4_turn,level5_turn,level6_turn,level7_turn,level8_turn,level9_turn,level10_turn,effect1_id,effect1_level_type,effect1_level_value,effect2_id,effect2_level_type,effect2_level_value,effect3_id,effect3_level_type,effect3_level_value
+10016,成就心愿的祈祷,2,1,5,5,5,5,5,5,5,5,5,4,100161,1,0,100162,1,0,0,0,0
+10017,灵梦的驱魔棒,2,1,5,5,5,5,5,5,5,5,5,4,100171,1,0,100172,1,0,0,0,0
+10018,博丽的御守,2,1,6,6,6,6,6,6,6,6,6,5,100181,1,0,100182,1,0,100183,1,0

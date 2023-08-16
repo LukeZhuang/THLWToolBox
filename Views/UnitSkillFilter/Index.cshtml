@@ -1,0 +1,236 @@
+﻿@model UnitSkillFilterViewModel
+@using THLWToolBox.Helpers;
+@using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Models.ViewModels.UnitSkillFilterViewModel;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<style>
+    .skills-grid {
+        display: inline-grid;
+        grid-template-columns: 10% 20% auto;
+        grid-auto-flow: row;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    .skill-wrapper {
+        padding: 2px 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+</style>
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_skill.png")" width="60" height="60" />角色筛选器（按技能）</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="UnitSkillFilterModal" tabindex="-1" aria-labelledby="UnitSkillFilter" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="UnitSkillFilter">帮助：角色筛选器（按技能）</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 技能效果中“主类型”必选，否则该部分的技能效果查询无效。</p>
+                <p>2. 选择多项技能效果则会查询出同时拥有这几种技能的角色。</p>
+                <p>3. 不在查询范围内：子弹带有的特效，异常激昂效果（移步“按异常找”），连携效果（移步“亲密关系查询器”）</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="home-box">
+    <form asp-controller="UnitSkillFilter" asp-action="Index" method="post">
+        <div class="filter-box">
+            <div class="title-box-1">通用</div>
+            <div class="buttons-grid">
+                <div class="btn-checkbox" style="width:250px">@Html.CheckBox("SimplifiedEffect", true) 显示简略版效果描述</div>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="title-box-1">查找范围</div>
+            <div class="buttons-grid">
+                <div class="btn-checkbox">@Html.CheckBox("AbilityBoost", false) 用灵力</div>
+                <div class="btn-checkbox">@Html.CheckBox("AbilityPurgeBarrier", false) 用擦弹</div>
+                <div class="btn-checkbox">@Html.CheckBox("Skill", true) 技能</div>
+                <div class="btn-checkbox">@Html.CheckBox("Spellcard", true) 符卡效果</div>
+                <div class="btn-checkbox">@Html.CheckBox("Characteristic", false) 特性</div>
+            </div>
+        </div>
+        <div class="filter-box">
+            <div class="title-box-1">技能效果查询</div>
+            <div class="effect-box">
+                <div style="margin: 10px 10px"><h5><b>技能效果1:</b></h5></div>
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">主类型:</div>
+                    <div class="selects-box">
+                        <select asp-for="EffectId1" asp-items="Model.EffectTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">子类型:</div>
+                    <div class="selects-box">
+                        <select asp-for="SubeffectId1" asp-items="Model.SubeffectTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range1" asp-items="Model.RangeTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="accordion" class="accordion effect-expand-label">
+                    <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#skillEffectFoldBox1">
+                        <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                    </div>
+                </div>
+                <div class="card-body collapse" id="skillEffectFoldBox1" data-parent="#accordion">
+                    <div class="selects-grid">
+                        <div class="selects-box" style="text-align: right">回合数:</div>
+                        <div class="selects-box">
+                            <select asp-for="TurnTypeId1" asp-items="Model.TurnTypes" class="selector">
+                                <option value=null>任意</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="effect-box">
+                <div style="margin: 10px 10px"><h5><b>技能效果2:</b></h5></div>
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">主类型:</div>
+                    <div class="selects-box">
+                        <select asp-for="EffectId2" asp-items="Model.EffectTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">子类型:</div>
+                    <div class="selects-box">
+                        <select asp-for="SubeffectId2" asp-items="Model.SubeffectTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range2" asp-items="Model.RangeTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="accordion" class="accordion effect-expand-label">
+                    <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#skillEffectFoldBox2">
+                        <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                    </div>
+                </div>
+                <div class="card-body collapse" id="skillEffectFoldBox2" data-parent="#accordion">
+                    <div class="selects-grid">
+                        <div class="selects-box" style="text-align: right">回合数:</div>
+                        <div class="selects-box">
+                            <select asp-for="TurnTypeId2" asp-items="Model.TurnTypes" class="selector">
+                                <option value=null>任意</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="effect-box">
+                <div style="margin: 10px 10px"><h5><b>技能效果3:</b></h5></div>
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">主类型:</div>
+                    <div class="selects-box">
+                        <select asp-for="EffectId3" asp-items="Model.EffectTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">子类型:</div>
+                    <div class="selects-box">
+                        <select asp-for="SubeffectId3" asp-items="Model.SubeffectTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range3" asp-items="Model.RangeTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="accordion" class="accordion effect-expand-label">
+                    <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#skillEffectFoldBox3">
+                        <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                    </div>
+                </div>
+                <div class="card-body collapse" id="skillEffectFoldBox3" data-parent="#accordion">
+                    <div class="selects-grid">
+                        <div class="selects-box" style="text-align: right">回合数:</div>
+                        <div class="selects-box">
+                            <select asp-for="TurnTypeId3" asp-items="Model.TurnTypes" class="selector">
+                                <option value=null>任意</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitSkillFilterModal">帮助</button>
+    </form>
+</div>
+
+<div class="home-box">
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+                <th>
+                    匹配的技能组
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.UnitSkillInfos!)
+            {
+                <tr>
+                    <td>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.Unit.id + ".png")))
+                    </td>
+                    <td>
+                        @Html.Raw(GetWikiURL(item.Unit.name + item.Unit.symbol_name))
+                    </td>
+                    <td>
+                        @Html.Raw(Model.DisplayUnitSkills(item.SkillEffectInfos))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

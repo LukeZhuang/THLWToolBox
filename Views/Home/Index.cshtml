@@ -98,7 +98,7 @@
     <div class="home-box">
         <div class="title-box-1">绘卷相关</div>
         <div class="buttons-grid">
-            <button type="button" onclick="location.href='@Url.Action("Index", "PictureDatasFilter")'" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "PictureFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" /></div>
                 绘卷筛选器
             </button>
@@ -106,51 +106,55 @@
     </div>
     <div class="home-box">
         <div class="title-box-1">角色相关</div>
-        <div class="title-box-2">查看角色信息</div>
+        <div class="title-box-2">查看角色隐藏信息</div>
         <div class="buttons-grid">
-            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitSwitchLinkHelper")'" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitSwitchLinkHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_heart.png")" /></div>
                 查亲密关系
             </button>
-            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitRaceFilter")'" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitRaceHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_race.png")" /></div>
                 查种族
             </button>
-            <button type="button" onclick="location.href='@Url.Action("Index", "PlayerUnitShotDataFilter")'" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitShotPowerUpHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_bullet.png")" /></div>
-                查弹幕数据
+                查弹幕补正
             </button>
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitShotSpiritRecycleHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_power.png")" /></div>
-                <div class="btn-feature-inprogess">查回灵效率</div>
+                查回灵效率
+            </button>
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitHitCheckOrderHelper")'" class="btn-index">
+                <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_hitcheckorder.png")" /></div>
+                查段落顺序
             </button>
         </div>
         <div class="title-box-2">找想要的角色</div>
         <div class="buttons-grid">
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitCriticalHitFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_typeattack.png")" /></div>
-                <div class="btn-feature-inprogess">按特攻找</div>
+                按特攻找
             </button>
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitSkillFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_skill.png")" /></div>
-                <div class="btn-feature-inprogess">按技能找</div>
+                按技能找
             </button>
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitBarrierStatusFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_abnormal.png")" /></div>
-                <div class="btn-feature-inprogess">按异常破盾找</div>
+                按异常找
             </button>
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "UnitElementFilter")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_element.png")" /></div>
-                <div class="btn-feature-inprogess">按属性找</div>
+                按属性弹种找
             </button>
         </div>
     </div>
     <div class="home-box">
         <div class="title-box-1">其他实用工具</div>
         <div class="buttons-grid">
-            <button type="button" class="btn-index">
+            <button type="button" onclick="location.href='@Url.Action("Index", "IdHelper")'" class="btn-index">
                 <div class="image-box"><img src="@Url.Content("~/res/website/index_btn_empty.png")" /></div>
-                <div class="btn-feature-inprogess">开发中</div>
+                查编号
             </button>
         </div>
     </div>

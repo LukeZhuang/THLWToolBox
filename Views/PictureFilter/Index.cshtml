@@ -1,0 +1,260 @@
+﻿@model PictureFilterViewModel
+@using THLWToolBox.Helpers;
+@using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<!-- Modal -->
+<div class="modal fade" id="pictureFilterModal" tabindex="-1" aria-labelledby="pictureFilter" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pictureFilter">帮助：绘卷筛选器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 默认显示简略版绘卷效果描述，以及0级面板</p>
+                <p>2. 效果查询支持两种组合查询，若想进行筛选则必选“主类型”，否则无效</p>
+                <p>3. 面板属性若选择，则会进行筛选。然后按照当前指定的等级，把筛选结果先按“主属性”从大到小排序，再按“副属性”从大到小排序</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_picture_icon.png")" width="60" height="60"/> 绘卷筛选器</div>
+</div>
+
+<div class="home-box">
+<form asp-controller="PictureFilter" asp-action="Index" method="post">
+    <div class="filter-box">
+        <div class="title-box-1">通用</div>
+        <div class="buttons-grid">
+            <div class="btn-checkbox" style="width:250px">@Html.CheckBox("SimplifiedEffect", true) 显示简略版效果描述</div>
+        </div>
+    </div>
+
+    <div class="filter-box">
+        <div class="title-box-1">星级筛选</div>
+        <div class="buttons-grid">
+            <div class="btn-checkbox">@Html.CheckBox("RareType3", true) 三星</div>
+            <div class="btn-checkbox">@Html.CheckBox("RareType4", true) 四星</div>
+            <div class="btn-checkbox">@Html.CheckBox("RareType5", true) 五星</div>
+        </div>
+    </div>
+
+    
+    <div class="filter-box">
+        <div class="title-box-1">绘卷效果查询</div>
+        <div class="effect-box">
+            <div style="margin: 10px 10px"><h5><b>绘卷效果1:</b></h5></div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">主类型:</div>
+                <div class="selects-box">
+                    <select asp-for="EffectId1" asp-items="Model.EffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">子类型:</div>
+                <div class="selects-box">
+                    <select asp-for="SubeffectId1" asp-items="Model.SubeffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+            <div id="accordion" class="accordion effect-expand-label">
+                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureEffectFoldBox1">
+                    <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                </div>
+            </div>
+            <div class="card-body collapse" id="pictureEffectFoldBox1" data-parent="#accordion">
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range1" asp-items="Model.RangeTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">式专用:</div>
+                    <div class="selects-box">
+                        <select asp-for="UnitRoleTypeId1" asp-items="Model.UnitRoleTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">回合数:</div>
+                    <div class="selects-box">
+                        <select asp-for="TurnTypeId1" asp-items="Model.TurnTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="effect-box">
+            <div style="margin: 10px 10px"><h5><b>绘卷效果2:</b></h5></div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">主类型:</div>
+                <div class="selects-box">
+                    <select asp-for="EffectId2" asp-items="Model.EffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">子类型:</div>
+                <div class="selects-box">
+                    <select asp-for="SubeffectId2" asp-items="Model.SubeffectTypes" class="selector">
+                        <option value=null>任意</option>
+                    </select>
+                </div>
+            </div>
+            <div id="accordion" class="accordion effect-expand-label">
+                <div class="card-header collapsed" data-bs-toggle="collapse" data-bs-target="#pictureEffectFoldBox2">
+                    <b class="header-title">&nbsp;&nbsp;展开更多选项</b>
+                </div>
+            </div>
+            <div class="card-body collapse" id="pictureEffectFoldBox2" data-parent="#accordion">
+                <div class="selects-grid">
+                    <div class="selects-box" style="text-align: right">范围:</div>
+                    <div class="selects-box">
+                        <select asp-for="Range2" asp-items="Model.RangeTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">式专用:</div>
+                    <div class="selects-box">
+                        <select asp-for="UnitRoleTypeId2" asp-items="Model.UnitRoleTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                    <div class="selects-box" style="text-align: right">回合数:</div>
+                    <div class="selects-box">
+                        <select asp-for="TurnTypeId2" asp-items="Model.TurnTypes" class="selector">
+                            <option value=null>任意</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-box">
+        <div class="title-box-1">面板筛选与排序</div>
+        <div class="selects-grid">
+            <div class="selects-box" style="text-align: right">面板等级:</div>
+            <div class="selects-box">
+                <select asp-for="CorrLevel" class="selector">
+                    <option value=0>0级</option>
+                    <option value=1>1级</option>
+                    <option value=2>2级</option>
+                    <option value=3>3级</option>
+                    <option value=4>4级</option>
+                    <option value=5>5级</option>
+                    <option value=6>6级</option>
+                    <option value=7>7级</option>
+                    <option value=8>8级</option>
+                    <option value=9>9级</option>
+                    <option value=10>10级</option>
+                </select>
+            </div>
+            <div class="selects-box" style="text-align: right">主属性（<b><font color="FF6600">红色标出</font></b>）：</div>
+            <div class="selects-box">
+                <select asp-for="CorrTypeMain" class="selector">
+                    <option value=null>{未选择}</option>
+                    <option value=1>体力</option>
+                    <option value=2>阳攻</option>
+                    <option value=3>阳防</option>
+                    <option value=4>阴攻</option>
+                    <option value=5>阴防</option>
+                    <option value=6>速度</option>
+                </select>
+            </div>
+            <div class="selects-box" style="text-align: right">副属性（<b><font color="4CAFFF">蓝色标出</font></b>）：</div>
+            <div class="selects-box">
+                <select asp-for="CorrTypeSub" class="selector">
+                    <option value=null>{未选择}</option>
+                    <option value=1>体力</option>
+                    <option value=2>阳攻</option>
+                    <option value=3>阳防</option>
+                    <option value=4>阴攻</option>
+                    <option value=5>阴防</option>
+                    <option value=6>速度</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="submit-title-box-1"></div>
+    <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#pictureFilterModal">帮助</button>
+</form>
+</div>
+
+
+<div class="home-box">
+<table class="table table-light table-bordered">
+    <thead>
+        <tr>
+            <th>
+                名称
+            </th>
+            <th>
+                图片
+            </th>
+            <th>
+                星级
+            </th>
+            <th>
+                面板1
+            </th>
+            <th>
+                面板2
+            </th>
+            <th>
+                未满破效果
+            </th>
+            <th>
+                满破效果
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.DisplayPictureList!)
+    {
+        <tr>
+            <td>
+                @Html.Raw(GetWikiURL(item.name))
+            </td>
+            <td>
+                @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/pictures_img/" + item.id + ".png")))
+            </td>
+            <td>
+                @Html.Raw(item.rare)
+            </td>
+            <td>
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionString(item, 1)))
+            </td>
+            <td>
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateCorrectionString(item, 2)))
+            </td>
+            <td>
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffectString(item, false)))
+            </td>
+            <td>
+                @Html.Raw(StringFromDatabaseForDisplay(Model.CreateSimplifiedPictureEffectString(item, true)))
+            </td>
+        </tr>
+}
+    </tbody>
+    </table>
+</div>

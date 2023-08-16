@@ -1,0 +1,255 @@
+﻿@model UnitShotSpiritRecycleHelperViewModel
+@using THLWToolBox.Helpers;
+@using THLWToolBox.Models.ViewModels;
+@using static THLWToolBox.Helpers.GeneralHelper;
+@using static THLWToolBox.Helpers.TypeHelper;
+@using static THLWToolBox.Models.ViewModels.UnitShotSpiritRecycleHelperViewModel;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/filter.css" asp-append-version="true" />
+</head>
+
+<!-- Modal -->
+<div class="modal fade" id="UnitShotSpiritRecycleHelperModal" tabindex="-1" aria-labelledby="UnitShotSpiritRecycleHelper" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="UnitShotSpiritRecycleHelper">帮助：灵力回收查询器</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>1. 灵力回收机制详情请参阅文章：<a href="https://www.bilibili.com/read/cv20750984">灵力回收机制详解</a>。</p>
+                <p>2. 置信度除了平均以外其余指多少情况下的回灵下限。例如选择95%灵梦扩散3p回收1.55，指的是95%的情况下该射击3p的回灵都超过1.55。</p>
+                <p>3. 敌人数只对全体攻击有效，就算选择多名敌人，单体攻击的结果仍然不变。</p>
+                <p>4. 由于采用蒙特卡洛随机测试，因此每次结果可能不同，而且会有误差，但<b><font color="red">误差不超过0.01</font></b>。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script type="text/javascript">
+        $('#UnitSymbolNameInput').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/InputAutoCompleteHelper/SearchUser',
+                    dataType: 'json',
+                    data: { term: $('#UnitSymbolNameInput').val() },
+                    success: function (data) {
+                        var result = $.map(data, function (item) {
+                            return {
+                                label: item
+                            };
+                        });
+                        return response(result);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                $('#UnitSymbolNameInput').val(ui.item.label);
+            },
+            create: function () {
+                $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+                    return $('<li>')
+                        .append('<div id="ui-id-6" tabindex="-1" class="ui-menu-item-wrapper">'
+                            + item.label + '<br></div>')
+                        .appendTo(ul);
+                };
+            }
+        });
+    </script>
+}
+
+<p><b><font color="red">*数据更新日期：@Html.Raw(GeneralHelper.DATA_UPDATE_DATE), 当前版本：@Html.Raw(GeneralHelper.VERSION_STR)</font></b></p>
+
+<div class="text-center">
+    <div class="title-box"><img src="@Url.Content("~/res/website/index_btn_power.png")" width="60" height="60" /> 灵力回收查询器</div>
+</div>
+
+<div class="home-box">
+    <form asp-controller="UnitShotSpiritRecycleHelper" asp-action="Index" method="post">
+        <div class="filter-box">
+            <div class="title-box-1">按角色名查询</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">角色名+泛异记号（带补全建议）:</div>
+                <div class="selects-box">
+                    <input type="text" id="UnitSymbolNameInput" asp-for="UnitSymbolName" class="selector">
+                </div>
+            </div>
+            <div class="title-box-1">查询信息</div>
+            <div class="selects-grid">
+                <div class="selects-box" style="text-align: right">命中等级：</div>
+                <div class="selects-box">
+                    <select asp-for="HitRank" class="selector">
+                        <option value=0>0级</option>
+                        <option value=1>上升1级</option>
+                        <option value=2>上升2级</option>
+                        <option value=3>上升3级</option>
+                        <option value=4>上升4级</option>
+                        <option value=5>上升5级</option>
+                        <option value=6>上升6级</option>
+                        <option value=7>上升7级</option>
+                        <option value=8>上升8级</option>
+                        <option value=9>上升9级</option>
+                        <option value=10>上升10级</option>
+                        <option value=-1>下降1级</option>
+                        <option value=-2>下降2级</option>
+                        <option value=-3>下降3级</option>
+                        <option value=-4>下降4级</option>
+                        <option value=-5>下降5级</option>
+                        <option value=-6>下降6级</option>
+                        <option value=-7>下降7级</option>
+                        <option value=-8>下降8级</option>
+                        <option value=-9>下降9级</option>
+                        <option value=-10>下降10级</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">敌人数：</div>
+                <div class="selects-box">
+                    <select asp-for="EnemyCount" class="selector">
+                        <option value=1>1名</option>
+                        <option value=2>2名</option>
+                        <option value=3>3名</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">攻击方黑暗异常数：</div>
+                <div class="selects-box">
+                    <select asp-for="SourceSmoke" class="selector">
+                        <option value=0>0枚</option>
+                        <option value=1>1枚</option>
+                        <option value=2>2枚</option>
+                        <option value=3>3枚</option>
+                        <option value=4>4枚</option>
+                        <option value=5>5枚</option>
+                        <option value=6>6枚</option>
+                        <option value=7>7枚</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">防御方感电异常数：</div>
+                <div class="selects-box">
+                    <select asp-for="TargetCharge" class="selector">
+                        <option value=0>0枚</option>
+                        <option value=1>1枚</option>
+                        <option value=2>2枚</option>
+                        <option value=3>3枚</option>
+                        <option value=4>4枚</option>
+                        <option value=5>5枚</option>
+                        <option value=6>6枚</option>
+                        <option value=7>7枚</option>
+                    </select>
+                </div>
+                <div class="selects-box" style="text-align: right">置信度（见帮助）：</div>
+                <div class="selects-box">
+                    <select asp-for="ConfidenceLevel" class="selector">
+                        <option value=0>平均</option>
+                        <option value=900>90%</option>
+                        <option value=950>95%</option>
+                        <option value=990>99%</option>
+                        <option value=999>99.9%</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="submit-title-box-1"></div>
+        <input type="submit" value="确定" class="btn-submit" />
+        <button type="button" class="btn-submit btn-helper" data-bs-toggle="modal" data-bs-target="#UnitShotSpiritRecycleHelperModal">帮助</button>
+    </form>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">要查询的角色</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    头像
+                </th>
+                <th>
+                    角色名
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.QueryUnits!)
+            {
+                <tr>
+                    <td>
+                        @Html.Raw(GetImageHtmlRaw(@Url.Content("~/res/units_img/" + item.id + ".png")))
+                    </td>
+                    <td>
+                        @Html.Raw(GetWikiURL(item.name + item.symbol_name))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="home-box">
+    <div class="title-result-box-1">该角色弹幕灵力回收数据表</div>
+    <table class="table table-light table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    射击种类
+                </th>
+                <th>
+                    射击名
+                </th>
+                <th>
+                    范围
+                </th>
+                <th>
+                    0p回收
+                </th>
+                <th>
+                    1p回收
+                </th>
+                <th>
+                    2p回收
+                </th>
+                <th>
+                    3p回收
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.SpiritRecycleDatas!)
+            {
+                <tr>
+                    <td>
+                        @Html.Raw(item.TypeName)
+                    </td>
+                    <td>
+                        @Html.Raw(item.ShotName)
+                    </td>
+                    <td>
+                        @Html.Raw(GetBulletRangeString(item.Range))
+                    </td>
+                    <td>
+                        @Html.Raw(CreateSpiritRecycleStr(item.BoostRecycles[0]))
+                    </td>
+                    <td>
+                        @Html.Raw(CreateSpiritRecycleStr(item.BoostRecycles[1]))
+                    </td>
+                    <td>
+                        @Html.Raw(CreateSpiritRecycleStr(item.BoostRecycles[2]))
+                    </td>
+                    <td>
+                        @Html.Raw(CreateSpiritRecycleStr(item.BoostRecycles[3]))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

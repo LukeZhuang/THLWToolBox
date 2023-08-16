@@ -22,7 +22,43 @@ namespace THLWToolBox.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("THLWToolBox.Models.PersonRelationData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.BulletExtraEffectData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("subtype")
+                        .HasColumnType("int");
+
+                    b.Property<int>("target")
+                        .HasColumnType("int");
+
+                    b.Property<int>("turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("value")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("BulletExtraEffectData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PersonRelationData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -45,20 +81,13 @@ namespace THLWToolBox.Migrations
                     b.ToTable("PersonRelationData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.PictureData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PictureData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("album_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("circle_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("correction1_diff")
                         .HasColumnType("int");
@@ -76,33 +105,6 @@ namespace THLWToolBox.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("correction2_value")
-                        .HasColumnType("int");
-
-                    b.Property<string>("flavor_text1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("flavor_text2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("flavor_text3")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("flavor_text4")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("flavor_text5")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("illustrator_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("is_show")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
@@ -174,9 +176,6 @@ namespace THLWToolBox.Migrations
                     b.Property<int>("rare")
                         .HasColumnType("int");
 
-                    b.Property<int>("recycle_id")
-                        .HasColumnType("int");
-
                     b.Property<int>("type")
                         .HasColumnType("int");
 
@@ -185,7 +184,154 @@ namespace THLWToolBox.Migrations
                     b.ToTable("PictureData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.PlayerUnitCharacteristicData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitAbilityData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("barrier_ability_description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("blackout_barrier_type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("boost_ability_description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("boost_power_divergence_range")
+                        .HasColumnType("int");
+
+                    b.Property<int>("boost_power_divergence_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("burning_barrier_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("electrified_barrier_type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("element_ability_description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("frozen_barrier_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("good_element_give_damage_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("good_element_take_damage_rate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("poisoning_barrier_type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("purge_ability_description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("purge_barrier_diffusion_range")
+                        .HasColumnType("int");
+
+                    b.Property<int>("purge_barrier_diffusion_type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("resist_ability_description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("weak_element_give_damage_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("weak_element_take_damage_rate")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PlayerUnitAbilityData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitBulletData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("bullet1_addon_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet1_addon_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet1_extraeffect_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet1_extraeffect_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet2_addon_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet2_addon_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet2_extraeffect_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet2_extraeffect_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet3_addon_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet3_addon_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet3_extraeffect_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("bullet3_extraeffect_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("category")
+                        .HasColumnType("int");
+
+                    b.Property<int>("critical")
+                        .HasColumnType("int");
+
+                    b.Property<int>("element")
+                        .HasColumnType("int");
+
+                    b.Property<int>("hit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("power")
+                        .HasColumnType("real");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PlayerUnitBulletData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitCharacteristicData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -205,10 +351,6 @@ namespace THLWToolBox.Migrations
 
                     b.Property<int>("characteristic1_effect_value")
                         .HasColumnType("int");
-
-                    b.Property<string>("characteristic1_icon_filename")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("characteristic1_name")
                         .IsRequired()
@@ -233,10 +375,6 @@ namespace THLWToolBox.Migrations
                     b.Property<int>("characteristic2_effect_value")
                         .HasColumnType("int");
 
-                    b.Property<string>("characteristic2_icon_filename")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("characteristic2_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -260,10 +398,6 @@ namespace THLWToolBox.Migrations
                     b.Property<int>("characteristic3_effect_value")
                         .HasColumnType("int");
 
-                    b.Property<string>("characteristic3_icon_filename")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("characteristic3_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -280,10 +414,6 @@ namespace THLWToolBox.Migrations
                     b.Property<int>("trust_characteristic_avent_effect_type")
                         .HasColumnType("int");
 
-                    b.Property<string>("trust_characteristic_description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("trust_characteristic_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -299,7 +429,7 @@ namespace THLWToolBox.Migrations
                     b.ToTable("PlayerUnitCharacteristicData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.PlayerUnitData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -310,27 +440,7 @@ namespace THLWToolBox.Migrations
                     b.Property<int>("ability_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("album_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("alias_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("characteristic_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("default_costume_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("drop_text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("exp_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("is_show")
                         .HasColumnType("int");
 
                     b.Property<int>("life_point")
@@ -343,22 +453,7 @@ namespace THLWToolBox.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name_kana")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name_kana_sub")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name_sub")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("person_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("recycle_id")
                         .HasColumnType("int");
 
                     b.Property<int>("resist_id")
@@ -368,10 +463,6 @@ namespace THLWToolBox.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("short_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("short_name_sub")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -408,18 +499,7 @@ namespace THLWToolBox.Migrations
                     b.Property<int>("spellcard5_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("spellcard_bgm_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("symbol_description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("symbol_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("symbol_title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -440,7 +520,33 @@ namespace THLWToolBox.Migrations
                     b.ToTable("PlayerUnitData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.PlayerUnitRaceData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitHitCheckOrderData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("barrage_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("boost_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("hit_check_order")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("unit_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PlayerUnitHitCheckOrderData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitRaceData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -459,17 +565,13 @@ namespace THLWToolBox.Migrations
                     b.ToTable("PlayerUnitRaceData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.PlayerUnitShotData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitShotData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("magazine0_bullet_id")
                         .HasColumnType("int");
@@ -582,17 +684,93 @@ namespace THLWToolBox.Migrations
 
                     b.Property<int>("shot_level5_power_rate")
                         .HasColumnType("int");
-
-                    b.Property<string>("specification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
                     b.ToTable("PlayerUnitShotData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.PlayerUnitSpellcardData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitSkillData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("effect1_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect1_level_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect1_level_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect2_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect2_level_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect2_level_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect3_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect3_level_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("effect3_level_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("exp_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level10_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level1_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level2_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level3_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level4_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level5_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level6_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level7_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level8_turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level9_turn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PlayerUnitSkillData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitSkillEffectData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -603,6 +781,125 @@ namespace THLWToolBox.Migrations
                     b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("level10_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level10_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level10_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level1_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level1_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level1_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level2_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level2_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level2_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level3_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level3_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level3_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level4_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level4_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level4_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level5_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level5_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level5_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level6_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level6_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level6_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level7_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level7_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level7_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level8_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level8_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level8_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level9_add_value")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level9_success_rate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("level9_value")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("range")
+                        .HasColumnType("int");
+
+                    b.Property<int>("subtype")
+                        .HasColumnType("int");
+
+                    b.Property<int>("turn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PlayerUnitSkillEffectData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.PlayerUnitSpellcardData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<int>("magazine0_bullet_id")
                         .HasColumnType("int");
@@ -715,10 +1012,6 @@ namespace THLWToolBox.Migrations
 
                     b.Property<int>("shot_level5_power_rate")
                         .HasColumnType("int");
-
-                    b.Property<string>("specification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("spellcard_skill1_effect_id")
                         .HasColumnType("int");
@@ -788,21 +1081,13 @@ namespace THLWToolBox.Migrations
                     b.ToTable("PlayerUnitSpellcardData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.RaceData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.RaceData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("alias_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -813,7 +1098,7 @@ namespace THLWToolBox.Migrations
                     b.ToTable("RaceData");
                 });
 
-            modelBuilder.Entity("THLWToolBox.Models.VersionHistoryData", b =>
+            modelBuilder.Entity("THLWToolBox.Models.DataTypes.VersionHistoryData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -821,15 +1106,34 @@ namespace THLWToolBox.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("VersionHistoryData");
+                });
+
+            modelBuilder.Entity("THLWToolBox.Models.PlayerUnitBulletCriticalRaceData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("bullet_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("race_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("PlayerUnitBulletCriticalRaceData");
                 });
 #pragma warning restore 612, 618
         }
