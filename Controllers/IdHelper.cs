@@ -32,13 +32,15 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                queryUnits.Add(unitRecord);
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
+                    queryUnits.Add(unitRecord);
             }
             if (request.PictureName != null && request.PictureName.Length > 0)
             {
-                PictureData pictureRecord = GetPictureByName(pictureList, request.PictureName);
-                queryPictures.Add(pictureRecord);
+                PictureData? pictureRecord = GetPictureByName(pictureList, request.PictureName);
+                if (pictureRecord != null)
+                    queryPictures.Add(pictureRecord);
             }
 
             request.QueryUnits = queryUnits;

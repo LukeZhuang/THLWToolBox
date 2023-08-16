@@ -35,17 +35,20 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                queryUnits.Add(unitRecord);
-                List<UnitShotPowerUpDisplayModel> unitPowerUpDatas = new()
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
                 {
-                    new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id])),
-                    new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id])),
-                    new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id])),
-                    new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id])),
-                    new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id])),
-                };
-                powerUpDatas.AddRange(unitPowerUpDatas);
+                    queryUnits.Add(unitRecord);
+                    List<UnitShotPowerUpDisplayModel> unitPowerUpDatas = new()
+                    {
+                        new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id])),
+                        new UnitShotPowerUpDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id])),
+                    };
+                    powerUpDatas.AddRange(unitPowerUpDatas);
+                }
             }
 
             request.QueryUnits = queryUnits;
