@@ -42,7 +42,7 @@ delete from [TouhouLostWordRawData].[dbo].[HitCheckOrderTable];
 delete from [TouhouLostWordRawData].[dbo].[SkillTable];
 delete from [TouhouLostWordRawData].[dbo].[SkillEffectTable];
 delete from [TouhouLostWordRawData].[dbo].[AbilityTable];
-delete from [TouhouLostWordRawData].[dbo].[BulletExtraEffectData];
+delete from [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable];
 
 
 /* step 3: copy new data */
