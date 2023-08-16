@@ -47,10 +47,13 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                queryUnits.Add(unitRecord);
-                hitCheckOrderDatas.AddRange(hitCheckOrderList.Where(x => x.unit_id == unitRecord.id && x.barrage_id == request.BarrageId.GetValueOrDefault())
-                                                             .Select(x => CreateHitCheckOrderDisplayModel(unitRecord, x)));
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
+                {
+                    queryUnits.Add(unitRecord);
+                    hitCheckOrderDatas.AddRange(hitCheckOrderList.Where(x => x.unit_id == unitRecord.id && x.barrage_id == request.BarrageId.GetValueOrDefault())
+                                                                 .Select(x => CreateHitCheckOrderDisplayModel(unitRecord, x)));
+                }
             }
 
             request.QueryUnits = queryUnits;

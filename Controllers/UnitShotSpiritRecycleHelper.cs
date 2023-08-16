@@ -44,17 +44,20 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                queryUnits.Add(unitRecord);
-                List<UnitShotSpiritRecycleDisplayModel> unitSpiritRecycleDatas = new()
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
                 {
-                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id]), request),
-                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id]), request),
-                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id]), request),
-                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id]), request),
-                    CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), request),
-                };
-                spiritRecycleDatas.AddRange(unitSpiritRecycleDatas);
+                    queryUnits.Add(unitRecord);
+                    List<UnitShotSpiritRecycleDisplayModel> unitSpiritRecycleDatas = new()
+                    {
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpreadShot, shotDict[unitRecord.shot1_id]), request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringFocusShot, shotDict[unitRecord.shot2_id]), request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard1, spellcardDict[unitRecord.spellcard1_id]), request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringSpellcard2, spellcardDict[unitRecord.spellcard2_id]), request),
+                        CreateSpiritPowerRecycleDisplayModel(new AttackData(AttackData.TypeStringLastWord, spellcardDict[unitRecord.spellcard5_id]), request),
+                    };
+                    spiritRecycleDatas.AddRange(unitSpiritRecycleDatas);
+                }
             }
 
             request.QueryUnits = queryUnits;

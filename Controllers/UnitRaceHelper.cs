@@ -48,14 +48,16 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                queryUnits = CreateUnitRaceDisplayModelByUnit(unitRecord, unitToRaceIds.GetValueOrDefault(unitRecord.id, new()), raceList, null);
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
+                    queryUnits = CreateUnitRaceDisplayModelByUnit(unitRecord, unitToRaceIds.GetValueOrDefault(unitRecord.id, new()), raceList, null);
             }
             
             if (request.RaceName != null && request.RaceName.Length > 0)
             {
-                int raceId = GetRaceIdByName(raceList, request.RaceName);
-                queryRaces = CreateUnitRaceDisplayModelByRace(raceId);
+                int? raceId = GetRaceIdByName(raceList, request.RaceName);
+                if (raceId != null)
+                    queryRaces = CreateUnitRaceDisplayModelByRace(raceId.GetValueOrDefault());
             }
 
             request.QueryUnits = queryUnits;
