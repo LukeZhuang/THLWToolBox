@@ -48,19 +48,19 @@ namespace THLWToolBox.Helpers
 
 
         // Common functions which are used in mutliple controllers
-        public static PlayerUnitData GetUnitByNameSymbol(List<PlayerUnitData> unitList, string unitSymbolName)
+        public static PlayerUnitData? GetUnitByNameSymbol(List<PlayerUnitData> unitList, string unitSymbolName)
         {
-            return unitList.Where(x => (x.name + x.symbol_name).Equals(unitSymbolName)).First();
+            return unitList.Where(x => (x.name + x.symbol_name).Equals(unitSymbolName)).FirstOrDefault();
         }
 
-        public static int GetRaceIdByName(List<RaceData> raceList, string raceName)
+        public static int? GetRaceIdByName(List<RaceData> raceList, string raceName)
         {
-            return raceList.Where(x => x.name.Equals(raceName)).Select(x => x.id).First();
+            return raceList.Where(x => x.name.Equals(raceName)).Select(x => x.id).FirstOrDefault();
         }
 
-        public static PictureData GetPictureByName(List<PictureData> pictureList, string pictureName)
+        public static PictureData? GetPictureByName(List<PictureData> pictureList, string pictureName)
         {
-            return pictureList.Where(x => x.name.Equals(pictureName)).First();
+            return pictureList.Where(x => x.name.Equals(pictureName)).FirstOrDefault();
         }
 
         public static List<BulletAddonModel> GetBulletAddons(PlayerUnitBulletData bulletRecord)

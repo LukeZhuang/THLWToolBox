@@ -55,12 +55,19 @@ namespace THLWToolBox.Controllers
             HashSet<int> targetRaceIds = new();
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                targetRaceIds = unitToRaceIds.GetValueOrDefault(unitRecord.id, new());
-                queryUnits = CreateUnitRaceDisplayModelByUnit(unitRecord, targetRaceIds, raceList, null);
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
+                {
+                    targetRaceIds = unitToRaceIds.GetValueOrDefault(unitRecord.id, new());
+                    queryUnits = CreateUnitRaceDisplayModelByUnit(unitRecord, targetRaceIds, raceList, null);
+                }
             }
             else if (request.RaceName != null && request.RaceName.Length > 0)
-                targetRaceIds = new() { GetRaceIdByName(raceList, request.RaceName) };
+            {
+                int? targetRaceId = GetRaceIdByName(raceList, request.RaceName);
+                if (targetRaceId != null)
+                    targetRaceIds = new() { targetRaceId.GetValueOrDefault() };
+            }
 
             if (targetRaceIds.Count > 0)
             {

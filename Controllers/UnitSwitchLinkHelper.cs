@@ -46,11 +46,14 @@ namespace THLWToolBox.Controllers
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
-                PlayerUnitData unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
-                queryUnits.Add(new UnitSwitchLinkDisplayModel(unitRecord, GetUnitTrustCharacteristicSIM(unitRecord).name));
-                HashSet<int> relatedUnitIdSet = unitToRaltedUnits.GetValueOrDefault(unitRecord.person_id, new());
-                relatedUnits.AddRange(unitList.Where(x => relatedUnitIdSet.Contains(x.person_id) && (request.SwitchLinkType == null|| request.SwitchLinkType == GetUnitTrustCharacteristicSIM(x).id))
-                                              .Select(x => new UnitSwitchLinkDisplayModel(x, GetUnitTrustCharacteristicSIM(x).name)));
+                PlayerUnitData? unitRecord = GetUnitByNameSymbol(unitList, request.UnitSymbolName);
+                if (unitRecord != null)
+                {
+                    queryUnits.Add(new UnitSwitchLinkDisplayModel(unitRecord, GetUnitTrustCharacteristicSIM(unitRecord).name));
+                    HashSet<int> relatedUnitIdSet = unitToRaltedUnits.GetValueOrDefault(unitRecord.person_id, new());
+                    relatedUnits.AddRange(unitList.Where(x => relatedUnitIdSet.Contains(x.person_id) && (request.SwitchLinkType == null || request.SwitchLinkType == GetUnitTrustCharacteristicSIM(x).id))
+                                                  .Select(x => new UnitSwitchLinkDisplayModel(x, GetUnitTrustCharacteristicSIM(x).name)));
+                }
             }
             else if (request.SwitchLinkType != null)
                 queryUnits.AddRange(unitList.Where(x => GetUnitTrustCharacteristicSIM(x).id == request.SwitchLinkType)
