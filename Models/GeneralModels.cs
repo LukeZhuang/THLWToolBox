@@ -161,11 +161,13 @@ namespace THLWToolBox.Models
         public class SkillLevelTypeModel
         {
             public int EffectId { get; set; }
+            public bool IsSpellcard { get; set; }
             public int LevelType { get; set; }
             public int LevelValue { get; set; }
-            public SkillLevelTypeModel(int effectId, int levelType, int levelValue)
+            public SkillLevelTypeModel(int effectId, bool isSpellcard, int levelType, int levelValue)
             {
                 EffectId = effectId;
+                IsSpellcard = isSpellcard;
                 LevelType = levelType;
                 LevelValue = levelValue;
             }
