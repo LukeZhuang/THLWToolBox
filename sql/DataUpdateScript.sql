@@ -1,7 +1,7 @@
 /****** Script for SelectTopNRows command from SSMS  ******/
 
 /* update version info */
-USE [thlwtoolboxtestserver-database]
+USE [thlwtoolbox-database]
 GO
 
 INSERT INTO [dbo].[VersionHistoryData]
