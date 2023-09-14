@@ -221,6 +221,9 @@
                 <th>
                     3p回收
                 </th>
+                <th>
+                    <div style="display:none">debug</div>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -247,6 +250,9 @@
                     </td>
                     <td>
                         @Html.Raw(CreateSpiritRecycleStr(item.BoostRecycles[3]))
+                    </td>
+                    <td>
+                        <div style="display:none">@Html.Raw(Model.DebugString)</div>
                     </td>
                 </tr>
             }

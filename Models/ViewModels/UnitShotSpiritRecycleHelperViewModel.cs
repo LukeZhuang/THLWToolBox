@@ -31,6 +31,7 @@ namespace THLWToolBox.Models.ViewModels
         public int? SourceSmoke { get; set; }
         public int? TargetCharge { get; set; }
         public int? ConfidenceLevel { get; set; }
+        public string? DebugString { get; set; }
 
 
         // Methods
