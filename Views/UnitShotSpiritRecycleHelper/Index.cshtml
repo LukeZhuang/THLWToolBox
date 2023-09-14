@@ -195,6 +195,8 @@
     </table>
 </div>
 
+<div style="display:none">@Html.Raw(Model.DebugString)</div>
+
 <div class="home-box">
     <div class="title-result-box-1">该角色弹幕灵力回收数据表</div>
     <table class="table table-light table-bordered">
@@ -220,9 +222,6 @@
                 </th>
                 <th>
                     3p回收
-                </th>
-                <th>
-                    <div style="display:none">debug</div>
                 </th>
             </tr>
         </thead>
@@ -250,9 +249,6 @@
                     </td>
                     <td>
                         @Html.Raw(CreateSpiritRecycleStr(item.BoostRecycles[3]))
-                    </td>
-                    <td>
-                        <div style="display:none">@Html.Raw(Model.DebugString)</div>
                     </td>
                 </tr>
             }
