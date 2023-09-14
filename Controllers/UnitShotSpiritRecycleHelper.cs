@@ -123,8 +123,7 @@ namespace THLWToolBox.Controllers
                     int bulletCount = magazineInfo.BulletValue * enemyCount;
                     bool isSureHit = magazineInfo.IsSureHit;
                     double actualHit = GetActualHitRate(magazineInfo.Hit, hitRank, sourceSmoke, targetCharge);
-                    var aaa = spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04;
-                    request.DebugString += "info:" + bulletCount + "/" + isSureHit + "/" + actualHit + "<>";
+                    request.DebugString += "info:" + bulletCount + "/" + isSureHit + "/" + actualHit + "<br>";
                     var spiritRecycleMatrix = np.floor(spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04) * 0.01;
                     if (!isSureHit)
                     {
@@ -135,7 +134,7 @@ namespace THLWToolBox.Controllers
                     var magazineSP = np.sum(spiritRecycleMatrix, 0).astype(typeof(double));
                     accumulatedSP += magazineSP;
                 }
-                request.DebugString += "sp:" + accumulatedSP.ToString() + ",";
+                request.DebugString += "sp:" + accumulatedSP.ToString() + "<br>";
                 double spiritRecycle;
                 if (confidenceLevel == 0)
                     spiritRecycle = accumulatedSP.mean();
@@ -145,6 +144,8 @@ namespace THLWToolBox.Controllers
                     int confidenceIndex = sortIndex[Convert.ToInt32(MONTE_CARLO * (1000 - confidenceLevel) / 1000.0)];
                     spiritRecycle = accumulatedSP[confidenceIndex];
                 }
+                request.DebugString += "sp:" + accumulatedSP.ToString() + "<br>";
+                request.DebugString += "result:" + spiritRecycle + "<br>";
                 spiritRecycles.Add(spiritRecycle);
             }
 
