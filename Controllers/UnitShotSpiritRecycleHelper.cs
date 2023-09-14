@@ -41,6 +41,7 @@ namespace THLWToolBox.Controllers
 
             List<PlayerUnitData> queryUnits = new();
             List<UnitShotSpiritRecycleDisplayModel> spiritRecycleDatas = new();
+            request.DebugString = "";
 
             if (request.UnitSymbolName != null && request.UnitSymbolName.Length > 0)
             {
@@ -80,6 +81,7 @@ namespace THLWToolBox.Controllers
 
         UnitShotSpiritRecycleDisplayModel CreateSpiritPowerRecycleDisplayModel(AttackData attack, UnitShotSpiritRecycleHelperViewModel request)
         {
+            request.DebugString += "ph:" + attack.PhantasmPowerUpRate + "<br>";
             List<List<MagazineInfo>> boosts_info = new();
             for (int boostId = 0; boostId < 4; boostId++)
                 boosts_info.Add(new List<MagazineInfo>());
@@ -122,6 +124,7 @@ namespace THLWToolBox.Controllers
                     bool isSureHit = magazineInfo.IsSureHit;
                     double actualHit = GetActualHitRate(magazineInfo.Hit, hitRank, sourceSmoke, targetCharge);
                     var aaa = spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04;
+                    request.DebugString += "info:" + bulletCount + "/" + isSureHit + "/" + actualHit + "<>";
                     var spiritRecycleMatrix = np.floor(spRate * np.random.randint(3, 8, new int[] { bulletCount, MONTE_CARLO }) * 0.04) * 0.01;
                     if (!isSureHit)
                     {
@@ -132,6 +135,7 @@ namespace THLWToolBox.Controllers
                     var magazineSP = np.sum(spiritRecycleMatrix, 0).astype(typeof(double));
                     accumulatedSP += magazineSP;
                 }
+                request.DebugString += "sp:" + accumulatedSP.ToString() + ",";
                 double spiritRecycle;
                 if (confidenceLevel == 0)
                     spiritRecycle = accumulatedSP.mean();
