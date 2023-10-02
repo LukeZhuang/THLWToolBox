@@ -442,9 +442,10 @@ CREATE TABLE [dbo].[RAW_UnitTable](
 /* step 4: insert data from csv (note that source of HitCheckOrder is special) */
 TRUNCATE TABLE [dbo].[RAW_AbilityTable];
 BULK INSERT [dbo].[RAW_AbilityTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\AbilityTable.csv'
+FROM 'AbilityTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -455,9 +456,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_BulletCriticalRaceTable];
 BULK INSERT [dbo].[RAW_BulletCriticalRaceTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\BulletCriticalRaceTable.csv'
+FROM 'BulletCriticalRaceTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -468,9 +470,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_BulletExtraEffectTable];
 BULK INSERT [dbo].[RAW_BulletExtraEffectTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\BulletExtraEffectTable.csv'
+FROM 'BulletExtraEffectTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -481,9 +484,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_BulletTable];
 BULK INSERT [dbo].[RAW_BulletTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\BulletTable.csv'
+FROM 'BulletTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -494,9 +498,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_CharacteristicTable];
 BULK INSERT [dbo].[RAW_CharacteristicTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\CharacteristicTable.csv'
+FROM 'CharacteristicTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -507,9 +512,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_HitCheckOrderTable];
 BULK INSERT [dbo].[RAW_HitCheckOrderTable]
-FROM 'D:\touhou_lostword\workspace\LostWordResourceExtractor\output\HitCheckOrderTable.csv'
+FROM 'HitCheckOrderTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -520,9 +526,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_PersonRelationTable];
 BULK INSERT [dbo].[RAW_PersonRelationTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\PersonRelationTable.csv'
+FROM 'PersonRelationTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -533,9 +540,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_PictureTable];
 BULK INSERT [dbo].[RAW_PictureTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\PictureTable.csv'
+FROM 'PictureTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -546,9 +554,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_RaceTable];
 BULK INSERT [dbo].[RAW_RaceTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\RaceTable.csv'
+FROM 'RaceTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -559,9 +568,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_ShotTable];
 BULK INSERT [dbo].[RAW_ShotTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\ShotTable.csv'
+FROM 'ShotTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -572,9 +582,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_SkillEffectTable];
 BULK INSERT [dbo].[RAW_SkillEffectTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\SkillEffectTable.csv'
+FROM 'SkillEffectTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -585,9 +596,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_SkillTable];
 BULK INSERT [dbo].[RAW_SkillTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\SkillTable.csv'
+FROM 'SkillTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -598,9 +610,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_SpellcardTable];
 BULK INSERT [dbo].[RAW_SpellcardTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\SpellcardTable.csv'
+FROM 'SpellcardTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -611,9 +624,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_UnitRaceTable];
 BULK INSERT [dbo].[RAW_UnitRaceTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\UnitRaceTable.csv'
+FROM 'UnitRaceTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
@@ -624,9 +638,10 @@ WITH
 
 TRUNCATE TABLE [dbo].[RAW_UnitTable];
 BULK INSERT [dbo].[RAW_UnitTable]
-FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\UnitTable.csv'
+FROM 'UnitTable.csv'
 WITH
 (
+	DATA_SOURCE='csvdatas',
 	CODEPAGE = '65001',
 	DATAFILETYPE = 'Char',
 	FIRSTROW = 2,
