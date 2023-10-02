@@ -22,5 +22,7 @@
         public string purge_ability_description { get; set; }
         public int purge_barrier_diffusion_type { get; set; }
         public int purge_barrier_diffusion_range { get; set; }
+        public int boost_buff_effect_type { get; set; }
+        public int purge_buff_effect_type { get; set; }
     }
 }

@@ -203,6 +203,9 @@ namespace THLWToolBox.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("boost_buff_effect_type")
+                        .HasColumnType("int");
+
                     b.Property<int>("boost_power_divergence_range")
                         .HasColumnType("int");
 
@@ -243,6 +246,9 @@ namespace THLWToolBox.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("purge_barrier_diffusion_type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("purge_buff_effect_type")
                         .HasColumnType("int");
 
                     b.Property<string>("resist_ability_description")

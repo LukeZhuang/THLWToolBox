@@ -27,59 +27,613 @@ BEGIN
 END
 INSERT INTO [dbo].[UPDATEDATE] (date) VALUES ('20230417')
 
-/* step 2: clear old data */
-delete from [dbo].[RAW_CharacteristicTable];
-delete from [dbo].[RAW_PersonRelationTable];
-delete from [dbo].[RAW_PictureTable];
-delete from [dbo].[RAW_RaceTable];
-delete from [dbo].[RAW_ShotTable];
-delete from [dbo].[RAW_SpellcardTable];
-delete from [dbo].[RAW_UnitRaceTable];
-delete from [dbo].[RAW_UnitTable];
-delete from [dbo].[RAW_BulletTable];
-delete from [dbo].[RAW_BulletCriticalRaceTable];
-delete from [dbo].[RAW_HitCheckOrderTable];
-delete from [dbo].[RAW_SkillTable];
-delete from [dbo].[RAW_SkillEffectTable];
-delete from [dbo].[RAW_AbilityTable];
-delete from [dbo].[RAW_BulletExtraEffectTable];
+/* step 2: drop old tables */
+DROP TABLE [TouhouLostWordRawData].[dbo].[AbilityTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[BulletTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[CharacteristicTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[HitCheckOrderTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[PersonRelationTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[PictureTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[RaceTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[ShotTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[SkillEffectTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[SkillTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[SpellcardTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[UnitRaceTable];
+DROP TABLE [TouhouLostWordRawData].[dbo].[UnitTable];
 
 
-/* step 3: copy new data */
-insert into [dbo].[RAW_CharacteristicTable] select * from [dbo].[RAW_NEW_CharacteristicTable];
-insert into [dbo].[RAW_PersonRelationTable] select * from [dbo].[RAW_NEW_PersonRelationTable];
-insert into [dbo].[RAW_PictureTable] select * from [dbo].[RAW_NEW_PictureTable];
-insert into [dbo].[RAW_RaceTable] select * from [dbo].[RAW_NEW_RaceTable];
-insert into [dbo].[RAW_ShotTable] select * from [dbo].[RAW_NEW_ShotTable];
-insert into [dbo].[RAW_SpellcardTable] select * from [dbo].[RAW_NEW_SpellcardTable];
-insert into [dbo].[RAW_UnitRaceTable] select * from [dbo].[RAW_NEW_UnitRaceTable];
-insert into [dbo].[RAW_UnitTable] select * from [dbo].[RAW_NEW_UnitTable];
-insert into [dbo].[RAW_BulletTable] select * from [dbo].[RAW_NEW_BulletTable];
-insert into [dbo].[RAW_BulletCriticalRaceTable] select * from [dbo].[RAW_NEW_BulletCriticalRaceTable];
-insert into [dbo].[RAW_HitCheckOrderTable] select * from [dbo].[RAW_NEW_HitCheckOrderTable];
-insert into [dbo].[RAW_SkillTable] select * from [dbo].[RAW_NEW_SkillTable];
-insert into [dbo].[RAW_SkillEffectTable] select * from [dbo].[RAW_NEW_SkillEffectTable];
-insert into [dbo].[RAW_AbilityTable] select * from [dbo].[RAW_NEW_AbilityTable];
-insert into [dbo].[RAW_BulletExtraEffectTable] select * from [dbo].[RAW_NEW_BulletExtraEffectTable];
+/* step 3: create new raw table (note that this needs to be updated if table structure is changed) */
+CREATE TABLE [TouhouLostWordRawData].[dbo].[AbilityTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[resist_ability_description] [nvarchar](max) NOT NULL,
+	[good_element_take_damage_rate] [int] NOT NULL,
+	[weak_element_take_damage_rate] [int] NOT NULL,
+	[element_ability_description] [nvarchar](max) NOT NULL,
+	[good_element_give_damage_rate] [int] NOT NULL,
+	[weak_element_give_damage_rate] [int] NOT NULL,
+	[barrier_ability_description] [nvarchar](max) NOT NULL,
+	[burning_barrier_type] [int] NOT NULL,
+	[frozen_barrier_type] [int] NOT NULL,
+	[electrified_barrier_type] [int] NOT NULL,
+	[poisoning_barrier_type] [int] NOT NULL,
+	[blackout_barrier_type] [int] NOT NULL,
+	[boost_ability_description] [nvarchar](max) NOT NULL,
+	[boost_power_divergence_type] [int] NOT NULL,
+	[boost_power_divergence_range] [int] NOT NULL,
+	[purge_ability_description] [nvarchar](max) NOT NULL,
+	[purge_barrier_diffusion_type] [int] NOT NULL,
+	[purge_barrier_diffusion_range] [int] NOT NULL,
+	[boost_buff_effect_type] [int] NOT NULL,
+	[purge_buff_effect_type] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTable](
+	[id] [int] NOT NULL,
+	[bullet_id] [int] NOT NULL,
+	[race_id] [int] NOT NULL
+) ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[target] [int] NOT NULL,
+	[turn] [int] NOT NULL,
+	[type] [int] NOT NULL,
+	[subtype] [int] NOT NULL,
+	[value] [int] NOT NULL
+) ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[BulletTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[element] [int] NOT NULL,
+	[type] [int] NOT NULL,
+	[category] [int] NOT NULL,
+	[power] [float] NOT NULL,
+	[hit] [int] NOT NULL,
+	[critical] [int] NOT NULL,
+	[bullet1_addon_id] [int] NOT NULL,
+	[bullet1_addon_value] [int] NOT NULL,
+	[bullet2_addon_id] [int] NOT NULL,
+	[bullet2_addon_value] [int] NOT NULL,
+	[bullet3_addon_id] [int] NOT NULL,
+	[bullet3_addon_value] [int] NOT NULL,
+	[bullet1_extraeffect_id] [int] NOT NULL,
+	[bullet1_extraeffect_success_rate] [int] NOT NULL,
+	[bullet2_extraeffect_id] [int] NOT NULL,
+	[bullet2_extraeffect_success_rate] [int] NOT NULL,
+	[bullet3_extraeffect_id] [int] NOT NULL,
+	[bullet3_extraeffect_success_rate] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[CharacteristicTable](
+	[id] [int] NOT NULL,
+	[characteristic1_name] [nvarchar](max) NOT NULL,
+	[characteristic1_description] [nvarchar](max) NOT NULL,
+	[characteristic1_type] [int] NOT NULL,
+	[characteristic1_effect_type] [int] NOT NULL,
+	[characteristic1_effect_subtype] [int] NOT NULL,
+	[characteristic1_rate] [int] NOT NULL,
+	[characteristic1_effect_value] [int] NOT NULL,
+	[characteristic1_icon_filename] [nvarchar](max) NOT NULL,
+	[characteristic2_name] [nvarchar](max) NOT NULL,
+	[characteristic2_description] [nvarchar](max) NOT NULL,
+	[characteristic2_type] [int] NOT NULL,
+	[characteristic2_effect_type] [int] NOT NULL,
+	[characteristic2_effect_subtype] [int] NOT NULL,
+	[characteristic2_rate] [int] NOT NULL,
+	[characteristic2_effect_value] [int] NOT NULL,
+	[characteristic2_icon_filename] [nvarchar](max) NOT NULL,
+	[characteristic3_name] [nvarchar](max) NOT NULL,
+	[characteristic3_description] [nvarchar](max) NOT NULL,
+	[characteristic3_type] [int] NOT NULL,
+	[characteristic3_effect_type] [int] NOT NULL,
+	[characteristic3_effect_subtype] [int] NOT NULL,
+	[characteristic3_rate] [int] NOT NULL,
+	[characteristic3_effect_value] [int] NOT NULL,
+	[characteristic3_icon_filename] [nvarchar](max) NOT NULL,
+	[trust_characteristic_name] [nvarchar](max) NOT NULL,
+	[trust_characteristic_description] [nvarchar](max) NOT NULL,
+	[trust_characteristic_rear_effect_type] [int] NOT NULL,
+	[trust_characteristic_rear_effect_subtype] [int] NOT NULL,
+	[trust_characteristic_avent_effect_type] [int] NOT NULL,
+	[trust_characteristic_avent_effect_subtype] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[HitCheckOrderTable](
+	[id] [int] NOT NULL,
+	[unit_id] [int] NOT NULL,
+	[barrage_id] [int] NOT NULL,
+	[boost_id] [int] NOT NULL,
+	[hit_check_order] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[PersonRelationTable](
+	[id] [int] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[target_person_id] [int] NOT NULL,
+	[description] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[PictureTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[album_id] [int] NOT NULL,
+	[type] [int] NOT NULL,
+	[rare] [int] NOT NULL,
+	[illustrator_name] [nvarchar](max) NOT NULL,
+	[circle_name] [nvarchar](max) NOT NULL,
+	[flavor_text1] [nvarchar](max) NOT NULL,
+	[flavor_text2] [nvarchar](max) NOT NULL,
+	[flavor_text3] [nvarchar](max) NOT NULL,
+	[flavor_text4] [nvarchar](max) NOT NULL,
+	[flavor_text5] [nvarchar](max) NOT NULL,
+	[correction1_type] [int] NOT NULL,
+	[correction1_value] [int] NOT NULL,
+	[correction1_diff] [int] NOT NULL,
+	[correction2_type] [int] NOT NULL,
+	[correction2_value] [int] NOT NULL,
+	[correction2_diff] [int] NOT NULL,
+	[picture_characteristic1_effect_type] [int] NOT NULL,
+	[picture_characteristic1_effect_subtype] [int] NOT NULL,
+	[picture_characteristic1_effect_value] [int] NOT NULL,
+	[picture_characteristic1_effect_value_max] [int] NOT NULL,
+	[picture_characteristic1_effect_turn] [int] NOT NULL,
+	[picture_characteristic1_effect_range] [int] NOT NULL,
+	[picture_characteristic2_effect_type] [int] NOT NULL,
+	[picture_characteristic2_effect_subtype] [int] NOT NULL,
+	[picture_characteristic2_effect_value] [int] NOT NULL,
+	[picture_characteristic2_effect_value_max] [int] NOT NULL,
+	[picture_characteristic2_effect_turn] [int] NOT NULL,
+	[picture_characteristic2_effect_range] [int] NOT NULL,
+	[picture_characteristic3_effect_type] [int] NOT NULL,
+	[picture_characteristic3_effect_subtype] [int] NOT NULL,
+	[picture_characteristic3_effect_value] [int] NOT NULL,
+	[picture_characteristic3_effect_value_max] [int] NOT NULL,
+	[picture_characteristic3_effect_turn] [int] NOT NULL,
+	[picture_characteristic3_effect_range] [int] NOT NULL,
+	[picture_characteristic_text] [nvarchar](max) NOT NULL,
+	[picture_characteristic_text_max] [nvarchar](max) NOT NULL,
+	[recycle_id] [int] NOT NULL,
+	[is_show] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[RaceTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[alias_name] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[ShotTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[specification] [nvarchar](max) NOT NULL,
+	[magazine0_bullet_id] [int] NOT NULL,
+	[magazine0_bullet_range] [int] NOT NULL,
+	[magazine0_bullet_value] [int] NOT NULL,
+	[magazine0_bullet_power_rate] [int] NOT NULL,
+	[magazine1_boost_count] [int] NOT NULL,
+	[magazine1_bullet_id] [int] NOT NULL,
+	[magazine1_bullet_range] [int] NOT NULL,
+	[magazine1_bullet_value] [int] NOT NULL,
+	[magazine1_bullet_power_rate] [int] NOT NULL,
+	[magazine2_boost_count] [int] NOT NULL,
+	[magazine2_bullet_id] [int] NOT NULL,
+	[magazine2_bullet_range] [int] NOT NULL,
+	[magazine2_bullet_value] [int] NOT NULL,
+	[magazine2_bullet_power_rate] [int] NOT NULL,
+	[magazine3_boost_count] [int] NOT NULL,
+	[magazine3_bullet_id] [int] NOT NULL,
+	[magazine3_bullet_range] [int] NOT NULL,
+	[magazine3_bullet_value] [int] NOT NULL,
+	[magazine3_bullet_power_rate] [int] NOT NULL,
+	[magazine4_boost_count] [int] NOT NULL,
+	[magazine4_bullet_id] [int] NOT NULL,
+	[magazine4_bullet_range] [int] NOT NULL,
+	[magazine4_bullet_value] [int] NOT NULL,
+	[magazine4_bullet_power_rate] [int] NOT NULL,
+	[magazine5_boost_count] [int] NOT NULL,
+	[magazine5_bullet_id] [int] NOT NULL,
+	[magazine5_bullet_range] [int] NOT NULL,
+	[magazine5_bullet_value] [int] NOT NULL,
+	[magazine5_bullet_power_rate] [int] NOT NULL,
+	[phantasm_power_up_rate] [int] NOT NULL,
+	[shot_level0_power_rate] [int] NOT NULL,
+	[shot_level1_power_rate] [int] NOT NULL,
+	[shot_level2_power_rate] [int] NOT NULL,
+	[shot_level3_power_rate] [int] NOT NULL,
+	[shot_level4_power_rate] [int] NOT NULL,
+	[shot_level5_power_rate] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[SkillEffectTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[type] [int] NOT NULL,
+	[subtype] [int] NOT NULL,
+	[range] [int] NOT NULL,
+	[turn] [int] NOT NULL,
+	[level1_value] [int] NOT NULL,
+	[level1_success_rate] [int] NOT NULL,
+	[level1_add_value] [int] NOT NULL,
+	[level2_value] [int] NOT NULL,
+	[level2_success_rate] [int] NOT NULL,
+	[level2_add_value] [int] NOT NULL,
+	[level3_value] [int] NOT NULL,
+	[level3_success_rate] [int] NOT NULL,
+	[level3_add_value] [int] NOT NULL,
+	[level4_value] [int] NOT NULL,
+	[level4_success_rate] [int] NOT NULL,
+	[level4_add_value] [int] NOT NULL,
+	[level5_value] [int] NOT NULL,
+	[level5_success_rate] [int] NOT NULL,
+	[level5_add_value] [int] NOT NULL,
+	[level6_value] [int] NOT NULL,
+	[level6_success_rate] [int] NOT NULL,
+	[level6_add_value] [int] NOT NULL,
+	[level7_value] [int] NOT NULL,
+	[level7_success_rate] [int] NOT NULL,
+	[level7_add_value] [int] NOT NULL,
+	[level8_value] [int] NOT NULL,
+	[level8_success_rate] [int] NOT NULL,
+	[level8_add_value] [int] NOT NULL,
+	[level9_value] [int] NOT NULL,
+	[level9_success_rate] [int] NOT NULL,
+	[level9_add_value] [int] NOT NULL,
+	[level10_value] [int] NOT NULL,
+	[level10_success_rate] [int] NOT NULL,
+	[level10_add_value] [int] NOT NULL,
+	[icon_filename] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[SkillTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[type] [int] NOT NULL,
+	[exp_id] [int] NOT NULL,
+	[level1_turn] [int] NOT NULL,
+	[level2_turn] [int] NOT NULL,
+	[level3_turn] [int] NOT NULL,
+	[level4_turn] [int] NOT NULL,
+	[level5_turn] [int] NOT NULL,
+	[level6_turn] [int] NOT NULL,
+	[level7_turn] [int] NOT NULL,
+	[level8_turn] [int] NOT NULL,
+	[level9_turn] [int] NOT NULL,
+	[level10_turn] [int] NOT NULL,
+	[effect1_id] [int] NOT NULL,
+	[effect1_level_type] [int] NOT NULL,
+	[effect1_level_value] [int] NOT NULL,
+	[effect2_id] [int] NOT NULL,
+	[effect2_level_type] [int] NOT NULL,
+	[effect2_level_value] [int] NOT NULL,
+	[effect3_id] [int] NOT NULL,
+	[effect3_level_type] [int] NOT NULL,
+	[effect3_level_value] [int] NOT NULL,
+	[icon_filename] [nvarchar](max) NOT NULL,
+	[reincarnation_level_name] [nvarchar](max) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[SpellcardTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[specification] [nvarchar](max) NOT NULL,
+	[type] [int] NOT NULL,
+	[magazine0_bullet_id] [int] NOT NULL,
+	[magazine0_bullet_range] [int] NOT NULL,
+	[magazine0_bullet_value] [int] NOT NULL,
+	[magazine0_bullet_power_rate] [int] NOT NULL,
+	[magazine1_boost_count] [int] NOT NULL,
+	[magazine1_bullet_id] [int] NOT NULL,
+	[magazine1_bullet_range] [int] NOT NULL,
+	[magazine1_bullet_value] [int] NOT NULL,
+	[magazine1_bullet_power_rate] [int] NOT NULL,
+	[magazine2_boost_count] [int] NOT NULL,
+	[magazine2_bullet_id] [int] NOT NULL,
+	[magazine2_bullet_range] [int] NOT NULL,
+	[magazine2_bullet_value] [int] NOT NULL,
+	[magazine2_bullet_power_rate] [int] NOT NULL,
+	[magazine3_boost_count] [int] NOT NULL,
+	[magazine3_bullet_id] [int] NOT NULL,
+	[magazine3_bullet_range] [int] NOT NULL,
+	[magazine3_bullet_value] [int] NOT NULL,
+	[magazine3_bullet_power_rate] [int] NOT NULL,
+	[magazine4_boost_count] [int] NOT NULL,
+	[magazine4_bullet_id] [int] NOT NULL,
+	[magazine4_bullet_range] [int] NOT NULL,
+	[magazine4_bullet_value] [int] NOT NULL,
+	[magazine4_bullet_power_rate] [int] NOT NULL,
+	[magazine5_boost_count] [int] NOT NULL,
+	[magazine5_bullet_id] [int] NOT NULL,
+	[magazine5_bullet_range] [int] NOT NULL,
+	[magazine5_bullet_value] [int] NOT NULL,
+	[magazine5_bullet_power_rate] [int] NOT NULL,
+	[phantasm_power_up_rate] [int] NOT NULL,
+	[shot_level0_power_rate] [int] NOT NULL,
+	[shot_level1_power_rate] [int] NOT NULL,
+	[shot_level2_power_rate] [int] NOT NULL,
+	[shot_level3_power_rate] [int] NOT NULL,
+	[shot_level4_power_rate] [int] NOT NULL,
+	[shot_level5_power_rate] [int] NOT NULL,
+	[spellcard_skill1_effect_id] [int] NOT NULL,
+	[spellcard_skill1_level_type] [int] NOT NULL,
+	[spellcard_skill1_level_value] [int] NOT NULL,
+	[spellcard_skill1_timing] [int] NOT NULL,
+	[spellcard_skill2_effect_id] [int] NOT NULL,
+	[spellcard_skill2_level_type] [int] NOT NULL,
+	[spellcard_skill2_level_value] [int] NOT NULL,
+	[spellcard_skill2_timing] [int] NOT NULL,
+	[spellcard_skill3_effect_id] [int] NOT NULL,
+	[spellcard_skill3_level_type] [int] NOT NULL,
+	[spellcard_skill3_level_value] [int] NOT NULL,
+	[spellcard_skill3_timing] [int] NOT NULL,
+	[spellcard_skill4_effect_id] [int] NOT NULL,
+	[spellcard_skill4_level_type] [int] NOT NULL,
+	[spellcard_skill4_level_value] [int] NOT NULL,
+	[spellcard_skill4_timing] [int] NOT NULL,
+	[spellcard_skill5_effect_id] [int] NOT NULL,
+	[spellcard_skill5_level_type] [int] NOT NULL,
+	[spellcard_skill5_level_value] [int] NOT NULL,
+	[spellcard_skill5_timing] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[UnitRaceTable](
+	[id] [int] NOT NULL,
+	[unit_id] [int] NOT NULL,
+	[race_id] [int] NOT NULL
+) ON [PRIMARY];
+
+CREATE TABLE [TouhouLostWordRawData].[dbo].[UnitTable](
+	[id] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[name_kana] [nvarchar](max) NOT NULL,
+	[alias_name] [nvarchar](max) NOT NULL,
+	[short_name] [nvarchar](max) NOT NULL,
+	[person_id] [int] NOT NULL,
+	[album_id] [int] NOT NULL,
+	[role] [int] NOT NULL,
+	[exp_id] [int] NOT NULL,
+	[symbol_name] [nvarchar](max) NOT NULL,
+	[symbol_title] [nvarchar](max) NOT NULL,
+	[symbol_description] [nvarchar](max) NOT NULL,
+	[life_point] [int] NOT NULL,
+	[yang_attack] [int] NOT NULL,
+	[yang_defense] [int] NOT NULL,
+	[yin_attack] [int] NOT NULL,
+	[yin_defense] [int] NOT NULL,
+	[speed] [int] NOT NULL,
+	[shot1_id] [int] NOT NULL,
+	[shot2_id] [int] NOT NULL,
+	[spellcard1_id] [int] NOT NULL,
+	[spellcard2_id] [int] NOT NULL,
+	[spellcard3_id] [int] NOT NULL,
+	[spellcard4_id] [int] NOT NULL,
+	[spellcard5_id] [int] NOT NULL,
+	[skill1_id] [int] NOT NULL,
+	[skill2_id] [int] NOT NULL,
+	[skill3_id] [int] NOT NULL,
+	[resist_id] [int] NOT NULL,
+	[characteristic_id] [int] NOT NULL,
+	[ability_id] [int] NOT NULL,
+	[recycle_id] [int] NOT NULL,
+	[default_costume_id] [int] NOT NULL,
+	[drop_text] [nvarchar](max) NOT NULL,
+	[limitbreak_item_id] [int] NOT NULL,
+	[spellcard_bgm_id] [int] NOT NULL,
+	[name_sub] [nvarchar](max) NOT NULL,
+	[name_kana_sub] [nvarchar](max) NOT NULL,
+	[short_name_sub] [nvarchar](max) NOT NULL,
+	[is_show] [int] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
 
-/* step 4: drop new data table */
-drop table [dbo].[RAW_NEW_CharacteristicTable];
-drop table [dbo].[RAW_NEW_PersonRelationTable];
-drop table [dbo].[RAW_NEW_PictureTable];
-drop table [dbo].[RAW_NEW_RaceTable];
-drop table [dbo].[RAW_NEW_ShotTable];
-drop table [dbo].[RAW_NEW_SpellcardTable];
-drop table [dbo].[RAW_NEW_UnitRaceTable];
-drop table [dbo].[RAW_NEW_UnitTable];
-drop table [dbo].[RAW_NEW_BulletTable];
-drop table [dbo].[RAW_NEW_BulletCriticalRaceTable];
-drop table [dbo].[RAW_NEW_HitCheckOrderTable];
-drop table [dbo].[RAW_NEW_SkillTable];
-drop table [dbo].[RAW_NEW_SkillEffectTable];
-drop table [dbo].[RAW_NEW_AbilityTable];
-drop table [dbo].[RAW_NEW_BulletExtraEffectTable];
+/* step 4: insert data from csv (note that source of HitCheckOrder is special) */
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[AbilityTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[AbilityTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\AbilityTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
 
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[BulletCriticalRaceTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\BulletCriticalRaceTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[BulletExtraEffectTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\BulletExtraEffectTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[BulletTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[BulletTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\BulletTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[CharacteristicTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[CharacteristicTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\CharacteristicTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[HitCheckOrderTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[HitCheckOrderTable]
+FROM 'D:\touhou_lostword\workspace\LostWordResourceExtractor\output\HitCheckOrderTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[PersonRelationTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[PersonRelationTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\PersonRelationTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[PictureTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[PictureTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\PictureTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[RaceTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[RaceTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\RaceTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[ShotTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[ShotTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\ShotTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[SkillEffectTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[SkillEffectTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\SkillEffectTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[SkillTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[SkillTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\SkillTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[SpellcardTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[SpellcardTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\SpellcardTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[UnitRaceTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[UnitRaceTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\UnitRaceTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
+
+TRUNCATE TABLE [TouhouLostWordRawData].[dbo].[UnitTable];
+BULK INSERT [TouhouLostWordRawData].[dbo].[UnitTable]
+FROM 'D:\workspace\LostWordDataDecrypter\decrypt_output\UnitTable.csv'
+WITH
+(
+	CODEPAGE = '65001',
+	DATAFILETYPE = 'Char',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '0x0a',
+	TABLOCK
+);
 
 /* step 5: prepare data for website */
 delete from [dbo].[PersonRelationData];
@@ -218,14 +772,14 @@ B.[id],B.[name],B.[description],B.[type],B.[subtype],B.[range],B.[turn],B.[level
 from [dbo].[PlayerUnitSpellcardData] as A inner join [dbo].[RAW_SkillEffectTable] as B on A.spellcard_skill1_effect_id = B.id or A.spellcard_skill2_effect_id = B.id or A.spellcard_skill3_effect_id = B.id or A.spellcard_skill4_effect_id = B.id or A.spellcard_skill5_effect_id = B.id
 SET IDENTITY_INSERT [dbo].[PlayerUnitSkillEffectData] OFF;
 
-SET IDENTITY_INSERT [dbo].[PlayerUnitAbilityData] ON;
-INSERT INTO [dbo].[PlayerUnitAbilityData] (
-[id],[name],[resist_ability_description],[good_element_take_damage_rate],[weak_element_take_damage_rate],[element_ability_description],[good_element_give_damage_rate],[weak_element_give_damage_rate],[barrier_ability_description],[burning_barrier_type],[frozen_barrier_type],[electrified_barrier_type],[poisoning_barrier_type],[blackout_barrier_type],[boost_ability_description],[boost_power_divergence_type],[boost_power_divergence_range],[purge_ability_description],[purge_barrier_diffusion_type],[purge_barrier_diffusion_range]
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitAbilityData] ON;
+INSERT INTO [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitAbilityData] (
+[id],[name],[resist_ability_description],[good_element_take_damage_rate],[weak_element_take_damage_rate],[element_ability_description],[good_element_give_damage_rate],[weak_element_give_damage_rate],[barrier_ability_description],[burning_barrier_type],[frozen_barrier_type],[electrified_barrier_type],[poisoning_barrier_type],[blackout_barrier_type],[boost_ability_description],[boost_power_divergence_type],[boost_power_divergence_range],[purge_ability_description],[purge_barrier_diffusion_type],[purge_barrier_diffusion_range],[boost_buff_effect_type],[purge_buff_effect_type]
 )
 select
-B.[id],B.[name],B.[resist_ability_description],B.[good_element_take_damage_rate],B.[weak_element_take_damage_rate],B.[element_ability_description],B.[good_element_give_damage_rate],B.[weak_element_give_damage_rate],B.[barrier_ability_description],B.[burning_barrier_type],B.[frozen_barrier_type],B.[electrified_barrier_type],B.[poisoning_barrier_type],B.[blackout_barrier_type],B.[boost_ability_description],B.[boost_power_divergence_type],B.[boost_power_divergence_range],B.[purge_ability_description],B.[purge_barrier_diffusion_type],B.[purge_barrier_diffusion_range]
-from [dbo].[PlayerUnitData] as A inner join [dbo].[RAW_AbilityTable] as B on A.ability_id = B.id
-SET IDENTITY_INSERT [dbo].[PlayerUnitAbilityData] OFF;
+B.[id],B.[name],B.[resist_ability_description],B.[good_element_take_damage_rate],B.[weak_element_take_damage_rate],B.[element_ability_description],B.[good_element_give_damage_rate],B.[weak_element_give_damage_rate],B.[barrier_ability_description],B.[burning_barrier_type],B.[frozen_barrier_type],B.[electrified_barrier_type],B.[poisoning_barrier_type],B.[blackout_barrier_type],B.[boost_ability_description],B.[boost_power_divergence_type],B.[boost_power_divergence_range],B.[purge_ability_description],B.[purge_barrier_diffusion_type],B.[purge_barrier_diffusion_range],[boost_buff_effect_type],[purge_buff_effect_type]
+from [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitData] as A inner join [TouhouLostWordRawData].[dbo].[AbilityTable] as B on A.ability_id = B.id
+SET IDENTITY_INSERT [THLWToolBoxContext-088877b4-245d-43ef-b004-d1d23cc730e7].[dbo].[PlayerUnitAbilityData] OFF;
 
 SET IDENTITY_INSERT [dbo].[BulletExtraEffectData] ON;
 INSERT INTO [dbo].[BulletExtraEffectData] (
