@@ -115,7 +115,6 @@
 
         public static string GetEffectTypeName(int effectType)
         {
-            Console.WriteLine(effectType);
             return effectType switch
             {
                 0 => "空",
@@ -161,6 +160,7 @@
                 42 => "二阶Debuff",
                 43 => "弱点植入",
                 47 => "前卫人数相关Buff",
+                48 => "体力百分比相关Buff",
                 _ => throw new NotImplementedException(),
             };
         }
@@ -291,6 +291,15 @@
                 7 => "加伤害",
                 8 => "加暴伤",
                 9 => "加暴击",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string GetBuffByHPProportionTypeString(int buffByHPProportionType)
+        {
+            return buffByHPProportionType switch
+            {
+                3 => "加伤害",
                 _ => throw new InvalidDataException(),
             };
         }

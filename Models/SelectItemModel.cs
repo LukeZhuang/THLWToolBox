@@ -75,7 +75,12 @@ namespace THLWToolBox.Models
 
         static string GetBuffByNumberOfFrontGuardsTypeStringForSelect(int buffByNumberOfFrontGuardsType)
         {
-            return "前卫相关Buff-" + GetBuffByNumberOfFrontGuardsTypeString(buffByNumberOfFrontGuardsType);
+            return "前卫人数相关Buff-" + GetBuffByNumberOfFrontGuardsTypeString(buffByNumberOfFrontGuardsType);
+        }
+
+        static string GetBuffByHPProportionTypeStringForSelect(int buffByHPProportionType)
+        {
+            return "体力百分比相关Buff-" + GetBuffByHPProportionTypeString(buffByHPProportionType);
         }
 
 
@@ -159,6 +164,9 @@ namespace THLWToolBox.Models
 
                 case 47:   // "前卫人数相关Buff"
                     return new SelectItemModel(8000 + subEffectType, GetBuffByNumberOfFrontGuardsTypeStringForSelect(subEffectType));
+
+                case 48:   // "体力百分比相关Buff"
+                    return new SelectItemModel(9000 + subEffectType, GetBuffByHPProportionTypeStringForSelect(subEffectType));
 
                 default:
                     throw new NotImplementedException();

@@ -54,7 +54,7 @@ namespace THLWToolBox.Helpers
             return "";
         }
 
-        string CreatePartyGainString()
+        string CreateBuffByNumberOfFrontGuardsString()
         {
             return EffectModel.SubEffectType switch
             {
@@ -62,6 +62,15 @@ namespace THLWToolBox.Helpers
                 7 => MarkValue(EffectModel.Value) + "%",
                 8 => MarkValue(EffectModel.Value) + "%",
                 9 => MarkValue(EffectModel.Value) + "%",
+                _ => throw new NotImplementedException(),
+            };
+        }
+
+        string CreateBuffByHPProportionString()
+        {
+            return EffectModel.SubEffectType switch
+            {
+                3 => MarkValue(EffectModel.Value) + "%",
                 _ => throw new NotImplementedException(),
             };
         }
@@ -133,7 +142,8 @@ namespace THLWToolBox.Helpers
                     16 => GetElementTypeString(EffectModel.SubEffectType) + "属性加伤" + MarkValue(EffectModel.Value) + "%",
                     17 => "灵力回收效率加" + MarkValue(EffectModel.Value) + "%",
                     43 => CreateRangeString() + "植入" + GetElementTypeString(EffectModel.SubEffectType) + "属性弱点(" + Convert.ToString(EffectModel.Turn) +"t)",
-                    47 => CreateRangeString() + GetBuffByNumberOfFrontGuardsTypeString(EffectModel.SubEffectType) + "：前卫人数乘" + CreatePartyGainString() + "(" + Convert.ToString(EffectModel.Turn) + "t)",
+                    47 => CreateRangeString() + GetBuffByNumberOfFrontGuardsTypeString(EffectModel.SubEffectType) + "：前卫人数乘" + CreateBuffByNumberOfFrontGuardsString() + "(" + Convert.ToString(EffectModel.Turn) + "t)",
+                    48 => CreateRangeString() + GetBuffByNumberOfFrontGuardsTypeString(EffectModel.SubEffectType) + "：当前体力百分比，最大" + CreateBuffByHPProportionString() + "(" + Convert.ToString(EffectModel.Turn) + "t)",
                     _ => throw new NotImplementedException(),
                 };
             return EffectModel.TimingString + simplifiedEffectStr + CreateAddValueSuffix();
