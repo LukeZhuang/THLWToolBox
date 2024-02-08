@@ -63,6 +63,7 @@ namespace THLWToolBox.Controllers
                 // --- check rare ---
                 isSelected &= pictureRecord.rare switch
                 {
+                    1 => request.RareType1.GetValueOrDefault(true),
                     3 => request.RareType3.GetValueOrDefault(true),
                     4 => request.RareType4.GetValueOrDefault(true),
                     5 => request.RareType5.GetValueOrDefault(true),

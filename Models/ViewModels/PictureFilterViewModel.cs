@@ -30,6 +30,7 @@ namespace THLWToolBox.Models.ViewModels
         public int? Range2 { get; set; }
         public int? UnitRoleTypeId2 { get; set; }
         public int? TurnTypeId2 { get; set; }
+        public bool? RareType1 { get; set; }
         public bool? RareType3 { get; set; }
         public bool? RareType4 { get; set; }
         public bool? RareType5 { get; set; }
