@@ -54,6 +54,18 @@ namespace THLWToolBox.Helpers
             return "";
         }
 
+        string CreatePartyGainString()
+        {
+            return EffectModel.SubEffectType switch
+            {
+                6 => MarkValue(0.05 * EffectModel.Value) + "P",
+                7 => MarkValue(EffectModel.Value) + "%",
+                8 => MarkValue(EffectModel.Value) + "%",
+                9 => MarkValue(EffectModel.Value) + "%",
+                _ => throw new NotImplementedException(),
+            };
+        }
+
         string CreateRolePrefixString()
         {
             int role, effectType = EffectModel.EffectType;
@@ -120,6 +132,8 @@ namespace THLWToolBox.Helpers
                     15 => GetBulletTypeString(EffectModel.SubEffectType) + "弹加伤" + MarkValue(EffectModel.Value) + "%",
                     16 => GetElementTypeString(EffectModel.SubEffectType) + "属性加伤" + MarkValue(EffectModel.Value) + "%",
                     17 => "灵力回收效率加" + MarkValue(EffectModel.Value) + "%",
+                    43 => CreateRangeString() + "植入" + GetElementTypeString(EffectModel.SubEffectType) + "属性弱点(" + Convert.ToString(EffectModel.Turn) +"t)",
+                    47 => CreateRangeString() + GetBuffByNumberOfFrontGuardsTypeString(EffectModel.SubEffectType) + "：前卫人数乘" + CreatePartyGainString() + "(" + Convert.ToString(EffectModel.Turn) + "t)",
                     _ => throw new NotImplementedException(),
                 };
             return EffectModel.TimingString + simplifiedEffectStr + CreateAddValueSuffix();

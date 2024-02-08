@@ -73,6 +73,11 @@ namespace THLWToolBox.Models
             return "敌方顺序改变-" + GetEnemyOrderChangeTypeString(enemyOrderChangeType);
         }
 
+        static string GetBuffByNumberOfFrontGuardsTypeStringForSelect(int buffByNumberOfFrontGuardsType)
+        {
+            return "前卫相关Buff-" + GetBuffByNumberOfFrontGuardsTypeString(buffByNumberOfFrontGuardsType);
+        }
+
 
         // Some effects can be aggregated together, currently only UnitRole related effect types
         public static SelectItemModel GetEffectRemappedInfo(int effectType)
@@ -140,6 +145,7 @@ namespace THLWToolBox.Models
 
                 case 13:  // "受X属性攻击时伤害下降"
                 case 16:  // "X属性威力上升"
+                case 43:  // "弱点植入"
                     return new SelectItemModel(4000 + subEffectType, GetElementTypeStringForSelect(subEffectType));
 
                 case 6:   // "施加结界异常"
@@ -150,6 +156,9 @@ namespace THLWToolBox.Models
 
                 case 7:   // "敌方回合顺序改变"
                     return new SelectItemModel(7000 + subEffectType, GetEnemyOrderChangeTypeStringForSelect(subEffectType));
+
+                case 47:   // "前卫人数相关Buff"
+                    return new SelectItemModel(8000 + subEffectType, GetBuffByNumberOfFrontGuardsTypeStringForSelect(subEffectType));
 
                 default:
                     throw new NotImplementedException();
