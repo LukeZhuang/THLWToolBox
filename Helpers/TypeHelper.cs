@@ -158,6 +158,9 @@
                 38 => "破坏式使用时施加Debuff",
                 41 => "二阶Buff",
                 42 => "二阶Debuff",
+                43 => "弱点植入",
+                47 => "前卫人数相关Buff",
+                48 => "体力百分比相关Buff",
                 _ => throw new NotImplementedException(),
             };
         }
@@ -276,6 +279,27 @@
                 3 => "受阴气攻击减伤",
                 4 => "若满血则减伤",
                 5 => "若少于25%血则减伤",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string GetBuffByNumberOfFrontGuardsTypeString(int buffByNumberOfFrontGuardsType)
+        {
+            return buffByNumberOfFrontGuardsType switch
+            {
+                6 => "加灵力",
+                7 => "加伤害",
+                8 => "加暴伤",
+                9 => "加暴击",
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        public static string GetBuffByHPProportionTypeString(int buffByHPProportionType)
+        {
+            return buffByHPProportionType switch
+            {
+                3 => "加伤害",
                 _ => throw new InvalidDataException(),
             };
         }
