@@ -11,8 +11,8 @@ namespace THLWToolBox.Helpers
 {
     public class GeneralHelper
     {
-        public static string VERSION_STR = "v2.3";
-        public static string DATA_UPDATE_DATE = "2024/03/26";
+        public static string VERSION_STR = "v2.4";
+        public static string DATA_UPDATE_DATE = "2024/05/27";
 
         // For HTML
         public static string GetImageHtmlRaw(string imgUrl)
